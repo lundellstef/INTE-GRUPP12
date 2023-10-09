@@ -22,4 +22,11 @@ public class TestThing {
         double fahr = t.convertCelsiusToFahrenheit(32);
         assertEquals(fahr, 89.6);
     }
+
+    @Test
+    void ThisTestWillFail() {
+        Thing t = new Thing();
+        double fahr = t.convertCelsiusToFahrenheit(32);
+        assertEquals(fahr, 120);
+    }
 }

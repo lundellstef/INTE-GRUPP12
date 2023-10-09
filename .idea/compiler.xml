@@ -6,6 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="INTE-GRUPP12" />
         <module name="INTE-EX1" />
       </profile>
     </annotationProcessing>
