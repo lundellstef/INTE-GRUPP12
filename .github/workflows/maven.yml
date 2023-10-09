@@ -1,4 +1,4 @@
-name: Maven build through GitHub actions
+name: Master branch updated
 
 on:
   push:
@@ -23,6 +23,8 @@ jobs:
     - name: Step 3 - Build with Maven
       run: mvn -B package --file pom.xml
 
-    - name: Step 4 - List current directory
-      run: ls -a
-      
+    - name: Step 4 - Test Results
+      run: |
+        # Display Surefire test results
+        cat target/surefire-reports/*.txt
+        
