@@ -5,11 +5,12 @@ import java.util.NoSuchElementException;
 public class Purchase {
 
     Map<ProductItem, Integer> items;
-    int totalPrice;
+    int totalPriceExVAT;
+    int totalVAT;
 
     public Purchase(){
         items = new HashMap<>();
-        totalPrice = 0;
+        totalPriceExVAT = 0;
     }
 
     /**
@@ -24,18 +25,24 @@ public class Purchase {
         } else{
             items.put(item, 1);
         }
-        incrementTotalPrice(item);
+        incrementTotalPriceExVAT(item);
+        incrementTotalVAT(item);
+    }
+
+    private void incrementTotalVAT(ProductItem item){
+        int vatPercentage = item.getVat.value;
+        totalVAT += (item.getPrice() * ((100 + vatPercentage)/100)) - item.getPrice();
     }
 
     /**
      *increments totalPrice price based on price of item to be purchased.
      * @param item the item to decide price for.
      */
-    private void incrementTotalPrice(ProductItem item){
+    private void incrementTotalPriceExVAT(ProductItem item){
         if(item.hasDiscount()) {
-            totalPrice += (item.getPrice() * ((100 - item.getDiscount())/100.0));
+            totalPriceExVAT += (item.getPrice() * ((100 - item.getDiscount())/100.0));
         } else{
-            totalPrice += item.getPrice();
+            totalPriceExVAT += item.getPrice();
         }
     }
 
@@ -56,24 +63,30 @@ public class Purchase {
         } else {
             items.remove(item);
         }
-        decrementPrice(item);
+        decrementPriceExVAT(item);
+        decrementTotalVAT(item);
         return item;
+    }
+
+    private void decrementTotalVAT(ProductItem item){
+        int vatPercentage = item.getVat.value;
+        totalVAT -= (item.getPrice() * ((100 + vatPercentage)/100)) - item.getPrice();
     }
 
     /**
      *decrements totalPrice price based on price of item to be purchased.
      * @param item the item to decide price for.
      */
-    private void decrementPrice(ProductItem item){
+    private void decrementPriceExVAT(ProductItem item){
         if(item.hasDiscount()) {
-            totalPrice -= (item.getPrice() * ((100 - item.getDiscount())/100.0));
+            totalPriceExVAT -= (item.getPrice() * ((100 - item.getDiscount())/100.0));
         } else{
-            totalPrice -= item.getPrice();
+            totalPriceExVAT -= item.getPrice();
         }
     }
 
     public int getTotalPrice(){
-        return totalPrice;
+        return totalPriceExVAT;
     }
 
     public Map<ProductItem, Integer> getPurchasedItems(){
