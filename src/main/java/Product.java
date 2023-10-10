@@ -6,7 +6,14 @@ public abstract class Product {
     private boolean hasDiscount;
     private VAT vatRate;
 
-    // Price is in minor units. If (price = 100) that equals 1KR SEK, 500 is 5KR SEK, etc.
+    public int getPriceWithVat() {
+        return (getPrice() * vatRate.value) / 100;
+    }
+
+    /**
+     * Price is entered in minor units, WITHOUT tax.
+     * If a banana costs 20 SEK, the price entered would be 2000. (2000 öre.)
+     **/
     public int getPrice() {
         return price;
     }
