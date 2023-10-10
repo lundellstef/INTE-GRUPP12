@@ -1,18 +1,27 @@
+/**
+ * Product is treated as immutable as possible.
+ * After a product has been created, you should only be able to change the amount and the discount.
+ * Creation of Product objects is managed with builder pattern - see bottom of class.
+ */
 public class Product {
 
     private final String productName;
     private final String brandName;
-    private int priceInMinorUnits;
+    private final int priceInMinorUnits;
+    private final VAT vatRate;
+
+    private int amount;
     private int discount;
     private boolean hasDiscount;
-    private VAT vatRate;
 
     private Product(ProductBuilder builder) {
         this.productName = builder.productName;
         this.brandName = builder.brandName;
         this.priceInMinorUnits = builder.priceInMinorUnits;
         this.discount = builder.discount;
+        this.hasDiscount = builder.hasDiscount;
         this.vatRate = builder.vatRate;
+        this.amount = builder.amount;
     }
 
     /**
@@ -27,7 +36,7 @@ public class Product {
      * Returns the amount of VAT from the total price.
      * If a banana costs 2240 with VAT, this would return 240.
      */
-    public int getVatAmount() {
+    public int getVatAmountOfPrice() {
         return getPriceWithVat() - getPrice();
     }
 
@@ -59,50 +68,65 @@ public class Product {
         return getPriceWithVat() - getPriceWithVatAndDiscount();
     }
 
-    public void setPrice(int priceInMinorUnits) {
-        this.priceInMinorUnits = priceInMinorUnits;
-    }
-
     public int getDiscount() {
         return discount;
     }
 
     public void setDiscount(int discount) {
         this.discount = discount;
+        this.hasDiscount = discount > 0;
     }
 
     public boolean hasDiscount() {
         return hasDiscount;
     }
 
-    public void setHasDiscount(boolean hasDiscount) {
-        this.hasDiscount = hasDiscount;
-    }
-
     public VAT getVat() {
         return vatRate;
     }
 
-    public void setVat(VAT vatRate) {
-        this.vatRate = vatRate;
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) throws IllegalArgumentException {
+        if (amount < 0) {
+            throw new IllegalArgumentException(String.format("%d is not a valid amount.", amount));
+        }
+        this.amount = amount;
     }
 
     @Override
     public String toString() {
-        return String.format("%s", productName);
+        return String.format("%s %s", brandName, productName);
     }
 
+    /**
+     * Builder pattern used to create Product objects.
+     * All fields are mandatory except discount.
+     * If the discount is not explicitly set by the user, the discount defaults to 0 and hasDiscount to false.
+     * <p>
+     * brandName and productName are entered directly in the constructor, all remaining fields are set by methods.
+     * For example:
+     * Product milk = new Product.ProductBuilder("Arla", "Mellanmjölk)
+     * .setPrice(2000)
+     * .setAmount(5)
+     * .setVatRate(VAT.FOOD)
+     * .build();
+     */
     public static class ProductBuilder {
+
         private final String productName;
         private final String brandName;
         private int priceInMinorUnits;
+        private int amount;
         private int discount;
         private boolean hasDiscount;
         private VAT vatRate;
 
-        public ProductBuilder(String productName, String brandName) {
-            this.productName = productName;
+        public ProductBuilder(String brandName, String productName) {
             this.brandName = brandName;
+            this.productName = productName;
         }
 
         public ProductBuilder setPrice(int priceInMinorUnits) {
@@ -112,12 +136,17 @@ public class Product {
 
         public ProductBuilder setDiscount(int discount) {
             this.discount = discount;
-            this.hasDiscount = discount > 0;
+            hasDiscount = discount > 0;
             return this;
         }
 
         public ProductBuilder setVatRate(VAT vatRate) {
             this.vatRate = vatRate;
+            return this;
+        }
+
+        public ProductBuilder setAmount(int amount) {
+            this.amount = amount;
             return this;
         }
 
@@ -127,8 +156,33 @@ public class Product {
             return product;
         }
 
-        private void validateProduct(Product product) {
+        /**
+         * Method used to ensure that all mandatory fields are entered.
+         */
+        private void validateProduct(Product product) throws IllegalArgumentException {
+            if (priceInMinorUnits <= 0) {
+                exceptionMessage(product, "Price");
+            }
 
+            if (amount <= 0) {
+                exceptionMessage(product, "Amount");
+            }
+
+            if (vatRate == null) {
+                exceptionMessage(product, "VAT");
+            }
+
+            if (discount < 0) {
+                exceptionMessage(product, "Discount");
+            }
+        }
+
+        private void exceptionMessage(Product product, String message) {
+            if (message.equals("Discount")) {
+                throw new IllegalArgumentException(String.format(message + " invalid in %s", product.productName));
+            } else {
+                throw new IllegalArgumentException(String.format(message + " missing or invalid in %s", product.productName));
+            }
         }
     }
 }
