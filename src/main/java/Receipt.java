@@ -21,7 +21,11 @@ public class Receipt {
         return ((totalPriceExVat + totalVat) - totalDiscount);
     }
 
-    public String printReciept(){
+    /**
+     * prints the receipt, right now as a long string, this method needs refactoring
+     * @return the receipt as a String
+     */
+    public String printReceipt(){
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Du har köpt varorna:");
         for(ProductItem item : items.keySet()){
