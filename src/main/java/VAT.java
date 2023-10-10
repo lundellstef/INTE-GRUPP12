@@ -2,9 +2,9 @@
 public enum VAT {
     STANDARD(25), REDUCED(12), LOW(6), TOLL_FREE(0);
 
-    public final int percentageValue;
+    public final int value;
 
     VAT(int value) {
-        this.percentageValue = value;
+        this.value = value;
     }
 }

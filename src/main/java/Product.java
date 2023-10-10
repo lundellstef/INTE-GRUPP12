@@ -4,7 +4,7 @@ public abstract class Product {
     private String productID;
     private int discount;
     private boolean hasDiscount;
-    private VAT tollRate;
+    private VAT vatRate;
 
     // Price is in minor units. If (price = 100) that equals 1KR SEK, 500 is 5KR SEK, etc.
     public int getPrice() {
@@ -39,11 +39,11 @@ public abstract class Product {
         this.hasDiscount = hasDiscount;
     }
 
-    public VAT getTollRate() {
-        return tollRate;
+    public VAT getVat() {
+        return vatRate;
     }
 
-    public void setTollRate(VAT tollRate) {
-        this.tollRate = tollRate;
+    public void setVat(VAT vatRate) {
+        this.vatRate = vatRate;
     }
 }
