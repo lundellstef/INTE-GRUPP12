@@ -4,5 +4,5 @@
 - Pontus Lembäck
 
 ## Test case naming convention
-- Should_ExpectedBehavior_When_StateUnderTest 
-- For example: Should_ThrowException_When_AgeLessThan18
+- should_expectedBehavior_when_stateUnderTest 
+- For example: should_throwException_when_ageLessThan18
