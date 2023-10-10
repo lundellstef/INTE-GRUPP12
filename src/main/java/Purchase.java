@@ -7,10 +7,13 @@ public class Purchase {
     Map<ProductItem, Integer> items;
     int totalPriceExVAT;
     int totalVAT;
+    int totalDiscount;
 
     public Purchase(){
         items = new HashMap<>();
         totalPriceExVAT = 0;
+        totalVAT = 0;
+        totalDiscount = 0;
     }
 
     /**
@@ -25,8 +28,22 @@ public class Purchase {
         } else{
             items.put(item, 1);
         }
+        if(item.hasDiscount()){
+            incrementTotalDiscount(item);
+        }
         incrementTotalPriceExVat(item);
         incrementTotalVat(item);
+    }
+
+    /**
+     * increments the total discount
+     * @param item the item that is added to the purchase
+     */
+    private void incrementTotalDiscount(ProductItem item){
+        int discountPercentage = item.getDiscount();
+        int vat = item.getVat.value;
+        int priceIncVat = item.getPrice() * ((100 + vat)/100);
+        totalDiscount += priceIncVat * (100 - discountPercentage);
     }
 
     /**
@@ -70,6 +87,18 @@ public class Purchase {
         decrementPriceExVat(item);
         decrementTotalVat(item);
         return item;
+    }
+
+    /**
+     * decrements the total discount
+     * @param item the item that is removed
+     */
+
+    private void decrementTotalDiscount(ProductItem item){
+        int discountPercentage = item.getDiscount();
+        int vat = item.getVat.value;
+        int priceIncVat = item.getPrice() * ((100 + vat)/100);
+        totalDiscount -= priceIncVat * (100 - discountPercentage);
     }
 
     /**
