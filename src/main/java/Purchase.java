@@ -33,6 +33,7 @@ public class Purchase {
         }
         incrementTotalPriceExVat(item);
         incrementTotalVat(item);
+        incrementTotalDiscount(item);
     }
 
     /**
@@ -86,6 +87,7 @@ public class Purchase {
         }
         decrementPriceExVat(item);
         decrementTotalVat(item);
+        decrementTotalDiscount(item);
         return item;
     }
 
@@ -122,11 +124,20 @@ public class Purchase {
         }
     }
 
-    public int getTotalPrice(){
+    public int getTotalPriceExVat(){
         return totalPriceExVAT;
     }
 
     public Map<ProductItem, Integer> getPurchasedItems(){
         return items;
+    }
+
+
+    public int getTotalVAT(){
+        return totalVAT;
+    }
+
+    public int getTotalDiscount(){
+        return totalDiscount;
     }
 }
