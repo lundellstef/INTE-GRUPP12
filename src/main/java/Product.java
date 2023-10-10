@@ -11,23 +11,23 @@ public abstract class Product {
         return price;
     }
 
-    public String getProductID() {
-        return productID;
-    }
-
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public String getProductID() {
+        return productID;
     }
 
     public void setProductID(String productID) {
         this.productID = productID;
     }
 
-    public int getDiscountPercentage() {
+    public int getDiscount() {
         return discount;
     }
 
-    public void setDiscountPercentage(int discount) {
+    public void setDiscount(int discount) {
         this.discount = discount;
     }
 
