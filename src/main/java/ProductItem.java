@@ -1,4 +1,4 @@
-public class ProductItem extends Product{
+public class ProductItem extends Product {
 
     public ProductItem(int price, String productID, int discount, VAT vatRate) {
         setPrice(price);

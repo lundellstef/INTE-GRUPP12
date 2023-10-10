@@ -30,6 +30,26 @@ public abstract class Product {
         return priceInMinorUnits;
     }
 
+    /**
+     * Returns the price with VAT and discount applied.
+     * If a banana costs 2240 with VAT, this would return 2016.
+     * (2240 * 0.9 = 2016).
+     */
+    public int getPriceWithVatAndDiscount() {
+        int fraction = 100 - getDiscount();
+        int priceWithDiscount = getPriceWithVat() * fraction;
+        return priceWithDiscount / 100;
+    }
+
+    /**
+     * Returns the amount discounted from the price with VAT.
+     * If a banana costs 2240 with VAT, and 10% discount is applied, this returns 224.
+     * (2240 * 0.9 = 2016. 2240 - 2016 = 224.)
+     */
+    public int getDiscountAmount() {
+        return getPriceWithVat() - getPriceWithVatAndDiscount();
+    }
+
     public void setPrice(int priceInMinorUnits) {
         this.priceInMinorUnits = priceInMinorUnits;
     }
@@ -64,5 +84,10 @@ public abstract class Product {
 
     public void setVat(VAT vatRate) {
         this.vatRate = vatRate;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s", productID);
     }
 }
