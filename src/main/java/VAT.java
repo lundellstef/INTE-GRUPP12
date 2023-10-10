@@ -1,6 +1,11 @@
-// The toll rates are: 25%, 12%, 6%, 0%.
+/**
+* The typical tax rates are 25%, 12% and 6%.
+ * 25% is used for alcohol above 3.5 ABV, products, etc.
+ * 12% is used for provisions, food, etc.
+ * 6% is used for books, newspapers, etc.
+**/
 public enum VAT {
-    STANDARD(25), REDUCED(12), LOW(6), TOLL_FREE(0);
+    STANDARD(25), FOOD(12), REDUCED(6), NO_TAX(0);
 
     public final int value;
 
