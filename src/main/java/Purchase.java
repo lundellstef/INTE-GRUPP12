@@ -25,11 +25,15 @@ public class Purchase {
         } else{
             items.put(item, 1);
         }
-        incrementTotalPriceExVAT(item);
-        incrementTotalVAT(item);
+        incrementTotalPriceExVat(item);
+        incrementTotalVat(item);
     }
 
-    private void incrementTotalVAT(ProductItem item){
+    /**
+     * increments the total amount of money that is added to the purchase due to the product's individual VAT
+     * @param item the item to be added to the purchase
+     */
+    private void incrementTotalVat(ProductItem item){
         int vatPercentage = item.getVat.value;
         totalVAT += (item.getPrice() * ((100 + vatPercentage)/100)) - item.getPrice();
     }
@@ -38,7 +42,7 @@ public class Purchase {
      *increments totalPrice price based on price of item to be purchased.
      * @param item the item to decide price for.
      */
-    private void incrementTotalPriceExVAT(ProductItem item){
+    private void incrementTotalPriceExVat(ProductItem item){
         if(item.hasDiscount()) {
             totalPriceExVAT += (item.getPrice() * ((100 - item.getDiscount())/100.0));
         } else{
@@ -50,8 +54,8 @@ public class Purchase {
      * Removes an item from the list. Only one item can be removed at a time and it the item to be removed is not
      * in the list of items, an exception is thrown.
      * TANKE: SKA VI GÖRA SÅ MAN FÅR VÄLJA FRÅN LISTAN AV ITEMS SÅ DET BLIR OMÖJLIGT ATT TA BORT NÅGOT SOM INTE FINNS?
-     * @param item
-     * @return
+     * @param item the item to be removed
+     * @return the item if it has been successfully removed
      */
     public ProductItem removeScannedItem(ProductItem item){
         if(!items.containsKey(item)){
@@ -63,12 +67,16 @@ public class Purchase {
         } else {
             items.remove(item);
         }
-        decrementPriceExVAT(item);
-        decrementTotalVAT(item);
+        decrementPriceExVat(item);
+        decrementTotalVat(item);
         return item;
     }
 
-    private void decrementTotalVAT(ProductItem item){
+    /**
+     * decrements the total amount of money that is removed to the purchase due to the product's individual VAT
+     * @param item the item to be added to the purchase
+     */
+    private void decrementTotalVat(ProductItem item){
         int vatPercentage = item.getVat.value;
         totalVAT -= (item.getPrice() * ((100 + vatPercentage)/100)) - item.getPrice();
     }
@@ -77,7 +85,7 @@ public class Purchase {
      *decrements totalPrice price based on price of item to be purchased.
      * @param item the item to decide price for.
      */
-    private void decrementPriceExVAT(ProductItem item){
+    private void decrementPriceExVat(ProductItem item){
         if(item.hasDiscount()) {
             totalPriceExVAT -= (item.getPrice() * ((100 - item.getDiscount())/100.0));
         } else{
