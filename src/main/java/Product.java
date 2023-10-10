@@ -1,10 +1,19 @@
-public abstract class Product {
+public class Product {
 
+    private final String productName;
+    private final String brandName;
     private int priceInMinorUnits;
-    private String productID;
     private int discount;
     private boolean hasDiscount;
     private VAT vatRate;
+
+    private Product(ProductBuilder builder) {
+        this.productName = builder.productName;
+        this.brandName = builder.brandName;
+        this.priceInMinorUnits = builder.priceInMinorUnits;
+        this.discount = builder.discount;
+        this.vatRate = builder.vatRate;
+    }
 
     /**
      * Returns the total price of the product including VAT.
@@ -54,14 +63,6 @@ public abstract class Product {
         this.priceInMinorUnits = priceInMinorUnits;
     }
 
-    public String getProductID() {
-        return productID;
-    }
-
-    public void setProductID(String productID) {
-        this.productID = productID;
-    }
-
     public int getDiscount() {
         return discount;
     }
@@ -88,6 +89,46 @@ public abstract class Product {
 
     @Override
     public String toString() {
-        return String.format("%s", productID);
+        return String.format("%s", productName);
+    }
+
+    public static class ProductBuilder {
+        private final String productName;
+        private final String brandName;
+        private int priceInMinorUnits;
+        private int discount;
+        private boolean hasDiscount;
+        private VAT vatRate;
+
+        public ProductBuilder(String productName, String brandName) {
+            this.productName = productName;
+            this.brandName = brandName;
+        }
+
+        public ProductBuilder setPrice(int priceInMinorUnits) {
+            this.priceInMinorUnits = priceInMinorUnits;
+            return this;
+        }
+
+        public ProductBuilder setDiscount(int discount) {
+            this.discount = discount;
+            this.hasDiscount = discount > 0;
+            return this;
+        }
+
+        public ProductBuilder setVatRate(VAT vatRate) {
+            this.vatRate = vatRate;
+            return this;
+        }
+
+        public Product build() {
+            Product product = new Product(this);
+            validateProduct(product);
+            return product;
+        }
+
+        private void validateProduct(Product product) {
+
+        }
     }
 }
