@@ -105,10 +105,10 @@ public class Product {
      * Builder pattern used to create Product objects.
      * All fields are mandatory except discount.
      * If the discount is not explicitly set by the user, the discount defaults to 0 and hasDiscount to false.
-     * <p>
+     *
      * brandName and productName are entered directly in the constructor, all remaining fields are set by methods.
      * For example:
-     * Product milk = new Product.ProductBuilder("Arla", "Mellanmjölk)
+     * Product milk = new Product.ProductBuilder("Arla", "Mellanmjölk")
      * .setPrice(2000)
      * .setAmount(5)
      * .setVatRate(VAT.FOOD)
@@ -150,15 +150,16 @@ public class Product {
             return this;
         }
 
+        /**
+         * Finalizes the build of the Product object.
+         * Calls validateProduct() to ensure that the object is built properly, with all mandatory fields.
+         */
         public Product build() {
             Product product = new Product(this);
             validateProduct(product);
             return product;
         }
-
-        /**
-         * Method used to ensure that all mandatory fields are entered.
-         */
+        
         private void validateProduct(Product product) throws IllegalArgumentException {
             if (priceInMinorUnits <= 0) {
                 exceptionMessage(product, "Price");
