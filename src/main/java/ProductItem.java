@@ -1,10 +1,10 @@
-public class ProductItem extends Product{
+public class ProductItem extends Product {
 
-    public ProductItem(int price, String productID, int discount, VAT tollRate) {
+    public ProductItem(int price, String productID, int discount, VAT vatRate) {
         setPrice(price);
         setProductID(productID);
         setDiscount(discount);
-        setTollRate(tollRate);
+        setVat(vatRate);
         setHasDiscount(discount > 0);
     }
 }
