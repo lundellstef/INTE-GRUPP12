@@ -42,7 +42,7 @@ public class Purchase {
      */
     private void incrementTotalDiscount(ProductItem item){
         int discountPercentage = item.getDiscount();
-        int vat = item.getVat.value;
+        int vat = item.getVat().value;
         int priceIncVat = item.getPrice() * ((100 + vat)/100);
         totalDiscount += priceIncVat * (100 - discountPercentage);
     }
@@ -52,7 +52,7 @@ public class Purchase {
      * @param item the item to be added to the purchase
      */
     private void incrementTotalVat(ProductItem item){
-        int vatPercentage = item.getVat.value;
+        int vatPercentage = item.getVat().value;
         totalVAT += (item.getPrice() * ((100 + vatPercentage)/100)) - item.getPrice();
     }
 
@@ -98,7 +98,7 @@ public class Purchase {
 
     private void decrementTotalDiscount(ProductItem item){
         int discountPercentage = item.getDiscount();
-        int vat = item.getVat.value;
+        int vat = item.getVat().value;
         int priceIncVat = item.getPrice() * ((100 + vat)/100);
         totalDiscount -= priceIncVat * (100 - discountPercentage);
     }
@@ -108,7 +108,7 @@ public class Purchase {
      * @param item the item to be added to the purchase
      */
     private void decrementTotalVat(ProductItem item){
-        int vatPercentage = item.getVat.value;
+        int vatPercentage = item.getVat().value;
         totalVAT -= (item.getPrice() * ((100 + vatPercentage)/100)) - item.getPrice();
     }
 
