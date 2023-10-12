@@ -50,4 +50,13 @@ public class TestMoney {
         });
     }
 
+    @Test
+    public void addMoneyGivesCorrectNewAmount(){
+        Money money = new Money(VALID_AMOUNT);
+        money.add(DEFAULT_ADD_AND_SUBTRACT_AMOUNT);
+        long amount = money.getAmountInMinorUnit();
+        assertEquals(DEFAULT_AMOUNT_AFTER_ADD, amount);
+    }
+
+
 }

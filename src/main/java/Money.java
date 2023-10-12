@@ -24,5 +24,9 @@ public class Money {
         this.amountInMinorUnit -= amountInMinorUnit;
     }
 
+    public void add(long amountInMinorUnit){
+        this.amountInMinorUnit += amountInMinorUnit;
+    }
+
 
 }
