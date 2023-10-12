@@ -51,12 +51,29 @@ public class TestMoney {
     }
 
     @Test
+    public void throwExceptionWhenAmountToBeSubtractedIsNegative(){
+        Money money = new Money(VALID_AMOUNT);
+        assertThrows(IllegalArgumentException.class, () -> {
+            money.subtract(INVALID_AMOUNT);
+        });
+    }
+
+    @Test
     public void addMoneyGivesCorrectNewAmount(){
         Money money = new Money(VALID_AMOUNT);
         money.add(DEFAULT_ADD_AND_SUBTRACT_AMOUNT);
         long amount = money.getAmountInMinorUnit();
         assertEquals(DEFAULT_AMOUNT_AFTER_ADD, amount);
     }
+
+    @Test
+    public void throwExceptionWhenAmountToBeAddedIsNegative(){
+        Money money = new Money(VALID_AMOUNT);
+        assertThrows(IllegalArgumentException.class, () -> {
+            money.add(INVALID_AMOUNT);
+        });
+    }
+
 
 
 }

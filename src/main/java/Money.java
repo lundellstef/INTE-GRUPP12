@@ -18,14 +18,18 @@ public class Money {
     }
 
     public void subtract(long amountInMinorUnit){
-        if(amountInMinorUnit > this.amountInMinorUnit){
+        if((amountInMinorUnit > this.amountInMinorUnit)|| (amountInMinorUnit < 0)){
             throw new IllegalArgumentException();
         }
         this.amountInMinorUnit -= amountInMinorUnit;
     }
 
     public void add(long amountInMinorUnit){
+        if(amountInMinorUnit < 0){
+            throw new IllegalArgumentException();
+        }
         this.amountInMinorUnit += amountInMinorUnit;
+
     }
 
 
