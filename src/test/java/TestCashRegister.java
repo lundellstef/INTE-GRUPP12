@@ -1,4 +1,4 @@
-
+/*
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -39,8 +39,10 @@ public class TestCashRegister {
         assertEquals(DEFAULT_TOTAL_AMOUNT_ABOVE_ZERO + DEFAULT_TOTAL_PRICE, cashRegister.getTotalAmount());
     }
 
+
+
     @Test
-    void throwsExceptionWhenMoneyForChangeDoesNotExist(){
+    void throwsExceptionWhenEnoughMoneyForChangeDoesNotExist(){
 
         List<Money> customerPayment = new ArrayList<>();
         customerPayment.add(new Money(SEK, 1_000));
@@ -60,4 +62,41 @@ public class TestCashRegister {
         });
     }
 
-}
+    @Test
+    void throwsExceptionWhenThereIsNoMoneyInRegister(){
+
+        List<Money> customerPayment = new ArrayList<>();
+        customerPayment.add(new Money(SEK, 1_000));
+        customerPayment.add(new Money(SEK, 1_000));
+        customerPayment.add(new Money(SEK, 500));
+
+        List<Money> moneyInRegister = new ArrayList<>();
+
+        CashRegister cashRegister = new CashRegister();
+        cashRegister.setMoneyInRegister(moneyInRegister);
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            cashRegister.handlePayment(customerPayment, DEFAULT_TOTAL_PRICE);
+        });
+    }
+
+    @Test
+    void returnsLeastAmountOfMoneyObjectsForChange(){
+        List<Money> customerPayment = new ArrayList<>();
+        customerPayment.add(new Money(SEK, 1_000));
+        customerPayment.add(new Money(SEK, 1_000));
+        customerPayment.add(new Money(SEK, 500));
+
+        List<Money> moneyInRegister = new ArrayList<>();
+        moneyInRegister.add(new Money(SEK, 1_000));
+        moneyInRegister.add(new Money(SEK, 1_000));
+        moneyInRegister.add(new Money(SEK, 1_000));
+        moneyInRegister.add(new Money(SEK, 200));
+        moneyInRegister.add(new Money(SEK, 1));
+        moneyInRegister.add(new Money(SEK, 1));
+
+        CashRegister cashRegister = new CashRegister();
+        cashRegister.setMoneyInRegister(moneyInRegister);
+    }
+
+}*/

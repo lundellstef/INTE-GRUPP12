@@ -29,32 +29,33 @@ public class Purchase {
             items.put(item, 1);
         }
         if(item.hasDiscount()){
-            incrementTotalDiscount(item);
+            //incrementTotalDiscount(item);
         }
         incrementTotalPriceExVat(item);
-        incrementTotalVat(item);
-        incrementTotalDiscount(item);
+        //incrementTotalVat(item);
+        //incrementTotalDiscount(item);
     }
 
     /**
      * increments the total discount
      * @param item the item that is added to the purchase
      */
-    private void incrementTotalDiscount(ProductItem item){
+   /** private void incrementTotalDiscount(ProductItem item){
         int discountPercentage = item.getDiscount();
         int vat = item.getVat().value;
         int priceIncVat = item.getPrice() * ((100 + vat)/100);
         totalDiscount += priceIncVat * (100 - discountPercentage);
     }
+    **/
 
     /**
      * increments the total amount of money that is added to the purchase due to the product's individual VAT
      * @param item the item to be added to the purchase
      */
-    private void incrementTotalVat(ProductItem item){
+    /**private void incrementTotalVat(ProductItem item){
         int vatPercentage = item.getVat().value;
         totalVAT += (item.getPrice() * ((100 + vatPercentage)/100)) - item.getPrice();
-    }
+    }*/
 
     /**
      *increments totalPrice price based on price of item to be purchased.
@@ -86,8 +87,8 @@ public class Purchase {
             items.remove(item);
         }
         decrementPriceExVat(item);
-        decrementTotalVat(item);
-        decrementTotalDiscount(item);
+        //decrementTotalVat(item);
+        //decrementTotalDiscount(item);
         return item;
     }
 
@@ -96,21 +97,21 @@ public class Purchase {
      * @param item the item that is removed
      */
 
-    private void decrementTotalDiscount(ProductItem item){
+    /**private void decrementTotalDiscount(ProductItem item){
         int discountPercentage = item.getDiscount();
         int vat = item.getVat().value;
         int priceIncVat = item.getPrice() * ((100 + vat)/100);
         totalDiscount -= priceIncVat * (100 - discountPercentage);
-    }
+    }*/
 
     /**
      * decrements the total amount of money that is removed to the purchase due to the product's individual VAT
      * @param item the item to be added to the purchase
      */
-    private void decrementTotalVat(ProductItem item){
+    /**private void decrementTotalVat(ProductItem item){
         int vatPercentage = item.getVat().value;
         totalVAT -= (item.getPrice() * ((100 + vatPercentage)/100)) - item.getPrice();
-    }
+    }*/
 
     /**
      *decrements totalPrice price based on price of item to be purchased.
