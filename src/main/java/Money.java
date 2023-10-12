@@ -32,5 +32,10 @@ public class Money {
 
     }
 
+    @Override
+    public String toString(){
+        return (amountInMinorUnit/100) + "kr";
+    }
+
 
 }

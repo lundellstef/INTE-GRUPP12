@@ -74,6 +74,11 @@ public class TestMoney {
         });
     }
 
-
+    @Test
+    public void toStringReturnsCorrectlyFormattedString(){
+        Money money = new Money(VALID_AMOUNT);
+        String printedMoney = money.toString();
+        assertEquals("100kr", printedMoney);
+    }
 
 }
