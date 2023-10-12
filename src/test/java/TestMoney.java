@@ -4,8 +4,14 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestMoney {
 
     static final String DEFAULT_CURRENCY = "SEK";
-    static final int VALID_AMOUNT = 100;
-    static final int INVALID_AMOUNT = -100;
+    static final long VALID_AMOUNT = 10_000;
+
+    static final long DEFAULT_ADD_AND_SUBTRACT_AMOUNT = 1_000;
+
+    static final long DEFAULT_AMOUNT_AFTER_SUBTRACT = 9_000;
+
+    static final long DEFAULT_AMOUNT_AFTER_ADD = 11_000;
+    static final long INVALID_AMOUNT = -10_000;
 
     @Test
     public void throwsExceptionWhenAmountIsLessThanZero(){
@@ -18,7 +24,7 @@ public class TestMoney {
     public void getAmountReturnsCorrectAmount(){
         Money money = new Money(VALID_AMOUNT);
         long amount = money.getAmountInMinorUnit();
-        assertEquals(100, amount);
+        assertEquals(VALID_AMOUNT, amount);
     }
 
     @Test
@@ -28,6 +34,20 @@ public class TestMoney {
         assertEquals(DEFAULT_CURRENCY, currency);
     }
 
+    @Test
+    public void subtractMoneyGivesCorrectNewAmount(){
+        Money money = new Money(VALID_AMOUNT);
+        money.subtract(DEFAULT_ADD_AND_SUBTRACT_AMOUNT);
+        long amount = money.getAmountInMinorUnit();
+        assertEquals(DEFAULT_AMOUNT_AFTER_SUBTRACT, amount);
+    }
 
+    @Test
+    public void throwsExceptionWhenAmountToSubtractIsBiggerThanTotalAmount(){
+        Money money = new Money(VALID_AMOUNT);
+        assertThrows(IllegalArgumentException.class, () -> {
+            money.subtract(VALID_AMOUNT + 1);
+        });
+    }
 
 }

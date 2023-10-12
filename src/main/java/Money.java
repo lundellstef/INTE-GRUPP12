@@ -2,7 +2,7 @@ public class Money {
 
     long amountInMinorUnit;
     String currency = "SEK";
-    Money(int amountInMinorUnit){
+    Money(long amountInMinorUnit){
         if(amountInMinorUnit < 0) {
             throw new IllegalArgumentException();
         }
@@ -15,6 +15,13 @@ public class Money {
 
     public String getCurrency(){
         return currency;
+    }
+
+    public void subtract(long amountInMinorUnit){
+        if(amountInMinorUnit > this.amountInMinorUnit){
+            throw new IllegalArgumentException();
+        }
+        this.amountInMinorUnit -= amountInMinorUnit;
     }
 
 
