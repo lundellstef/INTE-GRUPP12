@@ -1,6 +1,6 @@
 public class CashMoney {
 
-    int amountInMinorUnit;
+    private int amountInMinorUnit;
     public CashMoney(int denomination){
         switch (denomination) {
             case 1 -> amountInMinorUnit = 1;
