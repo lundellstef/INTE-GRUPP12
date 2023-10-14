@@ -17,7 +17,8 @@ public class InventoryLoader {
         File file = new File(filePath);
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));
-            String currentLine = br.readLine();
+            String currentLine;
+            br.readLine();
             String[] values;
             while ((currentLine = br.readLine()) != null) {
                 values = currentLine.split(",");
@@ -25,7 +26,7 @@ public class InventoryLoader {
                 inventoryBalance.addProduct(product);
             }
         } catch (Exception e) {
-            System.err.println(e);
+            e.printStackTrace();
         }
         return inventoryBalance;
     }
@@ -69,13 +70,14 @@ public class InventoryLoader {
         File file = new File(filePath);
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));
-            String currentLine = br.readLine();
+            String currentLine;
+            br.readLine();
             currentLine = br.readLine();
             String[] values = currentLine.split(",");
             return createProductFromString(values);
 
         } catch (Exception e) {
-            System.err.println(e);
+            e.printStackTrace();
         }
         return null;
     }

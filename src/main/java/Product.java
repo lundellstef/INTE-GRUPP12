@@ -109,6 +109,14 @@ public class Product {
         setAmount(amountInInventory - 1);
     }
 
+    public String getProductName() {
+        return productName;
+    }
+
+    public String getBrandName() {
+        return brandName;
+    }
+
     @Override
     public String toString() {
         return String.format("%s %s", brandName, productName);

@@ -1,11 +1,13 @@
-import java.util.HashMap;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 /**
  * Class representing the inventory balance for the store.
  * Products are stored in a Map: the products' hashcode is the key, and the Product is the value. (For faster search.)
- *
+ * <p>
+ * The inventory holds direct references to the actual Products.
+ * This means that, if the amount of a Product is changed elsewhere (without interacting with the inventory)
+ * the inventory will still reflect that change.
+ * <p>
  * To create an inventory balance preloaded with values, see the InventoryLoader class.
  */
 public class InventoryBalance {
@@ -69,6 +71,21 @@ public class InventoryBalance {
     public void adjustAmount(Product product, int amount) {
         int previousAmount = getAmount(product);
         get(product).setAmount(previousAmount + amount);
+    }
+
+    /**
+     * Checks the inventory for products that are low in stock.
+     *
+     * @return a list of products that are currently low in stock.
+     */
+    public List<String> getProductsLowInStock() {
+        ArrayList<String> listOfProductsLowInStock = new ArrayList<>();
+        for (Product product : inventory.values()) {
+            if (product.getAmount() < 5) {
+                listOfProductsLowInStock.add(product.getBrandName() + " " + product.getProductName());
+            }
+        }
+        return listOfProductsLowInStock;
     }
 
     public boolean contains(Product product) {
