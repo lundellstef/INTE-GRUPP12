@@ -11,61 +11,87 @@ public class TestInventoryBalance {
     static final String FILE_PATH = "src/main/resources/products_testing_data.csv";
 
     @Test
-    void increasesCountOfItem_when_tryingToIncreaseCountByValidAmount() {
+    void increasesCountOfProduct_when_tryingToIncreaseCountByValidAmount() {
         InventoryBalance ib = InventoryLoader.createInventoryBalanceFromTextFile(FILE_PATH);
         Product itemInInventory = InventoryLoader.createSingleProductFromTextFile(FILE_PATH);
 
         int previousCountOfItem = ib.getCount(itemInInventory);
 
-        ib.updateCount(itemInInventory, VALID_AMOUNT_TO_INCREASE_BY);
+        ib.adjustAmount(itemInInventory, VALID_AMOUNT_TO_INCREASE_BY);
         int currentCountOfItem = ib.getCount(itemInInventory);
 
         assertEquals(currentCountOfItem, previousCountOfItem + VALID_AMOUNT_TO_INCREASE_BY);
     }
 
     @Test
-    void decreaseCountOfItem_when_tryingToDecreaseCountByValidAmount() {
+    void decreaseCountOfProduct_when_tryingToDecreaseCountByValidAmount() {
         InventoryBalance ib = InventoryLoader.createInventoryBalanceFromTextFile(FILE_PATH);
         Product itemInInventory = InventoryLoader.createSingleProductFromTextFile(FILE_PATH);
 
         int previousCountOfItem = ib.getCount(itemInInventory);
 
-        ib.updateCount(itemInInventory, VALID_AMOUNT_TO_DECREASE_BY);
+        ib.adjustAmount(itemInInventory, VALID_AMOUNT_TO_DECREASE_BY);
         int currentCountOfItem = ib.getCount(itemInInventory);
 
         assertEquals(currentCountOfItem, previousCountOfItem + VALID_AMOUNT_TO_DECREASE_BY);
     }
 
     @Test
-    void throwsException_when_tryingToIncreaseCountOfItemNotInInventory() {
+    void throwsException_when_tryingToIncreaseCountOfProductNotInInventory() {
         InventoryBalance ib = InventoryLoader.createInventoryBalanceFromTextFile(FILE_PATH);
-        Product itemNotInInventory = createJunkProductNotPresentInInventory();
+        Product itemNotInInventory = createProductNotPresentInInventory();
 
         assertThrows(NoSuchElementException.class, () -> {
-            ib.updateCount(itemNotInInventory, VALID_AMOUNT_TO_INCREASE_BY);
+            ib.adjustAmount(itemNotInInventory, VALID_AMOUNT_TO_INCREASE_BY);
         });
 
     }
 
     @Test
-    void throwsException_when_tryingToDecreaseCountOfItemNotInInventory() {
+    void throwsException_when_tryingToDecreaseCountOfProductNotInInventory() {
         InventoryBalance ib = InventoryLoader.createInventoryBalanceFromTextFile(FILE_PATH);
-        Product itemNotInInventory = createJunkProductNotPresentInInventory();
+        Product productNotInInventory = createProductNotPresentInInventory();
 
         assertThrows(NoSuchElementException.class, () -> {
-            ib.updateCount(itemNotInInventory, VALID_AMOUNT_TO_DECREASE_BY);
+            ib.adjustAmount(productNotInInventory, VALID_AMOUNT_TO_DECREASE_BY);
         });
 
+    }
+
+    @Test
+    void throwsException_when_tryingToRemoveProductNotInInventory() {
+        InventoryBalance ib = new InventoryBalance();
+        Product productNotInInventory = createProductNotPresentInInventory();
+
+        assertThrows(NoSuchElementException.class, () -> {
+            ib.removeProduct(productNotInInventory);
+        });
     }
 
     @Test
     void increasesCountInInventory_when_itemIsIncremented() {
+        InventoryBalance ib = new InventoryBalance();
+        Product product = createProductNotPresentInInventory();
+        ib.addProduct(product);
 
+        int originalAmount = ib.getCount(product);
+        ib.increment(product);
+        int currentAmount = ib.getCount(product);
+
+        assertEquals(currentAmount, originalAmount + 1);
     }
 
     @Test
     void decreasesCountInInventory_when_itemIsDecremented() {
+        InventoryBalance ib = new InventoryBalance();
+        Product product = createProductNotPresentInInventory();
+        ib.addProduct(product);
+        
+        int originalAmount = ib.getCount(product);
+        ib.decrement(product);
+        int currentAmount = ib.getCount(product);
 
+        assertEquals(currentAmount, originalAmount - 1);
     }
 
     @Test
@@ -77,10 +103,10 @@ public class TestInventoryBalance {
      * Support method used to create a Product with junk values.
      * @return a "junk" Product not present in inventory.
      */
-    private Product createJunkProductNotPresentInInventory() {
+    private Product createProductNotPresentInInventory() {
         return new Product.ProductBuilder("AAA", "BBB")
-                .setPrice(10_00)
-                .setAmount(1)
+                .setPrice(100_00)
+                .setAmount(10)
                 .setVatRate(VAT.STANDARD)
                 .setDiscount(0)
                 .build();
