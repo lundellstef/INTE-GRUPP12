@@ -50,9 +50,9 @@ public class TestCashRegister {
 
     @Test
     public void ifDatabaseFileHasLargeAmountOfMoneyCorrectAmountShouldStillBeMAde() {
-        CashRegister cashRegister = new CashRegister("src/main/java/CashRegisterMoneyTestFiles/emptyFile.txt");
+        CashRegister cashRegister = new CashRegister("src/main/java/CashRegisterMoneyTestFiles/largeAmountOfMoney.txt");
         long amountOfMoneyInStore = cashRegister.getAmountOfMoneyInStore();
-        assertEquals(0, amountOfMoneyInStore);
+        assertEquals(999999999999999L, cashRegister.getAmountOfMoneyInStore());
     }
 
 }
