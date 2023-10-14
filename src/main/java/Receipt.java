@@ -3,7 +3,7 @@ import java.util.Map;
 
 public class Receipt {
 
-    Map<ProductItem, Integer> items;
+    Map<Product, Integer> items;
     int totalPriceExVat;
     Date date;
     int totalVat;
@@ -28,7 +28,7 @@ public class Receipt {
     public String printReceipt(){
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Du har köpt varorna:");
-        for(ProductItem item : items.keySet()){
+        for(Product item : items.keySet()){
             stringBuilder.append(item.toString()).append(" antal: ").append(items.get(item));
         }
         stringBuilder.append("Pris ex moms: ").append(totalPriceExVat);
