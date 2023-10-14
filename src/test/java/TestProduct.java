@@ -9,8 +9,11 @@ public class TestProduct {
     static final int DEFAULT_PRICE = 2000_00;
     static final int EXPECTED_PRICE_WITH_VAT12 = 2240_00;
     static final int EXPECTED_PRICE_WITH_VAT25 = 2500_00;
-    static final int DEFAULT_AMOUNT = 10;
+    static final int EXPECTED_PRICE_WITH_VAT12_AND_DEFAULT_DISCOUNT = 2016_00;
     static final int DEFAULT_DISCOUNT = 10;
+    static final int DEFAULT_AMOUNT = 10;
+
+    static final String EXCEPTION_TEST_MESSAGE = "[TEST] Success: ";
 
     @Test
     void throwsException_when_creatingProduct_withOutPrice() {
@@ -20,7 +23,7 @@ public class TestProduct {
                         .setVatRate(VAT.FOOD)
                         .setDiscount(DEFAULT_DISCOUNT)
                         .build());
-        System.out.println(exception.getMessage());
+        printExceptionMessage(exception.getMessage());
     }
 
     @Test
@@ -32,21 +35,21 @@ public class TestProduct {
                         .setVatRate(VAT.FOOD)
                         .setDiscount(DEFAULT_DISCOUNT)
                         .build());
-        System.out.println(exception.getMessage());
+        printExceptionMessage(exception.getMessage());
     }
 
     @Test
     void throwsException_when_settingDiscountOfCreatedProduct_toInvalidAmount() {
         Product product = createProductWithDefaultValues(VAT.STANDARD);
         Exception exception = assertThrows(IllegalArgumentException.class, () -> product.setDiscount(-10));
-        System.out.println(exception.getMessage());
+        printExceptionMessage(exception.getMessage());
     }
 
     @Test
     void throwsException_when_settingAmountOfCreatedProduct_toInvalidAmount() {
         Product product = createProductWithDefaultValues(VAT.STANDARD);
         Exception exception = assertThrows(IllegalArgumentException.class, () -> product.setAmount(-100));
-        System.out.println(exception.getMessage());
+        printExceptionMessage(exception.getMessage());
     }
 
     @Test
@@ -57,7 +60,7 @@ public class TestProduct {
                         .setVatRate(VAT.FOOD)
                         .setDiscount(DEFAULT_DISCOUNT)
                         .build());
-        System.out.println(exception.getMessage());
+        printExceptionMessage(exception.getMessage());
     }
 
     @Test
@@ -68,7 +71,7 @@ public class TestProduct {
                         .setAmount(DEFAULT_AMOUNT)
                         .setDiscount(DEFAULT_DISCOUNT)
                         .build());
-        System.out.println(exception.getMessage());
+        printExceptionMessage(exception.getMessage());
     }
 
     @Test
@@ -84,6 +87,12 @@ public class TestProduct {
     }
 
     @Test
+    void returnsCorrectDiscountedPrice_withVat12_when_productIsCreated() {
+        Product product = createProductWithDefaultValues(VAT.FOOD);
+        assertEquals(product.getPriceWithVatAndDiscount(), EXPECTED_PRICE_WITH_VAT12_AND_DEFAULT_DISCOUNT);
+    }
+
+    @Test
     void setsDiscountToDefaultValueZero_when_creatingProduct_withoutDiscount() {
         Product product = new Product.ProductBuilder(DEFAULT_BRAND_NAME, DEFAULT_PRODUCT_NAME)
                 .setPrice(DEFAULT_PRICE)
@@ -94,6 +103,21 @@ public class TestProduct {
         assertFalse(product.hasDiscount());
     }
 
+    /**
+     * Support method used to print messages retrieved from exceptions.
+     *
+     * @param message is the exception message to be printed.
+     */
+    private void printExceptionMessage(String message) {
+        System.out.println(EXCEPTION_TEST_MESSAGE + message);
+    }
+
+    /**
+     * Support method used to create a product with default values.
+     *
+     * @param vatRate is the chosen VAT for the product to be created.
+     * @return a Product with default values and the chosen VAT rate.
+     */
     private Product createProductWithDefaultValues(VAT vatRate) {
         return new Product.ProductBuilder(DEFAULT_BRAND_NAME, DEFAULT_BRAND_NAME)
                 .setPrice(DEFAULT_PRICE)
