@@ -14,68 +14,60 @@ public class TestProduct {
 
     @Test
     void throwsException_when_creatingProduct_withOutPrice() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            new Product.ProductBuilder(DEFAULT_BRAND_NAME, DEFAULT_PRODUCT_NAME)
-                    .setAmount(DEFAULT_AMOUNT)
-                    .setVatRate(VAT.FOOD)
-                    .setDiscount(DEFAULT_DISCOUNT)
-                    .build();
-        });
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+                new Product.ProductBuilder(DEFAULT_BRAND_NAME, DEFAULT_PRODUCT_NAME)
+                        .setAmount(DEFAULT_AMOUNT)
+                        .setVatRate(VAT.FOOD)
+                        .setDiscount(DEFAULT_DISCOUNT)
+                        .build());
         System.out.println(exception.getMessage());
     }
 
     @Test
     void throwsException_when_creatingProduct_withInvalidPrice() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            new Product.ProductBuilder(DEFAULT_BRAND_NAME, DEFAULT_PRODUCT_NAME)
-                    .setPrice(-100)
-                    .setAmount(DEFAULT_AMOUNT)
-                    .setVatRate(VAT.FOOD)
-                    .setDiscount(DEFAULT_DISCOUNT)
-                    .build();
-        });
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+                new Product.ProductBuilder(DEFAULT_BRAND_NAME, DEFAULT_PRODUCT_NAME)
+                        .setPrice(-100)
+                        .setAmount(DEFAULT_AMOUNT)
+                        .setVatRate(VAT.FOOD)
+                        .setDiscount(DEFAULT_DISCOUNT)
+                        .build());
         System.out.println(exception.getMessage());
     }
 
     @Test
     void throwsException_when_settingDiscountOfCreatedProduct_toInvalidAmount() {
         Product product = createProductWithDefaultValues(VAT.STANDARD);
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            product.setDiscount(-10);
-        });
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> product.setDiscount(-10));
         System.out.println(exception.getMessage());
     }
 
     @Test
     void throwsException_when_settingAmountOfCreatedProduct_toInvalidAmount() {
         Product product = createProductWithDefaultValues(VAT.STANDARD);
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            product.setAmount(-100);
-        });
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> product.setAmount(-100));
         System.out.println(exception.getMessage());
     }
 
     @Test
     void throwsException_when_creatingProduct_withoutAmount() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            new Product.ProductBuilder(DEFAULT_BRAND_NAME, DEFAULT_PRODUCT_NAME)
-                    .setPrice(DEFAULT_PRICE)
-                    .setVatRate(VAT.FOOD)
-                    .setDiscount(DEFAULT_DISCOUNT)
-                    .build();
-        });
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+                new Product.ProductBuilder(DEFAULT_BRAND_NAME, DEFAULT_PRODUCT_NAME)
+                        .setPrice(DEFAULT_PRICE)
+                        .setVatRate(VAT.FOOD)
+                        .setDiscount(DEFAULT_DISCOUNT)
+                        .build());
         System.out.println(exception.getMessage());
     }
 
     @Test
     void throwsException_when_creatingProduct_withoutVatRate() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            new Product.ProductBuilder(DEFAULT_BRAND_NAME, DEFAULT_PRODUCT_NAME)
-                    .setPrice(DEFAULT_PRICE)
-                    .setAmount(DEFAULT_AMOUNT)
-                    .setDiscount(DEFAULT_DISCOUNT)
-                    .build();
-        });
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+                new Product.ProductBuilder(DEFAULT_BRAND_NAME, DEFAULT_PRODUCT_NAME)
+                        .setPrice(DEFAULT_PRICE)
+                        .setAmount(DEFAULT_AMOUNT)
+                        .setDiscount(DEFAULT_DISCOUNT)
+                        .build());
         System.out.println(exception.getMessage());
     }
 
