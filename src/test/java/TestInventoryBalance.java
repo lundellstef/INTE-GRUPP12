@@ -8,23 +8,20 @@ public class TestInventoryBalance {
 
     static final int VALID_AMOUNT_TO_INCREASE_BY = 5;
     static final int VALID_AMOUNT_TO_DECREASE_BY = -10;
+    static final String FILE_PATH = "src/main/resources/products_testing_data.csv";
 
-    public static void main(String[] args) {
-        InventoryBalance ib = createDefaultInventoryBalanceForTesting();
+    @Test
+    void increasesCountOfItem_when_tryingToIncreaseCountByValidAmount() {
+        InventoryBalance ib = InventoryLoader.createInventoryBalanceFromTextFile(FILE_PATH);
+        Product itemInInventory = createDefaultItemForTesting();
+
+        int previousCountOfItem = ib.getCount(itemInInventory);
+
+        ib.updateCount(itemInInventory, VALID_AMOUNT_TO_INCREASE_BY);
+        int currentCountOfItem = ib.getCount(itemInInventory);
+
+        assertEquals(currentCountOfItem, previousCountOfItem + VALID_AMOUNT_TO_INCREASE_BY);
     }
-
-//    @Test
-//    void increasesCountOfItem_when_tryingToIncreaseCountByValidAmount() {
-//        InventoryBalance ib = createDefaultInventoryBalanceForTesting();
-//        Product itemInInventory = createDefaultItemForTesting();
-//
-//        int previousCountOfItem = ib.getCount(itemInInventory);
-//
-//        ib.updateCount(itemInInventory, VALID_AMOUNT_TO_INCREASE_BY);
-//        int currentCountOfItem = ib.getCount(itemInInventory);
-//
-//        assertEquals(currentCountOfItem, previousCountOfItem + VALID_AMOUNT_TO_INCREASE_BY);
-//    }
 
 //    @Test
 //    void decreaseCountOfItem_when_tryingToDecreaseCountByValidAmount() {
@@ -70,14 +67,9 @@ public class TestInventoryBalance {
     void decreasesCountInInventory_when_itemIsDecremented() {
 
     }
+
     @Test
     void displaysCountOfEveryItem_when_totalInventoryIsPrinted() {
 
-    }
-
-    private static InventoryBalance createDefaultInventoryBalanceForTesting() {
-        String filePath = "src/main/resources/products_testing_data.csv";
-        File file = new File(filePath);
-        return new InventoryBalance(file);
     }
 }
