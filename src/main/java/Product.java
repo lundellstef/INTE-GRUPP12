@@ -12,7 +12,7 @@ public class Product {
     private final int priceInMinorUnits;
     private final VAT vatRate;
 
-    private int amount;
+    private int amountInInventory;
     private int discount;
     private boolean hasDiscount;
 
@@ -21,7 +21,7 @@ public class Product {
         this.productName = builder.productName;
         this.priceInMinorUnits = builder.priceInMinorUnits;
         this.vatRate = builder.vatRate;
-        this.amount = builder.amount;
+        this.amountInInventory = builder.amount;
         this.discount = builder.discount;
         this.hasDiscount = builder.hasDiscount;
     }
@@ -88,7 +88,7 @@ public class Product {
     }
 
     public int getAmount() {
-        return amount;
+        return amountInInventory;
     }
 
     /**
@@ -98,15 +98,15 @@ public class Product {
         if (amount < 0) {
             throw new IllegalArgumentException(String.format("%d is not a valid amount.", amount));
         }
-        this.amount = amount;
+        this.amountInInventory = amount;
     }
 
     public void increment() {
-        setAmount(amount + 1);
+        setAmount(amountInInventory + 1);
     }
 
     public void decrement() {
-        setAmount(amount - 1);
+        setAmount(amountInInventory - 1);
     }
 
     @Override
