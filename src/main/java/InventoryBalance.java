@@ -1,6 +1,11 @@
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
+/**
+ * Class representing the inventory balance for the store.
+ * Products are stored in a Map: the products' hashcode is the key, and the Product is the value. (For faster search.)
+ */
 public class InventoryBalance {
 
     private final Map<Integer, Product> inventory;
@@ -23,8 +28,16 @@ public class InventoryBalance {
         get(product).setAmount(previousAmount + amount);
     }
 
-    // Support-method for readability.
-    private Product get(Product product) {
+    /**
+     * Support method used to increase readability and handle exception when a Product is not in inventory.
+     * @param product is the product to be fetched from inventory.
+     * @return the Product from inventory.
+     * @throws NoSuchElementException when the searched Product is not found in inventory.
+     */
+    private Product get(Product product) throws NoSuchElementException{
+        if (inventory.get(product.hashCode()) == null) {
+            throw new NoSuchElementException("Product not in inventory.");
+        }
         return inventory.get(product.hashCode());
     }
 
