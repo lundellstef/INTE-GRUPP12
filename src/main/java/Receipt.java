@@ -8,18 +8,18 @@ public class Receipt {
     Date date;
     int totalVat;
     int totalDiscount;
+    int totalPrice;
 
     Receipt(Purchase purchase){
         items = purchase.getPurchasedItems();
         totalPriceExVat = purchase.getTotalPriceExVat();
         totalVat = purchase.getTotalVAT();
         totalDiscount = purchase.getTotalDiscount();
+        totalPrice = purchase.getTotalPrice();
         date = new Date();
     }
 
-    private int calculateTotalPrice(){
-        return ((totalPriceExVat + totalVat) - totalDiscount);
-    }
+
 
     /**
      * prints the receipt, right now as a long string, this method needs refactoring
@@ -34,7 +34,7 @@ public class Receipt {
         stringBuilder.append("Pris ex moms: ").append(totalPriceExVat);
         stringBuilder.append("Moms: ").append(totalVat);
         stringBuilder.append("Rabatt: ").append("-").append(totalDiscount);
-        stringBuilder.append("Totalpris: ").append(calculateTotalPrice());
+        stringBuilder.append("Totalpris: ").append(totalPrice);
 
         return stringBuilder.toString();
     }
