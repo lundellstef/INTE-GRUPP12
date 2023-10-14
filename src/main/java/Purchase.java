@@ -21,7 +21,7 @@ public class Purchase {
      * the amount is incremented by 1. decidePrice-method determines price of item
      * @param item the item to be added to the list of items to be purchased.
      */
-    public void scanItem(ProductItem item){
+    public void scanItem(Product item){
         if(items.containsKey(item)){
             int currentAmount = items.get(item);
             items.put(item, currentAmount + 1);
