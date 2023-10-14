@@ -21,4 +21,9 @@ public class CashMoney {
     public int getCashMoneyDenomination(){
         return amountInMinorUnit;
     }
+
+    @Override
+    public String toString(){
+        return (amountInMinorUnit/100) + "kr";
+    }
 }

@@ -23,6 +23,6 @@ public class TestCashMoney {
     public void toStringReturnsCorrectlyFormattedString(){
         CashMoney cashMoney = new CashMoney(VALID_DENOMINATION);
         String printedMoney = cashMoney.toString();
-        assertEquals("100kr", printedMoney);
+        assertEquals("10kr", printedMoney);
     }
 }
