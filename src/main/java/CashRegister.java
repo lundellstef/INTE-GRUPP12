@@ -21,6 +21,23 @@ public class CashRegister {
             e.printStackTrace();
         }
     }
+
+    public CashRegister(String cashRegisterMoneyDatabaseFileName){
+        try {
+            FileReader fileReader = new FileReader(cashRegisterMoneyDatabaseFileName);
+            BufferedReader reader = new BufferedReader(fileReader);
+            String readLine = reader.readLine();
+            if(readLine == null){
+                amountOfMoneyInStore = new Money(0);
+            } else {
+                amountOfMoneyInStore = new Money(Long.parseLong(readLine));
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public long getAmountOfMoneyInStore(){
         return amountOfMoneyInStore.getAmountInMinorUnit();
     }
