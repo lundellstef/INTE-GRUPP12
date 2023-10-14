@@ -29,7 +29,28 @@ public class TestCashRegister {
 
     @Test
     public void ifDatabaseFileIsEmptyAmountOfMoneyInStoreShouldHaveZeroInAmount() {
-        CashRegister cashRegister = new CashRegister("src/main/java/CashRegisterMoneyTestFiles/amountOfMoneyIsZero.txt");
+        CashRegister cashRegister = new CashRegister("src/main/java/CashRegisterMoneyTestFiles/emptyFile.txt");
+        long amountOfMoneyInStore = cashRegister.getAmountOfMoneyInStore();
+        assertEquals(0, amountOfMoneyInStore);
+    }
+
+    @Test
+    public void throwsExceptionIfNoFileIsFound() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            new CashRegister("src/main/java/CashRegisterMoneyTestFiles/fileThatDoesNotExist.txt");
+        });
+    }
+
+    @Test
+    public void throwsExceptionIfDatabaseFileDoesNotContainNumbers() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            new CashRegister("src/main/java/CashRegisterMoneyTestFiles/nonNumericCharacters.txt");
+        });
+    }
+
+    @Test
+    public void ifDatabaseFileHasLargeAmountOfMoneyCorrectAmountShouldStillBeMAde() {
+        CashRegister cashRegister = new CashRegister("src/main/java/CashRegisterMoneyTestFiles/emptyFile.txt");
         long amountOfMoneyInStore = cashRegister.getAmountOfMoneyInStore();
         assertEquals(0, amountOfMoneyInStore);
     }

@@ -27,6 +27,7 @@ public class CashRegister {
             FileReader fileReader = new FileReader(cashRegisterMoneyDatabaseFileName);
             BufferedReader reader = new BufferedReader(fileReader);
             String readLine = reader.readLine();
+
             if(readLine == null){
                 amountOfMoneyInStore = new Money(0);
             } else if(Long.parseLong(readLine) < 0) {
