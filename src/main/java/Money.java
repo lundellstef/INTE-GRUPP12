@@ -29,7 +29,6 @@ public class Money {
             throw new IllegalArgumentException();
         }
         this.amountInMinorUnit += amountInMinorUnit;
-
     }
 
     @Override
