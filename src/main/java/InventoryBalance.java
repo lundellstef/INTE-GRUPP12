@@ -5,6 +5,8 @@ import java.util.NoSuchElementException;
 /**
  * Class representing the inventory balance for the store.
  * Products are stored in a Map: the products' hashcode is the key, and the Product is the value. (For faster search.)
+ *
+ * To create an inventory balance preloaded with values, see the InventoryLoader class.
  */
 public class InventoryBalance {
 
@@ -14,10 +16,29 @@ public class InventoryBalance {
         inventory = new HashMap<>();
     }
 
-    public void addProduct(Product product) {
+    /**
+     * Adds a product to the inventory.
+     * Adding a product that's already present in the inventory should NOT increase the amount of that product.
+     * If you want to do that, you should call adjustValue(product) instead.
+     *
+     * @param product is the Product to be added.
+     * @throws IllegalArgumentException if trying to add an item already present in the inventory.
+     */
+    public void addProduct(Product product) throws IllegalArgumentException {
+        if (contains(product)) {
+            throw new IllegalArgumentException("Product already present in inventory.");
+        }
         inventory.put(product.hashCode(), product);
     }
 
+    /**
+     * Removes a product from the inventory.
+     * Removing a product that's not present in the inventory is NOT possible.
+     *
+     * @param product is the Product to be removed.
+     * @return the removed Product (mimicking the behaviour from map.remove()).
+     * @throws NoSuchElementException if trying to remove a Product not present in the inventory.
+     */
     public Product removeProduct(Product product) throws NoSuchElementException {
         Product removedProduct = inventory.remove(product.hashCode());
         if (removedProduct == null) {
@@ -27,7 +48,14 @@ public class InventoryBalance {
         }
     }
 
-    public int getCount(Product product) {
+    /**
+     * Returns the current amount of a chosen Product in inventory.
+     * Uses the get() support method, and as such, exceptions are handled there.
+     *
+     * @param product is the Product to get the count of.
+     * @return the current amount of that Product in inventory.
+     */
+    public int getAmount(Product product) {
         return get(product).getAmount();
     }
 
@@ -39,7 +67,7 @@ public class InventoryBalance {
      * @param amount  is the value to adjust the amount by.
      */
     public void adjustAmount(Product product, int amount) {
-        int previousAmount = getCount(product);
+        int previousAmount = getAmount(product);
         get(product).setAmount(previousAmount + amount);
     }
 
