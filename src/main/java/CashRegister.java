@@ -29,12 +29,13 @@ public class CashRegister {
             String readLine = reader.readLine();
             if(readLine == null){
                 amountOfMoneyInStore = new Money(0);
-            } else {
+            } else if(Long.parseLong(readLine) < 0) {
+                throw new IllegalArgumentException();
+            } else{
                 amountOfMoneyInStore = new Money(Long.parseLong(readLine));
-
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException();
         }
     }
 
