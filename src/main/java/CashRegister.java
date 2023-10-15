@@ -1,5 +1,4 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.*;
 import java.util.ArrayList;
 
 public class CashRegister {
@@ -36,6 +35,7 @@ public class CashRegister {
             } else{
                 amountOfMoneyInStore = new Money(Long.parseLong(readLine));
             }
+            reader.close();
         } catch (Exception e) {
             throw new IllegalArgumentException();
         }
@@ -45,8 +45,20 @@ public class CashRegister {
         return amountOfMoneyInStore.getAmountInMinorUnit();
     }
 
-    public void payByCard(long amountInMinorUnit){
-        amountOfMoneyInStore.add(amountInMinorUnit);
+    public void payByCard(long amountInMinorUnit, String fileName){
+        try{
+            FileWriter fileWriter = new FileWriter(fileName);
+            BufferedWriter writer = new BufferedWriter(fileWriter);
+            long prePurchaseAmountOfMoney = getAmountOfMoneyInStore();
+            long amountOfMoneyAfterPurchase = prePurchaseAmountOfMoney + amountInMinorUnit;
+            String amountToDatabase = String.valueOf(amountOfMoneyAfterPurchase);
+            writer.write(amountToDatabase);
+            amountOfMoneyInStore.add(amountInMinorUnit);
+            writer.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
 

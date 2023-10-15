@@ -1,4 +1,9 @@
 import org.junit.jupiter.api.Test;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestCashRegister {
@@ -61,9 +66,46 @@ public class TestCashRegister {
         CashRegister cashRegister = new CashRegister("src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
         long prePurchaseAmountOfMoneyInStore = cashRegister.getAmountOfMoneyInStore();
         long expectedAmount = prePurchaseAmountOfMoneyInStore + VALID_CARD_PAYMENT_AMOUNT;
-        cashRegister.payByCard(VALID_CARD_PAYMENT_AMOUNT);
+        cashRegister.payByCard(VALID_CARD_PAYMENT_AMOUNT, "src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
         long amountOfMoneyInStore = cashRegister.getAmountOfMoneyInStore();
         assertEquals(expectedAmount, amountOfMoneyInStore);
+        rollBackTestDatabaseUpdate();
+    }
+
+    @Test
+    public void multiplePaymentsShouldIncrementValueInAmountOfMoneyInStoreByCorrectAmount(){
+        CashRegister cashRegister = new CashRegister("src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
+        long prePurchaseAmountOfMoneyInStore = cashRegister.getAmountOfMoneyInStore();
+        long expectedAmount = prePurchaseAmountOfMoneyInStore + (VALID_CARD_PAYMENT_AMOUNT * 4);
+        for(int i = 0; i < 4; i++){
+            cashRegister.payByCard(VALID_CARD_PAYMENT_AMOUNT,"src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
+        }
+        long amountOfMoneyInStore = cashRegister.getAmountOfMoneyInStore();
+        assertEquals(expectedAmount, amountOfMoneyInStore);
+        rollBackTestDatabaseUpdate();
+    }
+
+    @Test
+    public void payByCardShouldUpdateDatabaseFileWithCorrectNewAmount(){
+        CashRegister cashRegister = new CashRegister("src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
+        long prePurchaseAmountOfMoneyInStore = cashRegister.getAmountOfMoneyInStore();
+        cashRegister.payByCard(VALID_CARD_PAYMENT_AMOUNT,"src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
+        long expectedAmount = prePurchaseAmountOfMoneyInStore + VALID_CARD_PAYMENT_AMOUNT;
+        CashRegister cashRegisterAfterPurchase = new CashRegister("src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
+        long amountOfMoneyInStore = cashRegisterAfterPurchase.getAmountOfMoneyInStore();
+        assertEquals(expectedAmount, amountOfMoneyInStore);
+        rollBackTestDatabaseUpdate();
+    }
+
+    private void rollBackTestDatabaseUpdate(){
+        try{
+            FileWriter fileWriter = new FileWriter("src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
+            BufferedWriter writer = new BufferedWriter(fileWriter);
+            writer.write("200000");
+            writer.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
