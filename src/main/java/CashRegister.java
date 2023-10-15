@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class CashRegister {
 
     Money amountOfMoneyInStore;
+
     public CashRegister(){
         String moneyDatabase = "src/main/java/cashRegisterMoney.txt";
         try {
@@ -43,6 +44,11 @@ public class CashRegister {
     public long getAmountOfMoneyInStore(){
         return amountOfMoneyInStore.getAmountInMinorUnit();
     }
+
+    public void payByCard(long amountInMinorUnit){
+        amountOfMoneyInStore.add(amountInMinorUnit);
+    }
+
 
 }
 
