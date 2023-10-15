@@ -75,6 +75,9 @@ public class Product {
     }
 
     public void setDiscount(int discount) {
+        if (discount < 0) {
+            throw new IllegalArgumentException(String.format("%d is not a valid discount", discount));
+        }
         this.discount = discount;
         this.hasDiscount = discount > 0;
     }
