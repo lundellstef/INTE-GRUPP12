@@ -5,12 +5,11 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestCustomer {
 
     @Test
-    void basicSetupTest() {
-        Customer customer = new Customer.CustomerBuilder("Namn")
+    void inProgressTest() {
+        Customer customer = new Customer.CustomerBuilder("Namn", "9507301122")
                 .setPhoneNumber("1231")
                 .setAddress("Kedjebacken 2A")
                 .setEmailAddress("asd@hotmail.com")
-                .setSSNumber("12939141")
                 .build();
         System.out.println(customer);
     }

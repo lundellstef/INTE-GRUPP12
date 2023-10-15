@@ -9,7 +9,7 @@ public class TestInventoryBalance {
 
     static final int VALID_AMOUNT_TO_INCREASE_BY = 5;
     static final int VALID_AMOUNT_TO_DECREASE_BY = -10;
-    static final String TEST_DATA_FILE_PATH = "src/main/resources/products_testing_data.csv";
+    static final String TEST_DATA_FILE_PATH = "src/test/resources/product_test_data.csv";
 
     static final String DEFAULT_PRODUCT_NAME = "Product Name";
 
