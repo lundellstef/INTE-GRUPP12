@@ -47,6 +47,9 @@ public class CashRegister {
 
     public void payByCard(long amountInMinorUnit, String fileName){
         try{
+            if(amountInMinorUnit < 0){
+                throw new IllegalArgumentException();
+            }
             FileWriter fileWriter = new FileWriter(fileName);
             BufferedWriter writer = new BufferedWriter(fileWriter);
             long prePurchaseAmountOfMoney = getAmountOfMoneyInStore();
@@ -56,7 +59,7 @@ public class CashRegister {
             amountOfMoneyInStore.add(amountInMinorUnit);
             writer.close();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new IllegalArgumentException(e);
         }
 
     }
