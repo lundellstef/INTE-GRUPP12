@@ -25,7 +25,9 @@ public class TestCashRegister {
 
     static final String VALID_DATABASE_FILE_LARGE_AMOUNT_OF_MONEY = "src/main/java/CashRegisterMoneyTestFiles/largeAmountOfMoney.txt";
 
-    static final long INVALID_CARD_PAYMENT_AMOUNT = -25_000;
+    static final long INVALID_PAYMENT_AMOUNT = -25_000;
+
+    static final long VALID_LARGE_CASH_PAYMENT = 5_253_000;
 
 
     @Test
@@ -113,7 +115,7 @@ public class TestCashRegister {
     public void payByCardShouldThrowExceptionIfTryingToPayWithNegativeAmount(){
         CashRegister cashRegister = new CashRegister(VALID_DATABASE_FILE);
         assertThrows(IllegalArgumentException.class, () -> {
-            cashRegister.payByCard(INVALID_CARD_PAYMENT_AMOUNT,VALID_DATABASE_FILE);
+            cashRegister.payByCard(INVALID_PAYMENT_AMOUNT,VALID_DATABASE_FILE);
         });
     }
 
@@ -175,6 +177,15 @@ public class TestCashRegister {
         HashMap<CashMoney, Integer> cashMoneyPayment = new HashMap<>();
         addMoreThanPaymentAmountToWallet(cashMoneyPayment);
         HashMap<CashMoney, Integer> returnedChange = cashRegister.payByCash(cashMoneyPayment, VALID_PAYMENT_AMOUNT, VALID_DATABASE_FILE);
+        assertEquals(expectedReturnWallet.toString(), returnedChange.toString());
+    }
+
+    @Test
+    public void payByCashShouldReturnAmountOfMoneyInLeastAmountOfCashWhenPaymentIsLarge(){
+        CashRegister cashRegister = new CashRegister(VALID_DATABASE_FILE);
+        HashMap<CashMoney, Integer> paymentWallet = createPaymentWalletForLargeAmountOfMoney();
+        HashMap<CashMoney, Integer> returnedChange = cashRegister.payByCash(paymentWallet, VALID_PAYMENT_AMOUNT, VALID_DATABASE_FILE);
+        HashMap<CashMoney, Integer> expectedReturnWallet = createExpectedReturnWalletForLargeAmountOfMoney();
         assertEquals(expectedReturnWallet, returnedChange);
     }
 
@@ -225,6 +236,25 @@ public class TestCashRegister {
             }
         }
         return amountInCash;
+    }
+
+    private HashMap<CashMoney, Integer> createPaymentWalletForLargeAmountOfMoney(){
+        HashMap<CashMoney, Integer> wallet = new HashMap<>();
+        wallet.put(new CashMoney(100_000), 52);
+        wallet.put(new CashMoney(50_000), 1);
+        wallet.put(new CashMoney(2_000), 1);
+        wallet.put(new CashMoney(1_000), 1);
+        return wallet;
+    }
+
+    private HashMap<CashMoney, Integer> createExpectedReturnWalletForLargeAmountOfMoney(){
+        HashMap<CashMoney, Integer> wallet = new HashMap<>();
+        wallet.put(new CashMoney(100_000), 52);
+        wallet.put(new CashMoney(20_000), 1);
+        wallet.put(new CashMoney(5_000), 1);
+        wallet.put(new CashMoney(2_000), 1);
+        wallet.put(new CashMoney(1_000), 1);
+        return wallet;
     }
 
     private long calculateExpectedAmountOfMoneyAfterPurchase(CashRegister cashRegister){

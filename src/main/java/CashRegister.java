@@ -5,7 +5,7 @@ import java.util.HashMap;
 public class CashRegister {
 
     Money amountOfMoneyInStore;
-    int[] denominations = new int[]{1, 100, 200, 500, 1_000, 2_000, 5_000, 10_000, 20_000, 50_000, 100_000};
+    int[] denominations = new int[]{100_000, 50_000, 20_000, 10_000, 5_000, 2_000, 1_000, 500, 200, 100, 1};
 
     public CashRegister(){
         String moneyDatabase = "src/main/java/cashRegisterMoney.txt";
@@ -88,9 +88,10 @@ public class CashRegister {
         HashMap<CashMoney, Integer> returnWallet = new HashMap<>();
         for(int denomination : denominations){
             int currentDenomination = (int) (amount/denomination);
+
             if((currentDenomination > 0)){
                 returnWallet.put(new CashMoney(denomination), currentDenomination);
-                amount -= ((long) denomination * currentDenomination);
+                amount %= denomination;
             }
         }
         return returnWallet;
