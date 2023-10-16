@@ -159,6 +159,16 @@ public class TestCashRegister {
         assertEquals(expectedChange, actualChange);
     }
 
+    @Test
+    public void payByCashShouldReturnAmountOfMoneyInLeastAmountOfCash(){
+        CashRegister cashRegister = new CashRegister("src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
+        HashMap<CashMoney, Integer> expectedReturnWallet = new HashMap<>();
+        expectedReturnWallet.put(new CashMoney(2000), 1);
+        HashMap<CashMoney, Integer> cashMoneyPayment = new HashMap<>();
+        addMoreThanPaymentAmountToWallet(cashMoneyPayment);
+        HashMap<CashMoney, Integer> returnedChange = cashRegister.payByCash(cashMoneyPayment, VALID_CARD_PAYMENT_AMOUNT, "src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
+        assertEquals(expectedReturnWallet, returnedChange);
+    }
 
 
     private void rollBackTestDatabaseUpdate(String amountInFile, String fileName){
