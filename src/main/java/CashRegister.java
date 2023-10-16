@@ -8,39 +8,11 @@ public class CashRegister {
     int[] denominations = new int[]{100_000, 50_000, 20_000, 10_000, 5_000, 2_000, 1_000, 500, 200, 100, 1};
 
     public CashRegister(){
-        String moneyDatabase = "src/main/java/cashRegisterMoney.txt";
-        try {
-            FileReader fileReader = new FileReader(moneyDatabase);
-            BufferedReader reader = new BufferedReader(fileReader);
-            String readLine = reader.readLine();
-            if(readLine == null){
-                amountOfMoneyInStore = new Money(0);
-            } else {
-                amountOfMoneyInStore = new Money(Long.parseLong(readLine));
-
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        readFromDatabaseFile("src/main/java/cashRegisterMoney.txt");
     }
 
     public CashRegister(String cashRegisterMoneyDatabaseFileName){
-        try {
-            FileReader fileReader = new FileReader(cashRegisterMoneyDatabaseFileName);
-            BufferedReader reader = new BufferedReader(fileReader);
-            String readLine = reader.readLine();
-
-            if(readLine == null){
-                amountOfMoneyInStore = new Money(0);
-            } else if(Long.parseLong(readLine) < 0) {
-                throw new IllegalArgumentException();
-            } else{
-                amountOfMoneyInStore = new Money(Long.parseLong(readLine));
-            }
-            reader.close();
-        } catch (Exception e) {
-            throw new IllegalArgumentException();
-        }
+        readFromDatabaseFile(cashRegisterMoneyDatabaseFileName);
     }
 
     /**
@@ -132,6 +104,30 @@ public class CashRegister {
             writer.close();
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
+        }
+    }
+
+    /**
+     * Method that reads the amount of money currently in the database file containing the stor's total
+     * amount of money.
+     * @param fileName the database file to be read from.
+     */
+    private void readFromDatabaseFile(String fileName){
+        try {
+            FileReader fileReader = new FileReader(fileName);
+            BufferedReader reader = new BufferedReader(fileReader);
+            String readLine = reader.readLine();
+
+            if(readLine == null){
+                amountOfMoneyInStore = new Money(0);
+            } else if(Long.parseLong(readLine) < 0) {
+                throw new IllegalArgumentException();
+            } else{
+                amountOfMoneyInStore = new Money(Long.parseLong(readLine));
+            }
+            reader.close();
+        } catch (Exception e) {
+            throw new IllegalArgumentException();
         }
     }
 

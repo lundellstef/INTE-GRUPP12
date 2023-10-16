@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestCashRegister {
 
+    //TESTAR INTE ATT DATABASFILEN UPPDATERAS KORREKT NÄR MAN PAYBYCASH, DET ÄR JU SAMMA GREJ SOM FÖR PAYBYCARD - TITTA PÅ DETTA.
     static final long VALID_AMOUNT_READ_FROM_DATABASE_FILE = 200_000;
     static final long VALID_PAYMENT_AMOUNT = 25_000;
 
@@ -207,8 +208,8 @@ public class TestCashRegister {
     private long[] setUpDoublePurchaseToReadFromDatabase(String filename){
         CashRegister cashRegister = new CashRegister(filename);
         long prePurchaseAmountOfMoneyInStore = cashRegister.getAmountOfMoneyInStore();
-        cashRegister.payByCard(TestCashRegister.VALID_PAYMENT_AMOUNT,filename);
-        long expectedAmount = prePurchaseAmountOfMoneyInStore + TestCashRegister.VALID_PAYMENT_AMOUNT;
+        long expectedAmount = prePurchaseAmountOfMoneyInStore + VALID_PAYMENT_AMOUNT;
+        cashRegister.payByCard(VALID_PAYMENT_AMOUNT,filename);
         CashRegister cashRegisterAfterPurchase = new CashRegister(filename);
         long amountOfMoneyInStore = cashRegisterAfterPurchase.getAmountOfMoneyInStore();
         return new long[]{expectedAmount, amountOfMoneyInStore};
