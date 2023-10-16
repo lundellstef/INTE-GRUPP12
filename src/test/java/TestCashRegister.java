@@ -3,30 +3,41 @@ import org.junit.jupiter.api.Test;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestCashRegister {
 
     static final long VALID_AMOUNT_READ_FROM_DATABASE_FILE = 200_000;
-    static final long VALID_CARD_PAYMENT_AMOUNT = 25_000;
+    static final long VALID_PAYMENT_AMOUNT = 25_000;
+
+    static final String VALID_DATABASE_FILE = "src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt";
+    static final String VALID_DATABASE_FILE_AMOUNT_ZERO = "src/main/java/CashRegisterMoneyTestFiles/amountOfMoneyIsZero.txt";
+
+    static final String INVALID_DATABASE_FILE_NEGATIVE_AMOUNT = "src/main/java/CashRegisterMoneyTestFiles/negativeAmountOfMoney.txt";
+
+    static final String VALID_EMPTY_DATABASE_FILE = "src/main/java/CashRegisterMoneyTestFiles/emptyFile.txt";
+
+    static final String INVALID_NON_EXISTING_DATABASE_FILE = "src/main/java/CashRegisterMoneyTestFiles/fileThatDoesNotExist.txt";
+
+    static final String INVALID_NON_NUMERIC_DATABASE_FILE = "src/main/java/CashRegisterMoneyTestFiles/nonNumericCharacters.txt";
+
+    static final String VALID_DATABASE_FILE_LARGE_AMOUNT_OF_MONEY = "src/main/java/CashRegisterMoneyTestFiles/largeAmountOfMoney.txt";
 
     static final long INVALID_CARD_PAYMENT_AMOUNT = -25_000;
 
 
     @Test
     public void cashRegisterAmountOfMoneyCorrectlyReadFromDatabaseFile(){
-        CashRegister cashRegister = new CashRegister("src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
+        CashRegister cashRegister = new CashRegister(VALID_DATABASE_FILE);
         long amountOfMoneyInStore = cashRegister.getAmountOfMoneyInStore();
         assertEquals(VALID_AMOUNT_READ_FROM_DATABASE_FILE, amountOfMoneyInStore);
     }
 
     @Test
     public void cashRegisterAmountOfMoneyCorrectlyReadFromDatabaseFileWhenAmountIsZero(){
-        CashRegister cashRegister = new CashRegister("src/main/java/CashRegisterMoneyTestFiles/amountOfMoneyIsZero.txt");
+        CashRegister cashRegister = new CashRegister(VALID_DATABASE_FILE_AMOUNT_ZERO);
         long amountOfMoneyInStore = cashRegister.getAmountOfMoneyInStore();
         assertEquals(0, amountOfMoneyInStore);
     }
@@ -34,13 +45,13 @@ public class TestCashRegister {
     @Test
     public void throwsExceptionIfDatabaseFileHasNegativeAmountOfMoney() {
         assertThrows(IllegalArgumentException.class, () -> {
-            new CashRegister("src/main/java/CashRegisterMoneyTestFiles/negativeAmountOfMoney.txt");
+            new CashRegister(INVALID_DATABASE_FILE_NEGATIVE_AMOUNT);
         });
     }
 
     @Test
     public void ifDatabaseFileIsEmptyAmountOfMoneyInStoreShouldHaveZeroInAmount() {
-        CashRegister cashRegister = new CashRegister("src/main/java/CashRegisterMoneyTestFiles/emptyFile.txt");
+        CashRegister cashRegister = new CashRegister(VALID_EMPTY_DATABASE_FILE);
         long amountOfMoneyInStore = cashRegister.getAmountOfMoneyInStore();
         assertEquals(0, amountOfMoneyInStore);
     }
@@ -48,125 +59,122 @@ public class TestCashRegister {
     @Test
     public void throwsExceptionIfNoFileIsFound() {
         assertThrows(IllegalArgumentException.class, () -> {
-            new CashRegister("src/main/java/CashRegisterMoneyTestFiles/fileThatDoesNotExist.txt");
+            new CashRegister(INVALID_NON_EXISTING_DATABASE_FILE);
         });
     }
 
     @Test
     public void throwsExceptionIfDatabaseFileDoesNotContainNumbers() {
         assertThrows(IllegalArgumentException.class, () -> {
-            new CashRegister("src/main/java/CashRegisterMoneyTestFiles/nonNumericCharacters.txt");
+            new CashRegister(INVALID_NON_NUMERIC_DATABASE_FILE);
         });
     }
 
     @Test
     public void ifDatabaseFileHasLargeAmountOfMoneyCorrectAmountShouldStillBeMAde() {
-        CashRegister cashRegister = new CashRegister("src/main/java/CashRegisterMoneyTestFiles/largeAmountOfMoney.txt");
+        CashRegister cashRegister = new CashRegister(VALID_DATABASE_FILE_LARGE_AMOUNT_OF_MONEY);
         long amountOfMoneyInStore = cashRegister.getAmountOfMoneyInStore();
         assertEquals(999999999999999L, amountOfMoneyInStore);
     }
 
     @Test
     public void payByCardShouldIncrementValueInAmountOfMoneyInStoreByCorrectAmount(){
-        CashRegister cashRegister = new CashRegister("src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
-        long prePurchaseAmountOfMoneyInStore = cashRegister.getAmountOfMoneyInStore();
-        long expectedAmount = prePurchaseAmountOfMoneyInStore + VALID_CARD_PAYMENT_AMOUNT;
-        cashRegister.payByCard(VALID_CARD_PAYMENT_AMOUNT, "src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
+        CashRegister cashRegister = new CashRegister(VALID_DATABASE_FILE);
+        long amount = calculateExpectedAmountOfMoneyAfterPurchase(cashRegister);
+        cashRegister.payByCard(VALID_PAYMENT_AMOUNT, VALID_DATABASE_FILE);
         long amountOfMoneyInStore = cashRegister.getAmountOfMoneyInStore();
-        assertEquals(expectedAmount, amountOfMoneyInStore);
-        rollBackTestDatabaseUpdate("200000", "src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
+        assertEquals(amount, amountOfMoneyInStore);
+        rollBackTestDatabaseUpdate("200000", VALID_DATABASE_FILE);
     }
 
     @Test
     public void multiplePaymentsShouldIncrementValueInAmountOfMoneyInStoreByCorrectAmount(){
-        CashRegister cashRegister = new CashRegister("src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
+        CashRegister cashRegister = new CashRegister(VALID_DATABASE_FILE);
         long prePurchaseAmountOfMoneyInStore = cashRegister.getAmountOfMoneyInStore();
-        long expectedAmount = prePurchaseAmountOfMoneyInStore + (VALID_CARD_PAYMENT_AMOUNT * 4);
+        long expectedAmount = prePurchaseAmountOfMoneyInStore + (VALID_PAYMENT_AMOUNT * 4);
         for(int i = 0; i < 4; i++){
-            cashRegister.payByCard(VALID_CARD_PAYMENT_AMOUNT,"src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
+            cashRegister.payByCard(VALID_PAYMENT_AMOUNT,VALID_DATABASE_FILE);
         }
         long amountOfMoneyInStore = cashRegister.getAmountOfMoneyInStore();
         assertEquals(expectedAmount, amountOfMoneyInStore);
-        rollBackTestDatabaseUpdate("200000", "src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
+        rollBackTestDatabaseUpdate("200000", VALID_DATABASE_FILE);
     }
 
     @Test
     public void payByCardShouldUpdateDatabaseFileWithCorrectNewAmount(){
-        long[] expectedAmountAndActualAmount = setUpDoublePurchaseToReadFromDatabase(VALID_CARD_PAYMENT_AMOUNT, "src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
+        long[] expectedAmountAndActualAmount = setUpDoublePurchaseToReadFromDatabase(VALID_PAYMENT_AMOUNT, VALID_DATABASE_FILE);
         long expectedAmount = expectedAmountAndActualAmount[0];
         long amountOfMoneyInStoreAfterPurchase = expectedAmountAndActualAmount[1];
         assertEquals(expectedAmount, amountOfMoneyInStoreAfterPurchase);
-        rollBackTestDatabaseUpdate("200000", "src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
+        rollBackTestDatabaseUpdate("200000", VALID_DATABASE_FILE);
     }
 
     @Test
     public void payByCardShouldThrowExceptionIfTryingToPayWithNegativeAmount(){
-        CashRegister cashRegister = new CashRegister("src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
+        CashRegister cashRegister = new CashRegister(VALID_DATABASE_FILE);
         assertThrows(IllegalArgumentException.class, () -> {
-            cashRegister.payByCard(INVALID_CARD_PAYMENT_AMOUNT,"src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
+            cashRegister.payByCard(INVALID_CARD_PAYMENT_AMOUNT,VALID_DATABASE_FILE);
         });
     }
 
     @Test
     public void payByCardShouldUpdateToCorrectAmountWhenDatabaseFileIsEmpty(){
-        long[] expectedAmountAndActualAmount = setUpDoublePurchaseToReadFromDatabase(VALID_CARD_PAYMENT_AMOUNT, "src/main/java/CashRegisterMoneyTestFiles/emptyFile.txt");
+        long[] expectedAmountAndActualAmount = setUpDoublePurchaseToReadFromDatabase(VALID_PAYMENT_AMOUNT, VALID_EMPTY_DATABASE_FILE);
         long expectedAmount = expectedAmountAndActualAmount[0];
         long amountOfMoneyInStoreAfterPurchase = expectedAmountAndActualAmount[1];
         assertEquals(expectedAmount, amountOfMoneyInStoreAfterPurchase);
-        rollBackTestDatabaseUpdate("", "src/main/java/CashRegisterMoneyTestFiles/emptyFile.txt");
+        rollBackTestDatabaseUpdate("", VALID_EMPTY_DATABASE_FILE);
     }
 
     @Test
     public void payByCashUpdatesAmountOfMoneyInStoreCorrectly(){
-        CashRegister cashRegister = new CashRegister("src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
-        long prePurchaseAmount = cashRegister.getAmountOfMoneyInStore();
-        long expectedAmountOfMoneyAfterPurchase = prePurchaseAmount + VALID_CARD_PAYMENT_AMOUNT;
+        CashRegister cashRegister = new CashRegister(VALID_DATABASE_FILE);
+        long amount = calculateExpectedAmountOfMoneyAfterPurchase(cashRegister);
         HashMap<CashMoney, Integer> cashMoneyPayment = new HashMap<>();
         addExactPaymentAmountToWallet(cashMoneyPayment);
-        cashRegister.payByCash(cashMoneyPayment, VALID_CARD_PAYMENT_AMOUNT, "src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
-        assertEquals(expectedAmountOfMoneyAfterPurchase, cashRegister.getAmountOfMoneyInStore());
+        cashRegister.payByCash(cashMoneyPayment, VALID_PAYMENT_AMOUNT, VALID_DATABASE_FILE);
+        assertEquals(amount, cashRegister.getAmountOfMoneyInStore());
     }
 
     @Test
     public void payByCashWithAmountBiggerThanPaymentAmountIncrementsAmountOfMoneyInStoreWithPaymentAmount(){
-        CashRegister cashRegister = new CashRegister("src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
-        long prePurchaseAmount = cashRegister.getAmountOfMoneyInStore();
-        long expectedAmountOfMoneyAfterPurchase = prePurchaseAmount + VALID_CARD_PAYMENT_AMOUNT;
+        CashRegister cashRegister = new CashRegister(VALID_DATABASE_FILE);
+        long amount = calculateExpectedAmountOfMoneyAfterPurchase(cashRegister);
         HashMap<CashMoney, Integer> cashMoneyPayment = new HashMap<>();
         addMoreThanPaymentAmountToWallet(cashMoneyPayment);
-        cashRegister.payByCash(cashMoneyPayment, VALID_CARD_PAYMENT_AMOUNT, "src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
-        assertEquals(expectedAmountOfMoneyAfterPurchase, cashRegister.getAmountOfMoneyInStore());
+        cashRegister.payByCash(cashMoneyPayment, VALID_PAYMENT_AMOUNT, VALID_DATABASE_FILE);
+        assertEquals(amount, cashRegister.getAmountOfMoneyInStore());
     }
 
     @Test
     public void payByCashWithAmountLessThanPaymentAmountThrowsException(){
-        CashRegister cashRegister = new CashRegister("src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
+        CashRegister cashRegister = new CashRegister(VALID_DATABASE_FILE);
         HashMap<CashMoney, Integer> cashMoneyPayment = new HashMap<>();
         addLessThanPaymentAmountToWallet(cashMoneyPayment);
         assertThrows(IllegalArgumentException.class, () ->{
-            cashRegister.payByCash(cashMoneyPayment, VALID_CARD_PAYMENT_AMOUNT, "src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
+            cashRegister.payByCash(cashMoneyPayment, VALID_PAYMENT_AMOUNT, VALID_DATABASE_FILE);
         });
     }
 
     @Test
     public void payByCashShouldReturnCorrectAmountOfMoney(){
-        CashRegister cashRegister = new CashRegister("src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
+        CashRegister cashRegister = new CashRegister(VALID_DATABASE_FILE);
         long expectedChange = 2000;
         HashMap<CashMoney, Integer> cashMoneyPayment = new HashMap<>();
         addMoreThanPaymentAmountToWallet(cashMoneyPayment);
-        HashMap<CashMoney, Integer> returnedChange = cashRegister.payByCash(cashMoneyPayment, VALID_CARD_PAYMENT_AMOUNT, "src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
+        HashMap<CashMoney, Integer> returnedChange = cashRegister.payByCash(cashMoneyPayment, VALID_PAYMENT_AMOUNT, VALID_DATABASE_FILE);
         long actualChange = getAmountOfMoneyInCash(returnedChange);
         assertEquals(expectedChange, actualChange);
     }
 
     @Test
     public void payByCashShouldReturnAmountOfMoneyInLeastAmountOfCash(){
-        CashRegister cashRegister = new CashRegister("src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
+        CashRegister cashRegister = new CashRegister(VALID_DATABASE_FILE);
         HashMap<CashMoney, Integer> expectedReturnWallet = new HashMap<>();
         expectedReturnWallet.put(new CashMoney(2000), 1);
         HashMap<CashMoney, Integer> cashMoneyPayment = new HashMap<>();
         addMoreThanPaymentAmountToWallet(cashMoneyPayment);
-        HashMap<CashMoney, Integer> returnedChange = cashRegister.payByCash(cashMoneyPayment, VALID_CARD_PAYMENT_AMOUNT, "src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
+        HashMap<CashMoney, Integer> returnedChange = cashRegister.payByCash(cashMoneyPayment, VALID_PAYMENT_AMOUNT, VALID_DATABASE_FILE);
         assertEquals(expectedReturnWallet, returnedChange);
     }
 
@@ -217,6 +225,11 @@ public class TestCashRegister {
             }
         }
         return amountInCash;
+    }
+
+    private long calculateExpectedAmountOfMoneyAfterPurchase(CashRegister cashRegister){
+        long prePurchaseAmountOfMoneyInStore = cashRegister.getAmountOfMoneyInStore();
+        return prePurchaseAmountOfMoneyInStore + VALID_PAYMENT_AMOUNT;
     }
 
 }
