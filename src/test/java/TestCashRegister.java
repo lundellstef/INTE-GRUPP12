@@ -3,6 +3,7 @@ import org.junit.jupiter.api.Test;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -113,6 +114,40 @@ public class TestCashRegister {
         rollBackTestDatabaseUpdate("", "src/main/java/CashRegisterMoneyTestFiles/emptyFile.txt");
     }
 
+    @Test
+    public void payByCashUpdatesAmountOfMoneyInStoreCorrectly(){
+        CashRegister cashRegister = new CashRegister("src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
+        long prePurchaseAmount = cashRegister.getAmountOfMoneyInStore();
+        long expectedAmountOfMoneyAfterPurchase = prePurchaseAmount + VALID_CARD_PAYMENT_AMOUNT;
+        ArrayList<CashMoney> cashMoneyPayment = new ArrayList<>();
+        addExactPaymentAmountToWallet(cashMoneyPayment);
+        cashRegister.payByCash(cashMoneyPayment, VALID_CARD_PAYMENT_AMOUNT, "src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
+        assertEquals(expectedAmountOfMoneyAfterPurchase, cashRegister.getAmountOfMoneyInStore());
+    }
+
+    @Test
+    public void payByCashWithAmountBiggerThanPaymentAmountIncrementsAmountOfMoneyInStoreWithPaymentAmount(){
+        CashRegister cashRegister = new CashRegister("src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
+        long prePurchaseAmount = cashRegister.getAmountOfMoneyInStore();
+        long expectedAmountOfMoneyAfterPurchase = prePurchaseAmount + VALID_CARD_PAYMENT_AMOUNT;
+        ArrayList<CashMoney> cashMoneyPayment = new ArrayList<>();
+        addMoreThanPaymentAmountToWallet(cashMoneyPayment);
+        cashRegister.payByCash(cashMoneyPayment, VALID_CARD_PAYMENT_AMOUNT, "src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
+        assertEquals(expectedAmountOfMoneyAfterPurchase, cashRegister.getAmountOfMoneyInStore());
+    }
+
+    @Test
+    public void payByCashWithAmountLessThanPaymentAmountThrowsException(){
+        CashRegister cashRegister = new CashRegister("src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
+        long prePurchaseAmount = cashRegister.getAmountOfMoneyInStore();
+        long expectedAmountOfMoneyAfterPurchase = prePurchaseAmount + VALID_CARD_PAYMENT_AMOUNT;
+        ArrayList<CashMoney> cashMoneyPayment = new ArrayList<>();
+        addMoreThanPaymentAmountToWallet(cashMoneyPayment);
+        cashRegister.payByCash(cashMoneyPayment, VALID_CARD_PAYMENT_AMOUNT, "src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
+        assertEquals(expectedAmountOfMoneyAfterPurchase, cashRegister.getAmountOfMoneyInStore());
+    }
+
+
 
     private void rollBackTestDatabaseUpdate(String amountInFile, String fileName){
         try{
@@ -133,6 +168,19 @@ public class TestCashRegister {
         CashRegister cashRegisterAfterPurchase = new CashRegister(filename);
         long amountOfMoneyInStore = cashRegisterAfterPurchase.getAmountOfMoneyInStore();
         return new long[]{expectedAmount, amountOfMoneyInStore};
+    }
+
+    private void addExactPaymentAmountToWallet(ArrayList<CashMoney> wallet){
+        wallet.add(new CashMoney(5_000));
+        wallet.add(new CashMoney(10_000));
+        wallet.add(new CashMoney(10_000));
+    }
+
+    private void addMoreThanPaymentAmountToWallet(ArrayList<CashMoney> wallet){
+        wallet.add(new CashMoney(5_000));
+        wallet.add(new CashMoney(10_000));
+        wallet.add(new CashMoney(10_000));
+        wallet.add(new CashMoney(2_000));
     }
 
 }

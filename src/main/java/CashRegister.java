@@ -61,7 +61,18 @@ public class CashRegister {
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
         }
+    }
 
+    public void payByCash(ArrayList<CashMoney> payment, long actualCost, String filename){
+        long amountInCash = 0;
+        long change = 0;
+        for(CashMoney cash: payment){
+            amountInCash += cash.getCashMoneyDenomination();
+        }
+        if(amountInCash > actualCost){
+            change = amountInCash - actualCost;
+        }
+        amountOfMoneyInStore.add(actualCost);
     }
 
 
