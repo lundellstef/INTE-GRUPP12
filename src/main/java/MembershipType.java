@@ -1,2 +1,3 @@
-public class MembershipType {
+public enum MembershipType {
+    GOLD, SILVER, BRONZE;
 }
