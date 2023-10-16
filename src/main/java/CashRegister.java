@@ -1,9 +1,11 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CashRegister {
 
     Money amountOfMoneyInStore;
+    int[] denominations = new int[]{1, 100, 200, 500, 1_000, 2_000, 5_000, 10_000, 20_000, 50_000, 100_000};
 
     public CashRegister(){
         String moneyDatabase = "src/main/java/cashRegisterMoney.txt";
@@ -63,17 +65,37 @@ public class CashRegister {
         }
     }
 
-    public void payByCash(ArrayList<CashMoney> payment, long actualCost, String filename){
+    public HashMap<CashMoney, Integer> payByCash(HashMap<CashMoney, Integer> payment, long actualCost, String filename){
         long amountInCash = 0;
-        long change = 0;
-        for(CashMoney cash: payment){
-            amountInCash += cash.getCashMoneyDenomination();
+        HashMap<CashMoney, Integer> returnWallet = new HashMap<>();
+        for(CashMoney cash: payment.keySet()){
+            for(int i = 0; i < payment.get(cash); i++){
+                amountInCash += cash.getCashMoneyDenomination();
+            }
+        }
+        if(amountInCash < actualCost){
+            throw new IllegalArgumentException();
         }
         if(amountInCash > actualCost){
-            change = amountInCash - actualCost;
+            long change = amountInCash - actualCost;
+            returnWallet = calculateChange(change);
         }
         amountOfMoneyInStore.add(actualCost);
+        return returnWallet;
     }
+
+    private HashMap<CashMoney, Integer> calculateChange(long amount){
+        HashMap<CashMoney, Integer> returnWallet = new HashMap<>();
+        for(int denomination : denominations){
+            int currentDenomination = (int) (amount/denomination);
+            if((currentDenomination > 0)){
+                returnWallet.put(new CashMoney(denomination), currentDenomination);
+                amount -= ((long) denomination * currentDenomination);
+            }
+        }
+        return returnWallet;
+    }
+
 
 
 }

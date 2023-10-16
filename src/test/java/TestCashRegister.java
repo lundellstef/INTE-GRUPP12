@@ -4,6 +4,8 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -119,7 +121,7 @@ public class TestCashRegister {
         CashRegister cashRegister = new CashRegister("src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
         long prePurchaseAmount = cashRegister.getAmountOfMoneyInStore();
         long expectedAmountOfMoneyAfterPurchase = prePurchaseAmount + VALID_CARD_PAYMENT_AMOUNT;
-        ArrayList<CashMoney> cashMoneyPayment = new ArrayList<>();
+        HashMap<CashMoney, Integer> cashMoneyPayment = new HashMap<>();
         addExactPaymentAmountToWallet(cashMoneyPayment);
         cashRegister.payByCash(cashMoneyPayment, VALID_CARD_PAYMENT_AMOUNT, "src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
         assertEquals(expectedAmountOfMoneyAfterPurchase, cashRegister.getAmountOfMoneyInStore());
@@ -130,7 +132,7 @@ public class TestCashRegister {
         CashRegister cashRegister = new CashRegister("src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
         long prePurchaseAmount = cashRegister.getAmountOfMoneyInStore();
         long expectedAmountOfMoneyAfterPurchase = prePurchaseAmount + VALID_CARD_PAYMENT_AMOUNT;
-        ArrayList<CashMoney> cashMoneyPayment = new ArrayList<>();
+        HashMap<CashMoney, Integer> cashMoneyPayment = new HashMap<>();
         addMoreThanPaymentAmountToWallet(cashMoneyPayment);
         cashRegister.payByCash(cashMoneyPayment, VALID_CARD_PAYMENT_AMOUNT, "src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
         assertEquals(expectedAmountOfMoneyAfterPurchase, cashRegister.getAmountOfMoneyInStore());
@@ -139,12 +141,22 @@ public class TestCashRegister {
     @Test
     public void payByCashWithAmountLessThanPaymentAmountThrowsException(){
         CashRegister cashRegister = new CashRegister("src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
-        long prePurchaseAmount = cashRegister.getAmountOfMoneyInStore();
-        long expectedAmountOfMoneyAfterPurchase = prePurchaseAmount + VALID_CARD_PAYMENT_AMOUNT;
-        ArrayList<CashMoney> cashMoneyPayment = new ArrayList<>();
+        HashMap<CashMoney, Integer> cashMoneyPayment = new HashMap<>();
+        addLessThanPaymentAmountToWallet(cashMoneyPayment);
+        assertThrows(IllegalArgumentException.class, () ->{
+            cashRegister.payByCash(cashMoneyPayment, VALID_CARD_PAYMENT_AMOUNT, "src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
+        });
+    }
+
+    @Test
+    public void payByCashShouldReturnCorrectAmountOfMoney(){
+        CashRegister cashRegister = new CashRegister("src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
+        long expectedChange = 2000;
+        HashMap<CashMoney, Integer> cashMoneyPayment = new HashMap<>();
         addMoreThanPaymentAmountToWallet(cashMoneyPayment);
-        cashRegister.payByCash(cashMoneyPayment, VALID_CARD_PAYMENT_AMOUNT, "src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
-        assertEquals(expectedAmountOfMoneyAfterPurchase, cashRegister.getAmountOfMoneyInStore());
+        HashMap<CashMoney, Integer> returnedChange = cashRegister.payByCash(cashMoneyPayment, VALID_CARD_PAYMENT_AMOUNT, "src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt");
+        long actualChange = getAmountOfMoneyInCash(returnedChange);
+        assertEquals(expectedChange, actualChange);
     }
 
 
@@ -170,17 +182,31 @@ public class TestCashRegister {
         return new long[]{expectedAmount, amountOfMoneyInStore};
     }
 
-    private void addExactPaymentAmountToWallet(ArrayList<CashMoney> wallet){
-        wallet.add(new CashMoney(5_000));
-        wallet.add(new CashMoney(10_000));
-        wallet.add(new CashMoney(10_000));
+    private void addExactPaymentAmountToWallet(HashMap<CashMoney, Integer> wallet){
+        wallet.put(new CashMoney(5_000), 1);
+        wallet.put(new CashMoney(10_000), 2);
     }
 
-    private void addMoreThanPaymentAmountToWallet(ArrayList<CashMoney> wallet){
-        wallet.add(new CashMoney(5_000));
-        wallet.add(new CashMoney(10_000));
-        wallet.add(new CashMoney(10_000));
-        wallet.add(new CashMoney(2_000));
+    private void addMoreThanPaymentAmountToWallet(HashMap<CashMoney, Integer> wallet){
+        wallet.put(new CashMoney(5_000), 1);
+        wallet.put(new CashMoney(10_000), 2);
+        wallet.put(new CashMoney(2_000), 1);
+    }
+
+    private void addLessThanPaymentAmountToWallet(HashMap<CashMoney, Integer> wallet){
+        wallet.put(new CashMoney(5_000), 1);
+        wallet.put(new CashMoney(10_000), 1);
+
+    }
+
+    private long getAmountOfMoneyInCash(HashMap<CashMoney, Integer> wallet){
+        long amountInCash = 0;
+        for(CashMoney cash: wallet.keySet()){
+            for(int i = 0; i < wallet.get(cash); i++){
+                amountInCash += cash.getCashMoneyDenomination();
+            }
+        }
+        return amountInCash;
     }
 
 }
