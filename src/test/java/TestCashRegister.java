@@ -27,8 +27,6 @@ public class TestCashRegister {
 
     static final long INVALID_PAYMENT_AMOUNT = -25_000;
 
-    static final long VALID_LARGE_CASH_PAYMENT = 5_253_000;
-
 
     @Test
     public void cashRegisterAmountOfMoneyCorrectlyReadFromDatabaseFile(){
@@ -136,6 +134,7 @@ public class TestCashRegister {
         addExactPaymentAmountToWallet(cashMoneyPayment);
         cashRegister.payByCash(cashMoneyPayment, VALID_PAYMENT_AMOUNT, VALID_DATABASE_FILE);
         assertEquals(amount, cashRegister.getAmountOfMoneyInStore());
+        rollBackTestDatabaseUpdate("200000", VALID_DATABASE_FILE);
     }
 
     @Test
@@ -146,6 +145,7 @@ public class TestCashRegister {
         addMoreThanPaymentAmountToWallet(cashMoneyPayment);
         cashRegister.payByCash(cashMoneyPayment, VALID_PAYMENT_AMOUNT, VALID_DATABASE_FILE);
         assertEquals(amount, cashRegister.getAmountOfMoneyInStore());
+        rollBackTestDatabaseUpdate("200000", VALID_DATABASE_FILE);
     }
 
     @Test
@@ -167,6 +167,7 @@ public class TestCashRegister {
         HashMap<CashMoney, Integer> returnedChange = cashRegister.payByCash(cashMoneyPayment, VALID_PAYMENT_AMOUNT, VALID_DATABASE_FILE);
         long actualChange = getAmountOfMoneyInCash(returnedChange);
         assertEquals(expectedChange, actualChange);
+        rollBackTestDatabaseUpdate("200000", VALID_DATABASE_FILE);
     }
 
     @Test
@@ -177,7 +178,8 @@ public class TestCashRegister {
         HashMap<CashMoney, Integer> cashMoneyPayment = new HashMap<>();
         addMoreThanPaymentAmountToWallet(cashMoneyPayment);
         HashMap<CashMoney, Integer> returnedChange = cashRegister.payByCash(cashMoneyPayment, VALID_PAYMENT_AMOUNT, VALID_DATABASE_FILE);
-        assertEquals(expectedReturnWallet.toString(), returnedChange.toString());
+        assertEquals(expectedReturnWallet, returnedChange);
+        rollBackTestDatabaseUpdate("200000", VALID_DATABASE_FILE);
     }
 
     @Test
@@ -187,6 +189,7 @@ public class TestCashRegister {
         HashMap<CashMoney, Integer> returnedChange = cashRegister.payByCash(paymentWallet, VALID_PAYMENT_AMOUNT, VALID_DATABASE_FILE);
         HashMap<CashMoney, Integer> expectedReturnWallet = createExpectedReturnWalletForLargeAmountOfMoney();
         assertEquals(expectedReturnWallet, returnedChange);
+        rollBackTestDatabaseUpdate("200000", VALID_DATABASE_FILE);
     }
 
 

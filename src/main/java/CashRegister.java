@@ -48,24 +48,11 @@ public class CashRegister {
     }
 
     public void payByCard(long amountInMinorUnit, String fileName){
-        try{
-            if(amountInMinorUnit < 0){
-                throw new IllegalArgumentException();
-            }
-            FileWriter fileWriter = new FileWriter(fileName);
-            BufferedWriter writer = new BufferedWriter(fileWriter);
-            long prePurchaseAmountOfMoney = getAmountOfMoneyInStore();
-            long amountOfMoneyAfterPurchase = prePurchaseAmountOfMoney + amountInMinorUnit;
-            String amountToDatabase = String.valueOf(amountOfMoneyAfterPurchase);
-            writer.write(amountToDatabase);
-            amountOfMoneyInStore.add(amountInMinorUnit);
-            writer.close();
-        } catch (IOException e) {
-            throw new IllegalArgumentException(e);
-        }
+        writeToDatabaseFile(amountInMinorUnit, fileName);
+        amountOfMoneyInStore.add(amountInMinorUnit);
     }
 
-    public HashMap<CashMoney, Integer> payByCash(HashMap<CashMoney, Integer> payment, long actualCost, String filename){
+    public HashMap<CashMoney, Integer> payByCash(HashMap<CashMoney, Integer> payment, long actualCostInMinorUnit, String filename){
         long amountInCash = 0;
         HashMap<CashMoney, Integer> returnWallet = new HashMap<>();
         for(CashMoney cash: payment.keySet()){
@@ -73,14 +60,15 @@ public class CashRegister {
                 amountInCash += cash.getCashMoneyDenomination();
             }
         }
-        if(amountInCash < actualCost){
+        if(amountInCash < actualCostInMinorUnit){
             throw new IllegalArgumentException();
         }
-        if(amountInCash > actualCost){
-            long change = amountInCash - actualCost;
+        if(amountInCash > actualCostInMinorUnit){
+            long change = amountInCash - actualCostInMinorUnit;
             returnWallet = calculateChange(change);
         }
-        amountOfMoneyInStore.add(actualCost);
+        writeToDatabaseFile(actualCostInMinorUnit, filename);
+        amountOfMoneyInStore.add(actualCostInMinorUnit);
         return returnWallet;
     }
 
@@ -95,6 +83,24 @@ public class CashRegister {
             }
         }
         return returnWallet;
+    }
+
+    private void writeToDatabaseFile(long amountInMinorUnit, String fileName){
+        try{
+            if(amountInMinorUnit < 0){
+                throw new IllegalArgumentException();
+            }
+            FileWriter fileWriter = new FileWriter(fileName);
+            BufferedWriter writer = new BufferedWriter(fileWriter);
+
+            long prePurchaseAmountOfMoney = getAmountOfMoneyInStore();
+            long amountOfMoneyAfterPurchase = prePurchaseAmountOfMoney + amountInMinorUnit;
+            String amountToDatabase = String.valueOf(amountOfMoneyAfterPurchase);
+            writer.write(amountToDatabase);
+            writer.close();
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 
 
