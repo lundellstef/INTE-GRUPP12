@@ -1,17 +1,11 @@
+import java.time.LocalDate;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.regex.Pattern;
 
 /**
  * Entering a name and social security number is mandatory when creating a Customer, everything else is optional.
- * As such, Customer uses Optionals for every variable but name and social security number.
- * <p>
- * This enables behaviour such as:
- * if (customer.getPhoneNumber().isPresent())
- * - do something IF the customer has entered a phone number.
- * else
- * - do something else
- * <p>
+ * Because of this: call the boolean methods (i.e. "hasAPhoneNumber()") before using the values.
+ * phoneNumber, emailAddress, address, membership.
  * Creation of Customer is handled with builder pattern - see bottom of class.
  */
 public class Customer {
@@ -21,6 +15,7 @@ public class Customer {
     private String phoneNumber;
     private String emailAddress;
     private String address;
+    private Membership membership;
 
     private Customer(CustomerBuilder builder) {
         this.name = builder.name;
@@ -28,6 +23,30 @@ public class Customer {
         this.phoneNumber = builder.phoneNumber;
         this.emailAddress = builder.emailAddress;
         this.address = builder.address;
+    }
+
+    public boolean hasAPhoneNumber() {
+        return phoneNumber != null;
+    }
+
+    public boolean hasAnEmailAddress() {
+        return emailAddress != null;
+    }
+
+    public boolean hasAnAddress() {
+        return address != null;
+    }
+
+    public boolean isAMember() {
+        return membership != null;
+    }
+
+    public Membership getMembership() {
+        return membership;
+    }
+
+    public void joinMembership(LocalDate joinDate, long initialPoints) {
+        membership = new Membership(this, joinDate, initialPoints);
     }
 
     public String getName() {
@@ -38,24 +57,24 @@ public class Customer {
         return sSNumber;
     }
 
-    public Optional<String> getPhoneNumber() {
-        return Optional.ofNullable(phoneNumber);
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
-    public Optional<String> getEmailAddress() {
-        return Optional.ofNullable(emailAddress);
+    public String getEmailAddress() {
+        return emailAddress;
     }
 
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
     }
 
-    public Optional<String> getAddress() {
-        return Optional.ofNullable(address);
+    public String getAddress() {
+        return address;
     }
 
     public void setAddress(String address) {
@@ -82,13 +101,13 @@ public class Customer {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("[Name = ").append(name).append(", SSNumber = ").append(sSNumber);
-        if (getAddress().isPresent()) {
+        if (getAddress() != null) {
             sb.append(", Address = ").append(address);
         }
-        if (getEmailAddress().isPresent()) {
+        if (getEmailAddress() != null) {
             sb.append(", EmailAddress = ").append(emailAddress);
         }
-        if (getPhoneNumber().isPresent()) {
+        if (getPhoneNumber() != null) {
             sb.append(", PhoneNumber = ").append(phoneNumber);
         }
         sb.append("]");
@@ -124,30 +143,27 @@ public class Customer {
         }
 
         public Customer build() {
-            Customer customer = new Customer(this);
-            validateCustomer(customer);
-            return customer;
+            validateCustomer();
+            return new Customer(this);
         }
 
         /**
          * Method used to validate the inputs.
          * Validation of each individual variable is split into own methods.
-         *
-         * @param customer is the new Customer to validate.
          */
-        private void validateCustomer(Customer customer) {
-            validateName(customer);
-            validateSSNumber(customer);
-            validatePhoneNumber(customer);
-            validateEmailAddress(customer);
-            validateAddress(customer);
+        private void validateCustomer( ) {
+            validateName();
+            validateSSNumber();
+            validatePhoneNumber();
+            validateEmailAddress();
+            validateAddress();
 
         }
 
         /**
          * Support method used to validate the customers entered name.
          */
-        private void validateName(Customer customer) {
+        private void validateName() {
             // TODO: Add more validation checks for name.
             if (name.length() < 3) {
                 throwIllegalArgument(name, "Too few characters.");
@@ -168,7 +184,7 @@ public class Customer {
         /**
          * Support method used to validate the customers entered social security number.
          */
-        private void validateSSNumber(Customer customer) {
+        private void validateSSNumber() {
             // TODO: Add more validation checks for social security number.
             if (sSNumber.length() != 10) {
                 throwIllegalArgument(sSNumber, "Social security number must be exactly 10 digits.");
@@ -182,7 +198,10 @@ public class Customer {
         /**
          * Support method used to validate the customers entered phone number.
          */
-        private void validatePhoneNumber(Customer customer) {
+        private void validatePhoneNumber() {
+            if (phoneNumber == null) {
+                return;
+            }
             // TODO: Add more validation checks for phone number.
             if (phoneNumber.length() > 10) {
                 throwIllegalArgument(phoneNumber, "Too many numbers.");
@@ -192,7 +211,10 @@ public class Customer {
         /**
          * Support method used to validate the customers entered email address.
          */
-        private void validateEmailAddress(Customer customer) {
+        private void validateEmailAddress() {
+            if (phoneNumber == null) {
+                return;
+            }
             // TODO: Add more validation checks for email address.
             if (emailAddress.length() > 0) {
             }
@@ -201,7 +223,10 @@ public class Customer {
         /**
          * Support method used to validate the customers entered address.
          */
-        private void validateAddress(Customer customer) {
+        private void validateAddress() {
+            if (address == null) {
+                return;
+            }
             // TODO: Add more validation checks for address.
             if (address.length() > 0) {
             }
