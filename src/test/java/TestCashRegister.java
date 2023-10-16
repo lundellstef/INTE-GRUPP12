@@ -102,7 +102,7 @@ public class TestCashRegister {
 
     @Test
     public void payByCardShouldUpdateDatabaseFileWithCorrectNewAmount(){
-        long[] expectedAmountAndActualAmount = setUpDoublePurchaseToReadFromDatabase(VALID_PAYMENT_AMOUNT, VALID_DATABASE_FILE);
+        long[] expectedAmountAndActualAmount = setUpDoublePurchaseToReadFromDatabase(VALID_DATABASE_FILE);
         long expectedAmount = expectedAmountAndActualAmount[0];
         long amountOfMoneyInStoreAfterPurchase = expectedAmountAndActualAmount[1];
         assertEquals(expectedAmount, amountOfMoneyInStoreAfterPurchase);
@@ -119,7 +119,7 @@ public class TestCashRegister {
 
     @Test
     public void payByCardShouldUpdateToCorrectAmountWhenDatabaseFileIsEmpty(){
-        long[] expectedAmountAndActualAmount = setUpDoublePurchaseToReadFromDatabase(VALID_PAYMENT_AMOUNT, VALID_EMPTY_DATABASE_FILE);
+        long[] expectedAmountAndActualAmount = setUpDoublePurchaseToReadFromDatabase(VALID_EMPTY_DATABASE_FILE);
         long expectedAmount = expectedAmountAndActualAmount[0];
         long amountOfMoneyInStoreAfterPurchase = expectedAmountAndActualAmount[1];
         assertEquals(expectedAmount, amountOfMoneyInStoreAfterPurchase);
@@ -204,11 +204,11 @@ public class TestCashRegister {
         }
     }
 
-    private long[] setUpDoublePurchaseToReadFromDatabase(long amount, String filename){
+    private long[] setUpDoublePurchaseToReadFromDatabase(String filename){
         CashRegister cashRegister = new CashRegister(filename);
         long prePurchaseAmountOfMoneyInStore = cashRegister.getAmountOfMoneyInStore();
-        cashRegister.payByCard(amount,filename);
-        long expectedAmount = prePurchaseAmountOfMoneyInStore + amount;
+        cashRegister.payByCard(TestCashRegister.VALID_PAYMENT_AMOUNT,filename);
+        long expectedAmount = prePurchaseAmountOfMoneyInStore + TestCashRegister.VALID_PAYMENT_AMOUNT;
         CashRegister cashRegisterAfterPurchase = new CashRegister(filename);
         long amountOfMoneyInStore = cashRegisterAfterPurchase.getAmountOfMoneyInStore();
         return new long[]{expectedAmount, amountOfMoneyInStore};
