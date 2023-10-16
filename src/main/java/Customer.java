@@ -1,2 +1,222 @@
+import java.util.Objects;
+import java.util.Optional;
+import java.util.regex.Pattern;
+
+/**
+ * Entering a name and social security number is mandatory when creating a Customer, everything else is optional.
+ * As such, Customer uses Optionals for every variable but name and social security number.
+ * <p>
+ * This enables behaviour such as:
+ * if (customer.getPhoneNumber().isPresent())
+ * - do something IF the customer has entered a phone number.
+ * else
+ * - do something else
+ * <p>
+ * Creation of Customer is handled with builder pattern - see bottom of class.
+ */
 public class Customer {
+
+    private final String name;
+    private final String sSNumber;
+    private String phoneNumber;
+    private String emailAddress;
+    private String address;
+
+    private Customer(CustomerBuilder builder) {
+        this.name = builder.name;
+        this.sSNumber = builder.sSNumber;
+        this.phoneNumber = builder.phoneNumber;
+        this.emailAddress = builder.emailAddress;
+        this.address = builder.address;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getSSNumber() {
+        return sSNumber;
+    }
+
+    public Optional<String> getPhoneNumber() {
+        return Optional.ofNullable(phoneNumber);
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public Optional<String> getEmailAddress() {
+        return Optional.ofNullable(emailAddress);
+    }
+
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
+    }
+
+    public Optional<String> getAddress() {
+        return Optional.ofNullable(address);
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+        if (!(other instanceof Customer o)) {
+            return false;
+        }
+        return o.sSNumber.equals(sSNumber) && o.name.equals(name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(sSNumber, name);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("[Name = ").append(name).append(", SSNumber = ").append(sSNumber);
+        if (getAddress().isPresent()) {
+            sb.append(", Address = ").append(address);
+        }
+        if (getEmailAddress().isPresent()) {
+            sb.append(", EmailAddress = ").append(emailAddress);
+        }
+        if (getPhoneNumber().isPresent()) {
+            sb.append(", PhoneNumber = ").append(phoneNumber);
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+
+    public static class CustomerBuilder {
+
+        private final String name;
+        private final String sSNumber;
+        private String phoneNumber;
+        private String emailAddress;
+        private String address;
+
+        public CustomerBuilder(String name, String sSNumber) {
+            this.name = name;
+            this.sSNumber = sSNumber;
+        }
+
+        public CustomerBuilder setPhoneNumber(String phoneNumber) {
+            this.phoneNumber = phoneNumber;
+            return this;
+        }
+
+        public CustomerBuilder setEmailAddress(String emailAddress) {
+            this.emailAddress = emailAddress;
+            return this;
+        }
+
+        public CustomerBuilder setAddress(String address) {
+            this.address = address;
+            return this;
+        }
+
+        public Customer build() {
+            Customer customer = new Customer(this);
+            validateCustomer(customer);
+            return customer;
+        }
+
+        /**
+         * Method used to validate the inputs.
+         * Validation of each individual variable is split into own methods.
+         *
+         * @param customer is the new Customer to validate.
+         */
+        private void validateCustomer(Customer customer) {
+            validateName(customer);
+            validateSSNumber(customer);
+            validatePhoneNumber(customer);
+            validateEmailAddress(customer);
+            validateAddress(customer);
+
+        }
+
+        /**
+         * Support method used to validate the customers entered name.
+         */
+        private void validateName(Customer customer) {
+            // TODO: Add more validation checks for name.
+            if (name.length() < 3) {
+                throwIllegalArgument(name, "Too few characters.");
+            }
+            if (name.length() > 150) {
+                throwIllegalArgument(name, "Too many characters.");
+            }
+            Pattern regex = Pattern.compile("[0-9]");
+            if (regex.matcher(name).find()) {
+                throwIllegalArgument(name, "Cannot have digits in the name.");
+            }
+            regex = Pattern.compile("[$&+,:;=\\\\?@#|/'<>.^*()%!-]");
+            if (regex.matcher(name).find()) {
+                throwIllegalArgument(name, "Cannot contain special characters.");
+            }
+        }
+
+        /**
+         * Support method used to validate the customers entered social security number.
+         */
+        private void validateSSNumber(Customer customer) {
+            // TODO: Add more validation checks for social security number.
+            if (sSNumber.length() != 10) {
+                throwIllegalArgument(sSNumber, "Social security number must be exactly 10 digits.");
+            }
+            Pattern regex = Pattern.compile("[a-zA-Z]");
+            if (regex.matcher(sSNumber).find()) {
+                throwIllegalArgument(sSNumber, "Social security number cannot contain any characters.");
+            }
+        }
+
+        /**
+         * Support method used to validate the customers entered phone number.
+         */
+        private void validatePhoneNumber(Customer customer) {
+            // TODO: Add more validation checks for phone number.
+            if (phoneNumber.length() > 10) {
+                throwIllegalArgument(phoneNumber, "Too many numbers.");
+            }
+        }
+
+        /**
+         * Support method used to validate the customers entered email address.
+         */
+        private void validateEmailAddress(Customer customer) {
+            // TODO: Add more validation checks for email address.
+            if (emailAddress.length() > 0) {
+            }
+        }
+
+        /**
+         * Support method used to validate the customers entered address.
+         */
+        private void validateAddress(Customer customer) {
+            // TODO: Add more validation checks for address.
+            if (address.length() > 0) {
+            }
+
+        }
+
+        /**
+         * Support method used to throw IllegalArgumentException and print appropriate message.
+         *
+         * @param value is the variable that caused the exception to be thrown.
+         * @param message is the message to be printed together with the exception.
+         */
+        private void throwIllegalArgument(String value, String message) {
+            throw new IllegalArgumentException(String.format("%s is invalid. %s", value, message));
+        }
+
+    }
 }
