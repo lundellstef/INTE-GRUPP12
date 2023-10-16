@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class CashMoney {
 
     private int amountInMinorUnit;
@@ -22,8 +24,22 @@ public class CashMoney {
         return amountInMinorUnit;
     }
 
+
     @Override
     public String toString(){
         return (amountInMinorUnit/100) + "kr";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CashMoney cashMoney = (CashMoney) o;
+        return amountInMinorUnit == cashMoney.amountInMinorUnit;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(amountInMinorUnit);
     }
 }
