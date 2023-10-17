@@ -42,10 +42,10 @@ public class TestCustomer {
     @Test
     public void nameContainingNumbersThrowsException(){
         assertThrows(IllegalArgumentException.class, () -> {
-            new Customer.CustomerBuilder("Peter1", "9804195555")
-                    .setPhoneNumber("0708766789")
-                    .setAddress("Vaskvägen 89")
-                    .setEmailAddress("peter@hotmail.com")
+            new Customer.CustomerBuilder("Peter1", VALID_SS_NUMBER)
+                    .setPhoneNumber(VALID_PHONE_NUMBER)
+                    .setAddress(VALID_ADDRESS)
+                    .setEmailAddress(VALID_EMAIL_ADDRESS)
                     .build();
         });
     }
@@ -53,10 +53,10 @@ public class TestCustomer {
     @Test
     public void nameContainingSpecialCharactersThrowsException(){
         assertThrows(IllegalArgumentException.class, () -> {
-            new Customer.CustomerBuilder("Peter!", "9804195555")
-                    .setPhoneNumber("0708766789")
-                    .setAddress("Vaskvägen 89")
-                    .setEmailAddress("peter@hotmail.com")
+            new Customer.CustomerBuilder("Peter!", VALID_SS_NUMBER)
+                    .setPhoneNumber(VALID_PHONE_NUMBER)
+                    .setAddress(VALID_ADDRESS)
+                    .setEmailAddress(VALID_EMAIL_ADDRESS)
                     .build();
         });
     }
@@ -64,19 +64,63 @@ public class TestCustomer {
     @Test
     public void nameContainingDashCanStillCreateCustomer(){
 
-            new Customer.CustomerBuilder("Peter-Peter", "9804195555")
-                    .setPhoneNumber("0708766789")
-                    .setAddress("Vaskvägen 89")
-                    .setEmailAddress("peter@hotmail.com")
+            new Customer.CustomerBuilder("Peter-Peter",VALID_SS_NUMBER)
+                    .setPhoneNumber(VALID_PHONE_NUMBER)
+                    .setAddress(VALID_ADDRESS)
+                    .setEmailAddress(VALID_EMAIL_ADDRESS)
                     .build();
+    }
+
+    @Test
+    public void lengthOfSSNumberLessThanTenThrowsException(){
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Customer.CustomerBuilder(VALID_NAME, "123")
+                    .setPhoneNumber(VALID_PHONE_NUMBER)
+                    .setAddress(VALID_ADDRESS)
+                    .setEmailAddress(VALID_EMAIL_ADDRESS)
+                    .build();
+        });
+    }
+
+    @Test
+    public void lengthOfSSNumberLongerThanTenThrowsException(){
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Customer.CustomerBuilder(VALID_NAME, "12345678910")
+                    .setPhoneNumber(VALID_PHONE_NUMBER)
+                    .setAddress(VALID_ADDRESS)
+                    .setEmailAddress(VALID_EMAIL_ADDRESS)
+                    .build();
+        });
+    }
+
+    @Test
+    public void lengthOfSSNumberContainingLettersThrowsException(){
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Customer.CustomerBuilder(VALID_NAME, "123456789L")
+                    .setPhoneNumber(VALID_PHONE_NUMBER)
+                    .setAddress(VALID_ADDRESS)
+                    .setEmailAddress(VALID_EMAIL_ADDRESS)
+                    .build();
+        });
+    }
+
+    @Test
+    public void lengthOfSSNumberContainingSpecialCharactersThrowsException(){
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Customer.CustomerBuilder(VALID_NAME, "123456789!")
+                    .setPhoneNumber(VALID_PHONE_NUMBER)
+                    .setAddress(VALID_ADDRESS)
+                    .setEmailAddress(VALID_EMAIL_ADDRESS)
+                    .build();
+        });
     }
 
 
     private Customer setUpTestCustomerWithAllValuesEntered() {
-        return new Customer.CustomerBuilder("Peter", "9804195555")
-                .setPhoneNumber("0708766789")
-                .setAddress("Vaskvägen 89")
-                .setEmailAddress("peter@hotmail.com")
+        return new Customer.CustomerBuilder(VALID_NAME, VALID_SS_NUMBER)
+                .setPhoneNumber(VALID_PHONE_NUMBER)
+                .setAddress(VALID_ADDRESS)
+                .setEmailAddress(VALID_EMAIL_ADDRESS)
                 .build();
 
     }

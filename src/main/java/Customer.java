@@ -205,6 +205,10 @@ public class Customer {
             if (regex.matcher(sSNumber).find()) {
                 throwIllegalArgument(sSNumber, "Social security number cannot contain any characters.");
             }
+            regex = Pattern.compile("[$&+,:;=\\\\?@#|/'<>.^*()%!]");
+            if (regex.matcher(sSNumber).find()) {
+                throwIllegalArgument(sSNumber, "Cannot contain special characters.");
+            }
         }
 
         /**
