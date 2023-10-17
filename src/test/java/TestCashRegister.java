@@ -265,5 +265,4 @@ public class TestCashRegister {
         long prePurchaseAmountOfMoneyInStore = cashRegister.getAmountOfMoneyInStore();
         return prePurchaseAmountOfMoneyInStore + VALID_PAYMENT_AMOUNT;
     }
-
 }

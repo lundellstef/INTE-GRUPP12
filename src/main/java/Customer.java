@@ -186,7 +186,7 @@ public class Customer {
             if (regex.matcher(name).find()) {
                 throwIllegalArgument(name, "Cannot have digits in the name.");
             }
-            regex = Pattern.compile("[$&+,:;=\\\\?@#|/'<>.^*()%!-]");
+            regex = Pattern.compile("[$&+,:;=\\\\?@#|/'<>.^*()%!]");
             if (regex.matcher(name).find()) {
                 throwIllegalArgument(name, "Cannot contain special characters.");
             }
