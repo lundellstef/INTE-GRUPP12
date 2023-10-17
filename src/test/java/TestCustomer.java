@@ -170,6 +170,61 @@ public class TestCustomer {
         });
     }
 
+    @Test
+    public void addressWithOutStreetNumberThrowsException(){
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Customer.CustomerBuilder(VALID_NAME, VALID_SS_NUMBER)
+                    .setPhoneNumber(VALID_PHONE_NUMBER)
+                    .setAddress("Vaskvägen")
+                    .setEmailAddress(VALID_EMAIL_ADDRESS)
+                    .build();
+        });
+    }
+
+    @Test
+    public void addressWithOutStreetNameThrowsException(){
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Customer.CustomerBuilder(VALID_NAME, VALID_SS_NUMBER)
+                    .setPhoneNumber(VALID_PHONE_NUMBER)
+                    .setAddress("89")
+                    .setEmailAddress(VALID_EMAIL_ADDRESS)
+                    .build();
+        });
+    }
+
+    @Test
+    public void emailAddressThatBeginsWithAtThrowsException(){
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Customer.CustomerBuilder(VALID_NAME, VALID_SS_NUMBER)
+                    .setPhoneNumber(VALID_PHONE_NUMBER)
+                    .setAddress(VALID_ADDRESS)
+                    .setEmailAddress("@peter.hotmail.com")
+                    .build();
+        });
+    }
+
+    @Test
+    public void emailAddressThatEndsWithAtThrowsException(){
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Customer.CustomerBuilder(VALID_NAME, VALID_SS_NUMBER)
+                    .setPhoneNumber(VALID_PHONE_NUMBER)
+                    .setAddress(VALID_ADDRESS)
+                    .setEmailAddress("peter.hotmail.com@")
+                    .build();
+        });
+    }
+
+    @Test
+    public void emailAddressThatEndsWithNumbersThrowsException(){
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Customer.CustomerBuilder(VALID_NAME, VALID_SS_NUMBER)
+                    .setPhoneNumber(VALID_PHONE_NUMBER)
+                    .setAddress(VALID_ADDRESS)
+                    .setEmailAddress("peter@hotmail.111")
+                    .build();
+        });
+    }
+
 
     private Customer setUpTestCustomerWithAllValuesEntered() {
         return new Customer.CustomerBuilder(VALID_NAME, VALID_SS_NUMBER)
@@ -179,6 +234,7 @@ public class TestCustomer {
                 .build();
 
     }
+
 
 
 }

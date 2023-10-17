@@ -247,6 +247,11 @@ public class Customer {
             // TODO: Add more validation checks for email address.
             if (emailAddress.length() > 0) {
             }
+
+            Pattern regex = Pattern.compile("^[A-Za-z0-9+_.-]+@([A-Za-z]+[A-Za-z0-9-]*)(\\.[A-Za-z]+[A-Za-z0-9-]*)*$");
+            if(!regex.matcher(emailAddress).find()){
+                throwIllegalArgument(emailAddress, "The email adress is not correctly formatted");
+            }
         }
 
         /**
@@ -263,6 +268,21 @@ public class Customer {
             Pattern regex = Pattern.compile("[$&+,:;=\\\\?@#|/'<>.^*()%!-]");
             if (regex.matcher(address).find()) {
                 throwIllegalArgument(address, "Cannot contain special characters.");
+            }
+
+            Pattern regexNumbers = Pattern.compile("[0-9]");
+            if(!regexNumbers.matcher(address).find()){
+                throwIllegalArgument(address, "Must cointain street number");
+            }
+            Pattern regexCharacters = Pattern.compile("[a-zA-Z]");
+            if (!regexCharacters.matcher(address).find()) {
+                throwIllegalArgument(address, "Address must cointain a street name");
+            }
+
+            String firstCharacter = String.valueOf(address.charAt(0));
+            String lastCharacter = String.valueOf(address.charAt(address.length()-1));
+            if(!(regexCharacters.matcher(firstCharacter).find() || regexNumbers.matcher(lastCharacter).find())){
+                throwIllegalArgument(address, "Address must start with a street name and end with a street number");
             }
 
         }
