@@ -5,7 +5,7 @@ import java.util.HashMap;
 public class CashRegister {
 
     Money amountOfMoneyInStore;
-    int[] denominations = new int[]{100_000, 50_000, 20_000, 10_000, 5_000, 2_000, 1_000, 500, 200, 100, 1};
+    int[] denominations = new int[]{1000_00, 500_00, 200_00, 100_00, 50_00, 20_00, 10_00, 5_00, 2_00, 1_00, 1};
 
     public CashRegister(){
         readFromDatabaseFile("src/main/resources/cashRegisterMoney.txt");

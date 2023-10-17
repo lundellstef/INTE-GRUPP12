@@ -10,8 +10,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestCashRegister {
 
     //TESTAR INTE ATT DATABASFILEN UPPDATERAS KORREKT NÄR MAN PAYBYCASH, DET ÄR JU SAMMA GREJ SOM FÖR PAYBYCARD - TITTA PÅ DETTA.
-    static final long VALID_AMOUNT_READ_FROM_DATABASE_FILE = 200_000;
-    static final long VALID_PAYMENT_AMOUNT = 25_000;
+    static final long VALID_AMOUNT_READ_FROM_DATABASE_FILE = 2000_00;
+    static final long VALID_PAYMENT_AMOUNT = 250_00;
 
     static final String VALID_DATABASE_FILE = "src/test/resources/CashRegisterMoneyTestFiles/validAmountOfMoney.txt";
     static final String VALID_DATABASE_FILE_AMOUNT_ZERO = "src/test/resources/CashRegisterMoneyTestFiles/amountOfMoneyIsZero.txt";
@@ -26,7 +26,7 @@ public class TestCashRegister {
 
     static final String VALID_DATABASE_FILE_LARGE_AMOUNT_OF_MONEY = "src/test/resources/CashRegisterMoneyTestFiles/largeAmountOfMoney.txt";
 
-    static final long INVALID_PAYMENT_AMOUNT = -25_000;
+    static final long INVALID_PAYMENT_AMOUNT = -250_00;
 
 
     @Test
