@@ -278,9 +278,85 @@ public class TestCustomer {
     }
 
     @Test
-    public void getEmailAddressReturnsCorrectNumber(){
+    public void getEmailAddressReturnsCorrectEmailAddress(){
         Customer customer = setUpTestCustomerWithAllValuesEntered();
         assertEquals(VALID_EMAIL_ADDRESS, customer.getEmailAddress());
+    }
+
+    @Test
+    public void getAddressReturnsCorrectAddress(){
+        Customer customer = setUpTestCustomerWithAllValuesEntered();
+        assertEquals(VALID_ADDRESS, customer.getAddress());
+    }
+
+    @Test
+    public void setEmailAddressChangesEmailAddressCorrectly(){
+        Customer customer = setUpTestCustomerWithAllValuesEntered();
+        customer.setEmailAddress("anna@hotmail.com");
+        assertEquals("anna@hotmail.com", customer.getEmailAddress());
+    }
+
+    @Test
+    public void setAddressChangesAddressCorrectly(){
+        Customer customer = setUpTestCustomerWithAllValuesEntered();
+        customer.setAddress("Västanvägen 88");
+        assertEquals("Västanvägen 88", customer.getAddress());
+    }
+
+    @Test
+    public void setPhoneNumberChangesNumberCorrectly(){
+        Customer customer = setUpTestCustomerWithAllValuesEntered();
+        customer.setPhoneNumber("12345678");
+        assertEquals("12345678", customer.getPhoneNumber());
+    }
+
+    @Test
+    public void hasAPhoneNumberReturnsCorrectValueIfPhoneNumberExists(){
+        Customer customer = setUpTestCustomerWithAllValuesEntered();
+        assertTrue(customer.hasAPhoneNumber());
+    }
+
+    @Test
+    public void hasAPhoneNumberReturnsCorrectValueIFPhoneNumberDoesNotExist(){
+        Customer customer = new Customer.CustomerBuilder(VALID_NAME, VALID_SS_NUMBER).build();
+        assertFalse(customer.hasAPhoneNumber());
+    }
+
+    @Test
+    public void hasAnEmailAddressReturnsCorrectValueIfEmailAddressExists(){
+        Customer customer = setUpTestCustomerWithAllValuesEntered();
+        assertTrue(customer.hasAnEmailAddress());
+    }
+
+    @Test
+    public void hasAnEmailAddressReturnsCorrectValueIfEmailAddressDoesNotExist(){
+        Customer customer = new Customer.CustomerBuilder(VALID_NAME, VALID_SS_NUMBER).build();
+        assertFalse(customer.hasAnEmailAddress());
+    }
+
+    @Test
+    public void hasAnAddressReturnsCorrectValueIfAddressExists(){
+        Customer customer = setUpTestCustomerWithAllValuesEntered();
+        assertTrue(customer.hasAnAddress());
+    }
+
+    @Test
+    public void hasAnAddressReturnsCorrectValueIfAddressDoesNotExist(){
+        Customer customer = new Customer.CustomerBuilder(VALID_NAME, VALID_SS_NUMBER).build();
+        assertFalse(customer.hasAnAddress());
+    }
+
+    @Test
+    public void isAMemberReturnsCorrectValueIfCustomerIsMember(){
+        Customer customer = setUpTestCustomerWithAllValuesEntered();
+        customer.joinMembership(0);
+        assertTrue(customer.isAMember());
+    }
+
+    @Test
+    public void isAMemberReturnsCorrectValueIfCustomerIsNotAMember(){
+        Customer customer = setUpTestCustomerWithAllValuesEntered();
+        assertFalse(customer.isAMember());
     }
 
 
@@ -291,7 +367,6 @@ public class TestCustomer {
                 .setAddress(VALID_ADDRESS)
                 .setEmailAddress(VALID_EMAIL_ADDRESS)
                 .build();
-
     }
 
 
