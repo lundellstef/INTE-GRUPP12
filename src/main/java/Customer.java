@@ -46,7 +46,17 @@ public class Customer {
     }
 
     public void joinMembership(LocalDate joinDate, long initialPoints) {
+        if (isAMember()) {
+            throw new IllegalArgumentException("Already a member.");
+        }
         membership = new Membership(this, joinDate, initialPoints);
+    }
+
+    public void leaveMembership() {
+        if (!(isAMember())) {
+            throw new IllegalArgumentException("Not a member.");
+        }
+        membership = null;
     }
 
     public String getName() {
@@ -101,13 +111,13 @@ public class Customer {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("[Name = ").append(name).append(", SSNumber = ").append(sSNumber);
-        if (getAddress() != null) {
+        if (hasAnAddress()) {
             sb.append(", Address = ").append(address);
         }
-        if (getEmailAddress() != null) {
+        if (hasAnEmailAddress()) {
             sb.append(", EmailAddress = ").append(emailAddress);
         }
-        if (getPhoneNumber() != null) {
+        if (hasAPhoneNumber()) {
             sb.append(", PhoneNumber = ").append(phoneNumber);
         }
         sb.append("]");
@@ -149,9 +159,9 @@ public class Customer {
 
         /**
          * Method used to validate the inputs.
-         * Validation of each individual variable is split into own methods.
+         * Validation of each individual variable is split into own method.
          */
-        private void validateCustomer( ) {
+        private void validateCustomer() {
             validateName();
             validateSSNumber();
             validatePhoneNumber();
@@ -162,6 +172,7 @@ public class Customer {
 
         /**
          * Support method used to validate the customers entered name.
+         * Does not need a null check since name is mandatory.
          */
         private void validateName() {
             // TODO: Add more validation checks for name.
@@ -183,6 +194,7 @@ public class Customer {
 
         /**
          * Support method used to validate the customers entered social security number.
+         * Does not need a null check since social security number is mandatory.
          */
         private void validateSSNumber() {
             // TODO: Add more validation checks for social security number.
@@ -197,6 +209,7 @@ public class Customer {
 
         /**
          * Support method used to validate the customers entered phone number.
+         * Checks for null since phone number can be omitted.
          */
         private void validatePhoneNumber() {
             if (phoneNumber == null) {
@@ -210,9 +223,10 @@ public class Customer {
 
         /**
          * Support method used to validate the customers entered email address.
+         * Checks for null since email address can be omitted.
          */
         private void validateEmailAddress() {
-            if (phoneNumber == null) {
+            if (emailAddress == null) {
                 return;
             }
             // TODO: Add more validation checks for email address.
@@ -222,6 +236,7 @@ public class Customer {
 
         /**
          * Support method used to validate the customers entered address.
+         * Checks for null since address can be omitted.
          */
         private void validateAddress() {
             if (address == null) {
@@ -236,7 +251,7 @@ public class Customer {
         /**
          * Support method used to throw IllegalArgumentException and print appropriate message.
          *
-         * @param value is the variable that caused the exception to be thrown.
+         * @param value   is the variable that caused the exception to be thrown.
          * @param message is the message to be printed together with the exception.
          */
         private void throwIllegalArgument(String value, String message) {

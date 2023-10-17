@@ -30,8 +30,6 @@ public class Membership {
         determineMembershipType(this.memberPoints);
     }
 
-    ;
-
     public Customer getCustomer() {
         return customer;
     }
