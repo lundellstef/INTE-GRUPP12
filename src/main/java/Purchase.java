@@ -134,4 +134,16 @@ public class Purchase {
     public int getTotalDiscount(){
         return totalDiscount;
     }
+
+    public void cancelPurchase(){
+        for(Product product : items.keySet()){
+            int amountOfProductPurchased = items.get(product);
+            int currentAmount = product.getAmount();
+            product.setAmount(currentAmount + amountOfProductPurchased);
+        }
+        items = null;
+        totalDiscount = 0;
+        totalVAT = 0;
+        totalPriceExVAT = 0;
+    }
 }
