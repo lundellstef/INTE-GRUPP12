@@ -94,7 +94,7 @@ public class TestCustomer {
     }
 
     @Test
-    public void lengthOfSSNumberContainingLettersThrowsException(){
+    public void sSNumberContainingLettersThrowsException(){
         assertThrows(IllegalArgumentException.class, () -> {
             new Customer.CustomerBuilder(VALID_NAME, "123456789L")
                     .setPhoneNumber(VALID_PHONE_NUMBER)
@@ -105,11 +105,66 @@ public class TestCustomer {
     }
 
     @Test
-    public void lengthOfSSNumberContainingSpecialCharactersThrowsException(){
+    public void sSNumberContainingSpecialCharactersThrowsException(){
         assertThrows(IllegalArgumentException.class, () -> {
             new Customer.CustomerBuilder(VALID_NAME, "123456789!")
                     .setPhoneNumber(VALID_PHONE_NUMBER)
                     .setAddress(VALID_ADDRESS)
+                    .setEmailAddress(VALID_EMAIL_ADDRESS)
+                    .build();
+        });
+    }
+
+    @Test
+    public void lengthOfPhoneNumberLessThanEightDigitsThrowsException(){
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Customer.CustomerBuilder(VALID_NAME, VALID_SS_NUMBER)
+                    .setPhoneNumber("123")
+                    .setAddress(VALID_ADDRESS)
+                    .setEmailAddress(VALID_EMAIL_ADDRESS)
+                    .build();
+        });
+    }
+
+    @Test
+    public void lengthOfPhoneNumberMoreThanTenDigitsThrowsException(){
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Customer.CustomerBuilder(VALID_NAME, VALID_SS_NUMBER)
+                    .setPhoneNumber("12345678910")
+                    .setAddress(VALID_ADDRESS)
+                    .setEmailAddress(VALID_EMAIL_ADDRESS)
+                    .build();
+        });
+    }
+
+    @Test
+    public void phoneNumberContainingLettersThrowsException(){
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Customer.CustomerBuilder(VALID_NAME, VALID_SS_NUMBER)
+                    .setPhoneNumber("1234567A")
+                    .setAddress(VALID_ADDRESS)
+                    .setEmailAddress(VALID_EMAIL_ADDRESS)
+                    .build();
+        });
+    }
+
+    @Test
+    public void phoneNumberContainingSpecialCharactersThrowsException(){
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Customer.CustomerBuilder(VALID_NAME, VALID_SS_NUMBER)
+                    .setPhoneNumber("1234567!")
+                    .setAddress(VALID_ADDRESS)
+                    .setEmailAddress(VALID_EMAIL_ADDRESS)
+                    .build();
+        });
+    }
+
+    @Test
+    public void addressContainingSpecialCharactersThrowsException(){
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Customer.CustomerBuilder(VALID_NAME, VALID_SS_NUMBER)
+                    .setPhoneNumber(VALID_PHONE_NUMBER)
+                    .setAddress("Vaskvägen 89!")
                     .setEmailAddress(VALID_EMAIL_ADDRESS)
                     .build();
         });
@@ -124,5 +179,6 @@ public class TestCustomer {
                 .build();
 
     }
+
 
 }

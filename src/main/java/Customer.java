@@ -205,7 +205,7 @@ public class Customer {
             if (regex.matcher(sSNumber).find()) {
                 throwIllegalArgument(sSNumber, "Social security number cannot contain any characters.");
             }
-            regex = Pattern.compile("[$&+,:;=\\\\?@#|/'<>.^*()%!]");
+            regex = Pattern.compile("[$&+,:;=\\\\?@#|/'<>.^*()%!-]");
             if (regex.matcher(sSNumber).find()) {
                 throwIllegalArgument(sSNumber, "Cannot contain special characters.");
             }
@@ -221,7 +221,18 @@ public class Customer {
             }
             // TODO: Add more validation checks for phone number.
             if (phoneNumber.length() > 10) {
-                throwIllegalArgument(phoneNumber, "Too many numbers.");
+                throwIllegalArgument(phoneNumber, "Too many digits.");
+            }
+            if (phoneNumber.length() < 8) {
+                throwIllegalArgument(phoneNumber, "Too few digits.");
+            }
+            Pattern regex = Pattern.compile("[a-zA-Z]");
+            if (regex.matcher(phoneNumber).find()) {
+                throwIllegalArgument(phoneNumber, "Social security number cannot contain any characters.");
+            }
+            regex = Pattern.compile("[$&+,:;=\\\\?@#|/'<>.^*()%!-]");
+            if (regex.matcher(phoneNumber).find()) {
+                throwIllegalArgument(phoneNumber, "Cannot contain special characters.");
             }
         }
 
@@ -248,6 +259,10 @@ public class Customer {
             }
             // TODO: Add more validation checks for address.
             if (address.length() > 0) {
+            }
+            Pattern regex = Pattern.compile("[$&+,:;=\\\\?@#|/'<>.^*()%!-]");
+            if (regex.matcher(address).find()) {
+                throwIllegalArgument(address, "Cannot contain special characters.");
             }
 
         }
