@@ -13,18 +13,18 @@ public class TestCashRegister {
     static final long VALID_AMOUNT_READ_FROM_DATABASE_FILE = 200_000;
     static final long VALID_PAYMENT_AMOUNT = 25_000;
 
-    static final String VALID_DATABASE_FILE = "src/main/java/CashRegisterMoneyTestFiles/validAmountOfMoney.txt";
-    static final String VALID_DATABASE_FILE_AMOUNT_ZERO = "src/main/java/CashRegisterMoneyTestFiles/amountOfMoneyIsZero.txt";
+    static final String VALID_DATABASE_FILE = "src/test/resources/CashRegisterMoneyTestFiles/validAmountOfMoney.txt";
+    static final String VALID_DATABASE_FILE_AMOUNT_ZERO = "src/test/resources/CashRegisterMoneyTestFiles/amountOfMoneyIsZero.txt";
 
-    static final String INVALID_DATABASE_FILE_NEGATIVE_AMOUNT = "src/main/java/CashRegisterMoneyTestFiles/negativeAmountOfMoney.txt";
+    static final String INVALID_DATABASE_FILE_NEGATIVE_AMOUNT = "src/test/resources/CashRegisterMoneyTestFiles/negativeAmountOfMoney.txt";
 
-    static final String VALID_EMPTY_DATABASE_FILE = "src/main/java/CashRegisterMoneyTestFiles/emptyFile.txt";
+    static final String VALID_EMPTY_DATABASE_FILE = "src/test/resources/CashRegisterMoneyTestFiles/emptyFile.txt";
 
     static final String INVALID_NON_EXISTING_DATABASE_FILE = "src/main/java/CashRegisterMoneyTestFiles/fileThatDoesNotExist.txt";
 
-    static final String INVALID_NON_NUMERIC_DATABASE_FILE = "src/main/java/CashRegisterMoneyTestFiles/nonNumericCharacters.txt";
+    static final String INVALID_NON_NUMERIC_DATABASE_FILE = "src/test/resources/CashRegisterMoneyTestFiles/nonNumericCharacters.txt";
 
-    static final String VALID_DATABASE_FILE_LARGE_AMOUNT_OF_MONEY = "src/main/java/CashRegisterMoneyTestFiles/largeAmountOfMoney.txt";
+    static final String VALID_DATABASE_FILE_LARGE_AMOUNT_OF_MONEY = "src/test/resources/CashRegisterMoneyTestFiles/largeAmountOfMoney.txt";
 
     static final long INVALID_PAYMENT_AMOUNT = -25_000;
 

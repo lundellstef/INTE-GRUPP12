@@ -8,7 +8,7 @@ public class CashRegister {
     int[] denominations = new int[]{100_000, 50_000, 20_000, 10_000, 5_000, 2_000, 1_000, 500, 200, 100, 1};
 
     public CashRegister(){
-        readFromDatabaseFile("src/main/java/cashRegisterMoney.txt");
+        readFromDatabaseFile("src/main/resources/cashRegisterMoney.txt");
     }
 
     public CashRegister(String cashRegisterMoneyDatabaseFileName){
