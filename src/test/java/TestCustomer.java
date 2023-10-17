@@ -1,5 +1,8 @@
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+import java.util.Date;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestCustomer {
@@ -224,6 +227,62 @@ public class TestCustomer {
                     .build();
         });
     }
+
+    @Test
+    public void joinMemberShipWhenNotAlreadyMemberCorrectlyJoinsMembership(){
+        Customer customer = setUpTestCustomerWithAllValuesEntered();
+        customer.joinMembership(0);
+        String memberShipDescription = "Peter has been a member since 2023-10-17. Member status: Bronze.";
+        assertEquals(memberShipDescription, customer.getMembership().toString());
+    }
+
+    @Test
+    public void joinMembershipWhenAlreadyMemberThrowsException(){
+        Customer customer = setUpTestCustomerWithAllValuesEntered();
+        customer.joinMembership(0);
+        assertThrows(IllegalArgumentException.class, () -> {
+            customer.joinMembership(0);
+        });
+    }
+
+    @Test
+    public void leaveMemberShipWhenNotMemberThrowsException() {
+        Customer customer = setUpTestCustomerWithAllValuesEntered();
+        assertThrows(IllegalArgumentException.class, customer::leaveMembership);
+    }
+
+    @Test
+    public void leaveMemberShipWhenMemberRemovesMemberShip() {
+        Customer customer = setUpTestCustomerWithAllValuesEntered();
+        customer.joinMembership(0);
+        customer.leaveMembership();
+        assertNull(customer.getMembership());
+    }
+
+    @Test
+    public void getNameReturnsCorrectName(){
+        Customer customer = setUpTestCustomerWithAllValuesEntered();
+        assertEquals(VALID_NAME, customer.getName());
+    }
+
+    @Test
+    public void getSSNumberReturnsCorrectNumber(){
+        Customer customer = setUpTestCustomerWithAllValuesEntered();
+        assertEquals(VALID_SS_NUMBER, customer.getSSNumber());
+    }
+
+    @Test
+    public void getPhoneNumberReturnsCorrectNumber(){
+        Customer customer = setUpTestCustomerWithAllValuesEntered();
+        assertEquals(VALID_PHONE_NUMBER, customer.getPhoneNumber());
+    }
+
+    @Test
+    public void getEmailAddressReturnsCorrectNumber(){
+        Customer customer = setUpTestCustomerWithAllValuesEntered();
+        assertEquals(VALID_EMAIL_ADDRESS, customer.getEmailAddress());
+    }
+
 
 
     private Customer setUpTestCustomerWithAllValuesEntered() {

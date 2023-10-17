@@ -45,11 +45,11 @@ public class Customer {
         return membership;
     }
 
-    public void joinMembership(LocalDate joinDate, long initialPoints) {
+    public void joinMembership(long initialPoints) {
         if (isAMember()) {
             throw new IllegalArgumentException("Already a member.");
         }
-        membership = new Membership(this, joinDate, initialPoints);
+        membership = new Membership(this, LocalDate.now(), initialPoints);
     }
 
     public void leaveMembership() {
