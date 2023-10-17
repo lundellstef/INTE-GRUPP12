@@ -27,10 +27,4 @@ jobs:
       run: |
         # Display Surefire test results
         cat target/surefire-reports/*.txt
-
-    - name: Step 5 - Display Test Summary
-      run: |
-        # Display test summary
-        mvn surefire-report:report-only
-        cat target/site/surefire-report.html
         

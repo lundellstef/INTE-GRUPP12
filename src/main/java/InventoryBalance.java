@@ -51,26 +51,16 @@ public class InventoryBalance {
     }
 
     /**
-     * Returns the current amount of a chosen Product in inventory.
-     * Uses the get() support method, and as such, exceptions are handled there.
-     *
-     * @param product is the Product to get the count of.
-     * @return the current amount of that Product in inventory.
+     * Overloaded remove method.
      */
-    public int getAmount(Product product) {
-        return get(product).getAmount();
-    }
-
-    /**
-     * Adjusts the amount of a Product in inventory.
-     * Both positive and negative amount values are valid.
-     *
-     * @param product is the Product which amount is to be adjusted.
-     * @param amount  is the value to adjust the amount by.
-     */
-    public void adjustAmount(Product product, int amount) {
-        int previousAmount = getAmount(product);
-        get(product).setAmount(previousAmount + amount);
+    public Product removeProduct(String brandName, String productName) {
+        Product tempProduct = new Product.ProductBuilder(brandName, productName).build();
+        Product removedProduct = inventory.remove(tempProduct.hashCode());
+        if (removedProduct == null) {
+            throw new NoSuchElementException("Product not in inventory.");
+        } else {
+            return removedProduct;
+        }
     }
 
     /**
@@ -92,14 +82,6 @@ public class InventoryBalance {
         return inventory.containsKey(product.hashCode());
     }
 
-    public void increment(Product product) {
-        adjustAmount(product, 1);
-    }
-
-    public void decrement(Product product) {
-        adjustAmount(product, -1);
-    }
-
     /**
      * Support method used to increase readability and handle exception when a Product is not in inventory.
      *
@@ -107,11 +89,23 @@ public class InventoryBalance {
      * @return the Product from inventory.
      * @throws NoSuchElementException when the searched Product is not found in inventory.
      */
-    private Product get(Product product) throws NoSuchElementException {
+    public Product get(Product product) throws NoSuchElementException {
         if (inventory.get(product.hashCode()) == null) {
             throw new NoSuchElementException("Product not in inventory.");
         }
         return inventory.get(product.hashCode());
+    }
+
+    /**
+     * Overloaded get method.
+     */
+    public Product get(String brandName, String productName) {
+        Product product = new Product.ProductBuilder(brandName, productName).build();
+        if (inventory.containsKey(product.hashCode())) {
+            return inventory.get(product.hashCode());
+        } else {
+            throw new NoSuchElementException("Product not in inventory.");
+        }
     }
 
     @Override
