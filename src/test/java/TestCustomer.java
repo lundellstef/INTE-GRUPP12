@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestCustomer {
 
-    static final String CUSTOMER_INFORMATION = "[Name = Peter, SSNumber = 9804195555, Address = Vaskvägen 89, EmailAddress = peter@hotmail.com, PhoneNumber = 0708766789]";
 
     static final String VALID_NAME = "Peter";
     static final String VALID_SS_NUMBER = "9804195555";
@@ -18,7 +17,8 @@ public class TestCustomer {
     @Test
     public void createCustomerWithAllValuesEnteredStoresCorrectInformation(){
         Customer customer = setUpTestCustomerWithAllValuesEntered();
-        assertEquals(CUSTOMER_INFORMATION, customer.toString());
+        String customerInformation = "[Name = Peter, SSNumber = 9804195555, Address = Vaskvägen 89, EmailAddress = peter@hotmail.com, PhoneNumber = 0708766789]";
+        assertEquals(customerInformation, customer.toString());
     }
 
     @Test
@@ -358,8 +358,6 @@ public class TestCustomer {
         Customer customer = setUpTestCustomerWithAllValuesEntered();
         assertFalse(customer.isAMember());
     }
-
-
 
     private Customer setUpTestCustomerWithAllValuesEntered() {
         return new Customer.CustomerBuilder(VALID_NAME, VALID_SS_NUMBER)
