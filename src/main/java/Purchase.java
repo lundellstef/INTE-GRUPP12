@@ -4,10 +4,10 @@ import java.util.NoSuchElementException;
 
 public class Purchase {
 
-    Map<Product, Integer> items;
-    int totalPriceExVAT;
-    int totalVAT;
-    int totalDiscount;
+   private Map<Product, Integer> items;
+    private int totalPriceExVAT;
+    private int totalVAT;
+    private int totalDiscount;
 
     public Purchase(){
         items = new HashMap<>();
@@ -22,11 +22,15 @@ public class Purchase {
      * @param item the item to be added to the list of items to be purchased.
      */
     public void scanItem(Product item){
+        if(item.getAmount() == 0){
+            throw new IllegalArgumentException("Det finns inga fler av den här varan i butiken");
+        }
         if(items.containsKey(item)){
             int currentAmount = items.get(item);
             items.put(item, currentAmount + 1);
             item.decrement();
-        } else{
+        }
+        else{
             items.put(item, 1);
             item.decrement();
         }
@@ -59,17 +63,15 @@ public class Purchase {
      * @param item the item to decide price for.
      */
     private void incrementTotalPriceExVat(Product item){
-        totalPriceExVAT = item.getPrice();
+        totalPriceExVAT += item.getPrice();
     }
 
     /**
      * Removes an item from the list. Only one item can be removed at a time and it the item to be removed is not
      * in the list of items, an exception is thrown.
-     * TANKE: SKA VI GÖRA SÅ MAN FÅR VÄLJA FRÅN LISTAN AV ITEMS SÅ DET BLIR OMÖJLIGT ATT TA BORT NÅGOT SOM INTE FINNS?
      * @param item the item to be removed
-     * @return the item if it has been successfully removed
      */
-    public Product removeScannedItem(Product item){
+    public void removeScannedItem(Product item){
         if(!items.containsKey(item)){
             throw new NoSuchElementException("The item you are trying to remove has not been purchased");
         }
@@ -87,7 +89,6 @@ public class Purchase {
         decrementPriceExVat(item);
         decrementTotalVat(item);
 
-        return item;
     }
 
     /**
@@ -133,5 +134,17 @@ public class Purchase {
 
     public int getTotalDiscount(){
         return totalDiscount;
+    }
+
+    public void cancelPurchase(){
+        for(Product product : items.keySet()){
+            int amountOfProductPurchased = items.get(product);
+            int currentAmount = product.getAmount();
+            product.setAmount(currentAmount + amountOfProductPurchased);
+        }
+        items.clear();
+        totalDiscount = 0;
+        totalVAT = 0;
+        totalPriceExVAT = 0;
     }
 }
