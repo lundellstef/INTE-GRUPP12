@@ -30,6 +30,7 @@ jobs:
 
     - name: Step 5 - Run Code Coverage
       run: |
+        # Run JaCoCo
         mvn jacoco:prepare-agent test jacoco:report
 
     - name: Step 6 - Upload Code Coverage Reports
