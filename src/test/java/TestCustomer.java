@@ -1,5 +1,7 @@
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestCustomer {
@@ -228,17 +230,18 @@ public class TestCustomer {
     @Test
     public void joinMemberShipWhenNotAlreadyMemberCorrectlyJoinsMembership(){
         Customer customer = setUpTestCustomerWithAllValuesEntered();
-        customer.joinMembership(0);
-        String memberShipDescription = "Peter has been a member since 2023-10-17. Member status: Bronze.";
+        customer.joinMembership(0, false);
+        LocalDate now = LocalDate.now();
+        String memberShipDescription = "Peter has been a member since " + now.toString() + ". Member status: Bronze.";
         assertEquals(memberShipDescription, customer.getMembership().toString());
     }
 
     @Test
     public void joinMembershipWhenAlreadyMemberThrowsException(){
         Customer customer = setUpTestCustomerWithAllValuesEntered();
-        customer.joinMembership(0);
+        customer.joinMembership(0, false);
         assertThrows(IllegalArgumentException.class, () -> {
-            customer.joinMembership(0);
+            customer.joinMembership(0,false);
         });
     }
 
@@ -251,7 +254,7 @@ public class TestCustomer {
     @Test
     public void leaveMemberShipWhenMemberRemovesMemberShip() {
         Customer customer = setUpTestCustomerWithAllValuesEntered();
-        customer.joinMembership(0);
+        customer.joinMembership(0, false);
         customer.leaveMembership();
         assertNull(customer.getMembership());
     }
@@ -346,7 +349,7 @@ public class TestCustomer {
     @Test
     public void isAMemberReturnsCorrectValueIfCustomerIsMember(){
         Customer customer = setUpTestCustomerWithAllValuesEntered();
-        customer.joinMembership(0);
+        customer.joinMembership(0, false);
         assertTrue(customer.isAMember());
     }
 
