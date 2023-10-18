@@ -45,11 +45,18 @@ public class Customer {
         return membership;
     }
 
-    public void joinMembership(long initialPoints) {
+    /**
+     * Joins a membership.
+     *
+     * @param joinDate is the date at which the customer joined the membership.
+     * @param initialPoints is the initial points that the customer starts with.
+     * @param isAnEmployee is whether the customer is employed at the store or not.
+     */
+    public void joinMembership(long initialPoints, boolean isAnEmployee) {
         if (isAMember()) {
             throw new IllegalArgumentException("Already a member.");
         }
-        membership = new Membership(this, LocalDate.now(), initialPoints);
+        membership = new Membership(this, LocalDate.now(), initialPoints, isAnEmployee);
     }
 
     public void leaveMembership() {
