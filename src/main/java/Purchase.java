@@ -69,8 +69,6 @@ public class Purchase {
     /**
      * Removes an item from the list. Only one item can be removed at a time and it the item to be removed is not
      * in the list of items, an exception is thrown.
-     * TANKE: SKA VI GÖRA SÅ MAN FÅR VÄLJA FRÅN LISTAN AV ITEMS SÅ DET BLIR OMÖJLIGT ATT TA BORT NÅGOT SOM INTE FINNS?
-     *
      * @param item the item to be removed
      */
     public void removeScannedItem(Product item){
