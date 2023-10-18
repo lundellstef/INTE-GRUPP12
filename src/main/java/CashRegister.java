@@ -5,7 +5,7 @@ import java.util.HashMap;
 public class CashRegister {
 
     Money amountOfMoneyInStore;
-    int[] denominations = new int[]{100_000, 50_000, 20_000, 10_000, 5_000, 2_000, 1_000, 500, 200, 100, 1};
+    int[] denominations = new int[]{1000_00, 500_00, 200_00, 100_00, 50_00, 20_00, 10_00, 5_00, 2_00, 1_00, 1};
 
     public CashRegister(){
         readFromDatabaseFile("src/main/resources/cashRegisterMoney.txt");
@@ -53,7 +53,7 @@ public class CashRegister {
             }
         }
         if(amountInCash < actualCostInMinorUnit){
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("You have not paid enough money");
         }
         if(amountInCash > actualCostInMinorUnit){
             long change = amountInCash - actualCostInMinorUnit;
@@ -92,7 +92,7 @@ public class CashRegister {
     private void writeToDatabaseFile(long amountInMinorUnit, String fileName){
         try{
             if(amountInMinorUnit < 0){
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("You cannot have negative money");
             }
             FileWriter fileWriter = new FileWriter(fileName);
             BufferedWriter writer = new BufferedWriter(fileWriter);
@@ -108,7 +108,7 @@ public class CashRegister {
     }
 
     /**
-     * Method that reads the amount of money currently in the database file containing the stor's total
+     * Method that reads the amount of money currently in the database file containing the store's total
      * amount of money.
      * @param fileName the database file to be read from.
      */
@@ -121,7 +121,7 @@ public class CashRegister {
             if(readLine == null){
                 amountOfMoneyInStore = new Money(0);
             } else if(Long.parseLong(readLine) < 0) {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Money cannot be negative");
             } else{
                 amountOfMoneyInStore = new Money(Long.parseLong(readLine));
             }
