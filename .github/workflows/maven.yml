@@ -27,4 +27,13 @@ jobs:
       run: |
         # Display Surefire test results
         cat target/surefire-reports/*.txt
+
+    - name: Step 5 - Run Code Coverage
+        run: mvn jacoco:prepare-agent test jacoco:report
+
+    - name: Step 6 - Upload Code Coverage Reports
+      uses: actions/upload-artifact@v2
+      with:
+        name: code-coverage
+        path: target/site/jacoco/
         
