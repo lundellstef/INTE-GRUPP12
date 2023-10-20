@@ -4,7 +4,7 @@ public class Money {
 
     long amountInMinorUnit;
 
-    String currency = "SEK";
+    final String currency = "SEK";
     Money(long amountInMinorUnit){
         if(amountInMinorUnit < 0) {
             throw new IllegalArgumentException();

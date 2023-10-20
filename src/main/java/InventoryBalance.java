@@ -38,15 +38,13 @@ public class InventoryBalance {
      * Removing a product that's not present in the inventory is NOT possible.
      *
      * @param product is the Product to be removed.
-     * @return the removed Product (mimicking the behaviour from map.remove()).
      * @throws NoSuchElementException if trying to remove a Product not present in the inventory.
      */
-    public Product removeProduct(Product product) throws NoSuchElementException {
+    public void removeProduct(Product product) throws NoSuchElementException {
         Product removedProduct = inventory.remove(product.hashCode());
         if (removedProduct == null) {
             throw new NoSuchElementException("Product not in inventory.");
         } else {
-            return removedProduct;
         }
     }
 

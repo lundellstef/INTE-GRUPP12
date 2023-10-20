@@ -196,7 +196,7 @@ public class TestCustomer {
         Customer customer = setUpTestCustomerWithAllValuesEntered();
         customer.joinMembership(0, false);
         LocalDate now = LocalDate.now();
-        String memberShipDescription = "Peter has been a member since " + now.toString() + ". Member status: Bronze.";
+        String memberShipDescription = "Peter has been a member since " + now + ". Member status: Bronze.";
         assertEquals(memberShipDescription, customer.getMembership().toString());
     }
 

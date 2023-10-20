@@ -2,7 +2,7 @@ import java.util.Objects;
 
 public class CashMoney {
 
-    private int amountInMinorUnit;
+    private final int amountInMinorUnit;
     public CashMoney(int denomination){
         switch (denomination) {
             case 1 -> amountInMinorUnit = 1;

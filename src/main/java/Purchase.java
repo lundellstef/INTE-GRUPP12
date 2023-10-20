@@ -4,7 +4,7 @@ import java.util.NoSuchElementException;
 
 public class Purchase {
 
-   private Map<Product, Integer> items;
+   private final Map<Product, Integer> items;
     private int totalPriceExVAT;
     private int totalVAT;
     private int totalDiscount;
