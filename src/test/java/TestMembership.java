@@ -79,7 +79,6 @@ public class TestMembership {
 
     @Test
     public void isALegacyMember_when_beenAMemberForTenYears(){
-
         LocalDate currentDate = LocalDate.of(2023, 1, 1);
         LocalDate joinDate = LocalDate.of(2010, 1, 1);
         try (MockedStatic<LocalDate> localDateMock = Mockito.mockStatic(LocalDate.class)) {

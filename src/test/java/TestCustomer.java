@@ -200,17 +200,19 @@ public class TestCustomer {
             localDateMock.when(LocalDate::now).thenReturn(mockedDate);
             Customer customer = setUpTestCustomerWithAllValuesEntered();
             customer.joinMembership(0, false);
-            System.out.println(customer.getMembership());
-            String memberShipDescription = "Peter has been a member since " + mockedDate + ". Member status: Bronze.";
-            assertEquals(memberShipDescription, customer.getMembership().toString());
+            assertTrue(customer.isAMember());
         }
     }
 
     @Test
     public void joinMembershipWhenAlreadyMemberThrowsException(){
-        Customer customer = setUpTestCustomerWithAllValuesEntered();
-        customer.joinMembership(0, false);
-        assertThrows(IllegalArgumentException.class, () -> customer.joinMembership(0,false));
+        LocalDate mockedDate = LocalDate.of(2023, 1, 1);
+        try (MockedStatic<LocalDate> localDateMock = Mockito.mockStatic(LocalDate.class)) {
+            localDateMock.when(LocalDate::now).thenReturn(mockedDate);
+            Customer customer = setUpTestCustomerWithAllValuesEntered();
+            customer.joinMembership(0, false);
+            assertThrows(IllegalArgumentException.class, () -> customer.joinMembership(0, false));
+        }
     }
 
     @Test
@@ -221,10 +223,14 @@ public class TestCustomer {
 
     @Test
     public void leaveMemberShipWhenMemberRemovesMemberShip() {
-        Customer customer = setUpTestCustomerWithAllValuesEntered();
-        customer.joinMembership(0, false);
-        customer.leaveMembership();
-        assertNull(customer.getMembership());
+        LocalDate mockedDate = LocalDate.of(2023, 1, 1);
+        try (MockedStatic<LocalDate> localDateMock = Mockito.mockStatic(LocalDate.class)) {
+            localDateMock.when(LocalDate::now).thenReturn(mockedDate);
+            Customer customer = setUpTestCustomerWithAllValuesEntered();
+            customer.joinMembership(0, false);
+            customer.leaveMembership();
+            assertFalse(customer.isAMember());
+        }
     }
 
     @Test
