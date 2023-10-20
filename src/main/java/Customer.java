@@ -48,7 +48,6 @@ public class Customer {
     /**
      * Joins a membership.
      *
-     * @param joinDate is the date at which the customer joined the membership.
      * @param initialPoints is the initial points that the customer starts with.
      * @param isAnEmployee is whether the customer is employed at the store or not.
      */
@@ -251,9 +250,6 @@ public class Customer {
             if (emailAddress == null) {
                 return;
             }
-            // TODO: Add more validation checks for email address.
-            if (emailAddress.length() > 0) {
-            }
 
             Pattern regex = Pattern.compile("^[A-Za-z0-9+_.-]+@([A-Za-z]+[A-Za-z0-9-]*)(\\.[A-Za-z]+[A-Za-z0-9-]*)*$");
             if(!regex.matcher(emailAddress).find()){
@@ -268,9 +264,6 @@ public class Customer {
         private void validateAddress() {
             if (address == null) {
                 return;
-            }
-            // TODO: Add more validation checks for address.
-            if (address.length() > 0) {
             }
             Pattern regex = Pattern.compile("[$&+,:;=\\\\?@#|/'<>.^*()%!-]");
             if (regex.matcher(address).find()) {
