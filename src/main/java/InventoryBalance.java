@@ -44,7 +44,6 @@ public class InventoryBalance {
         Product removedProduct = inventory.remove(product.hashCode());
         if (removedProduct == null) {
             throw new NoSuchElementException("Product not in inventory.");
-        } else {
         }
     }
 

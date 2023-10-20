@@ -47,7 +47,7 @@ public class Money {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Money money = (Money) o;
-        return amountInMinorUnit == money.amountInMinorUnit && currency.equals(money.currency);
+        return amountInMinorUnit == money.amountInMinorUnit;
     }
 
     @Override

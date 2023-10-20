@@ -19,12 +19,16 @@ public class Membership {
     private boolean employee;
 
     public Membership(Customer customer, LocalDate startDate, long initialPoints, boolean employee) {
-        validateCustomerAge(customer);
+        try{
+            validateCustomerAge(customer);
+        } catch(ParseException exception){
+            exception.printStackTrace();
+        }
         this.customer = customer;
         this.startDate = startDate;
         this.memberPoints = initialPoints;
         this.employee = employee;
-        determineMembershipType(initialPoints, employee);
+        determineMembershipType();
     }
 
     /**
@@ -37,7 +41,7 @@ public class Membership {
             throw new IllegalArgumentException(String.format("%d is invalid.", memberPoints));
         }
         this.memberPoints += memberPoints;
-        determineMembershipType(this.memberPoints, employee);
+        determineMembershipType();
     }
 
     /**
@@ -47,7 +51,7 @@ public class Membership {
      */
     public void setEmploymentStatus(boolean isEmployed) {
         employee = isEmployed;
-        determineMembershipType(memberPoints, employee);
+        determineMembershipType();
     }
 
     public boolean isAnEmployee() {
@@ -78,12 +82,9 @@ public class Membership {
      * If the customer is an employee, member points are disregarded.
      * I.e., it does not matter if the customer has millions of points -
      * the EMPLOYEE type still gives the highest possible discount rate.
-     *
-     * @param memberPoints is the current amount of total member points.
-     * @param isAnEmployee is whether the customer is an employee or not.
      */
-    private void determineMembershipType(long memberPoints, boolean isAnEmployee) {
-        if (isAnEmployee) {
+    private void determineMembershipType() {
+        if (isAnEmployee()) {
             membershipType = MembershipType.EMPLOYEE;
         } else if (memberPoints >= THRESHOLD_FOR_GOLD_MEMBERSHIP) {
             membershipType = MembershipType.GOLD;
@@ -102,7 +103,7 @@ public class Membership {
      *
      * @param customer is the customer to verify the age of.
      */
-    private void validateCustomerAge(Customer customer) {
+    private void validateCustomerAge(Customer customer) throws ParseException{
         final long EIGHTEEN_YEARS_IN_MS = 568_036_800_000L;
         String firstSixDigits = customer.getSSNumber().substring(0, 6);
         boolean customerIsOver18 = false;
@@ -115,7 +116,7 @@ public class Membership {
                 customerIsOver18 = true;
             }
         } catch (ParseException exception) {
-            throw new IllegalArgumentException();
+            throw new ParseException(exception.getMessage(), exception.getErrorOffset());
         }
 
         if (!customerIsOver18) {
