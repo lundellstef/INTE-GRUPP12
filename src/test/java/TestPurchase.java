@@ -66,6 +66,21 @@ public class TestPurchase {
         assertEquals(new HashMap<Product, Integer>(), purchase.getPurchasedItems());
     }
 
+    //Sixth test from state chart diagram
+    @Test
+    public void removingMultipleProductsResultsInCorrectProductsInPurchase(){
+        Purchase purchase = new Purchase();
+        ArrayList<Product> products = setUpProducts();
+        purchase.scanItem(products.get(1));
+        purchase.scanItem(products.get(2));
+        purchase.scanItem(products.get(3));
+        purchase.removeScannedItem(products.get(2));
+        purchase.removeScannedItem(products.get(3));
+        HashMap<Product, Integer> expectedPurchase = new HashMap<>();
+        expectedPurchase.put(products.get(1), 1);
+        assertEquals(expectedPurchase, purchase.getPurchasedItems());
+    }
+
     @Test
     public void scanningProductsAndCancelingPurchaseDecreasesTotalDiscountToZero(){
         Purchase purchase = new Purchase();
