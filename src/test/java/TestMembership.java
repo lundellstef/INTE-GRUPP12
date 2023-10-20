@@ -1,7 +1,10 @@
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import java.time.LocalDate;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestMembership {
 
@@ -72,6 +75,18 @@ public class TestMembership {
 
         customer.getMembership().setEmploymentStatus(false);
         assertEquals(customer.getMembership().getMembershipType(), MembershipType.BRONZE);
+    }
+
+    @Test
+    public void isALegacyMember_when_beenAMemberForTenYears(){
+        LocalDate currentDate = LocalDate.of(2023, 1, 1);
+        LocalDate joinDate = LocalDate.of(2010, 1, 1);
+        try (MockedStatic<LocalDate> localDateMock = Mockito.mockStatic(LocalDate.class)) {
+            localDateMock.when(LocalDate::now).thenReturn(currentDate);
+            Customer customer = createCustomerOver18();
+            customer.joinMembership(0, false, joinDate);
+            assertTrue(customer.getMembership().isALegacyMember());
+        }
     }
 
     private Customer createCustomerOver18() {

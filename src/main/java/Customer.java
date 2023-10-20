@@ -48,7 +48,6 @@ public class Customer {
     /**
      * Joins a membership.
      *
-     * @param joinDate is the date at which the customer joined the membership.
      * @param initialPoints is the initial points that the customer starts with.
      * @param isAnEmployee is whether the customer is employed at the store or not.
      */
@@ -57,6 +56,13 @@ public class Customer {
             throw new IllegalArgumentException("Already a member.");
         }
         membership = new Membership(this, LocalDate.now(), initialPoints, isAnEmployee);
+    }
+
+    public void joinMembership(long initialPoints, boolean isAnEmployee, LocalDate joinDate) {
+        if (isAMember()) {
+            throw new IllegalArgumentException("Already a member.");
+        }
+        membership = new Membership(this, joinDate, initialPoints, isAnEmployee);
     }
 
     public void leaveMembership() {
@@ -139,6 +145,13 @@ public class Customer {
         private String emailAddress;
         private String address;
 
+        private static final Pattern REGEX_NUMBERS = Pattern.compile("[0-9]");
+        private static final Pattern REGEX_SPECIAL_CHARACTERS_WITHOUT_DASH = Pattern.compile("[$&+,:;=\\\\?@#|/'<>.^*()%!]");
+
+        private static final Pattern REGEX_CHARACTERS = Pattern.compile("[a-zA-Z]");
+
+        private static final Pattern REGEX_SPECIAL_CHARACTERS = Pattern.compile("[$&+,:;=\\\\?@#|/'<>.^*()%!-]");
+
         public CustomerBuilder(String name, String sSNumber) {
             this.name = name;
             this.sSNumber = sSNumber;
@@ -182,19 +195,16 @@ public class Customer {
          * Does not need a null check since name is mandatory.
          */
         private void validateName() {
-            // TODO: Add more validation checks for name.
             if (name.length() < 3) {
                 throwIllegalArgument(name, "Too few characters.");
             }
             if (name.length() > 150) {
                 throwIllegalArgument(name, "Too many characters.");
             }
-            Pattern regex = Pattern.compile("[0-9]");
-            if (regex.matcher(name).find()) {
+            if (REGEX_NUMBERS.matcher(name).find()) {
                 throwIllegalArgument(name, "Cannot have digits in the name.");
             }
-            regex = Pattern.compile("[$&+,:;=\\\\?@#|/'<>.^*()%!]");
-            if (regex.matcher(name).find()) {
+            if (REGEX_SPECIAL_CHARACTERS_WITHOUT_DASH.matcher(name).find()) {
                 throwIllegalArgument(name, "Cannot contain special characters.");
             }
         }
@@ -204,16 +214,14 @@ public class Customer {
          * Does not need a null check since social security number is mandatory.
          */
         private void validateSSNumber() {
-            // TODO: Add more validation checks for social security number.
             if (sSNumber.length() != 10) {
                 throwIllegalArgument(sSNumber, "Social security number must be exactly 10 digits.");
             }
-            Pattern regex = Pattern.compile("[a-zA-Z]");
-            if (regex.matcher(sSNumber).find()) {
+
+            if (REGEX_CHARACTERS.matcher(sSNumber).find()) {
                 throwIllegalArgument(sSNumber, "Social security number cannot contain any characters.");
             }
-            regex = Pattern.compile("[$&+,:;=\\\\?@#|/'<>.^*()%!-]");
-            if (regex.matcher(sSNumber).find()) {
+            if (REGEX_SPECIAL_CHARACTERS.matcher(sSNumber).find()) {
                 throwIllegalArgument(sSNumber, "Cannot contain special characters.");
             }
         }
@@ -226,19 +234,16 @@ public class Customer {
             if (phoneNumber == null) {
                 return;
             }
-            // TODO: Add more validation checks for phone number.
             if (phoneNumber.length() > 10) {
                 throwIllegalArgument(phoneNumber, "Too many digits.");
             }
             if (phoneNumber.length() < 8) {
                 throwIllegalArgument(phoneNumber, "Too few digits.");
             }
-            Pattern regex = Pattern.compile("[a-zA-Z]");
-            if (regex.matcher(phoneNumber).find()) {
-                throwIllegalArgument(phoneNumber, "Social security number cannot contain any characters.");
+            if (REGEX_CHARACTERS.matcher(phoneNumber).find()) {
+                throwIllegalArgument(phoneNumber, "Phone number cannot contain any characters.");
             }
-            regex = Pattern.compile("[$&+,:;=\\\\?@#|/'<>.^*()%!-]");
-            if (regex.matcher(phoneNumber).find()) {
+            if (REGEX_SPECIAL_CHARACTERS.matcher(phoneNumber).find()) {
                 throwIllegalArgument(phoneNumber, "Cannot contain special characters.");
             }
         }
@@ -251,13 +256,10 @@ public class Customer {
             if (emailAddress == null) {
                 return;
             }
-            // TODO: Add more validation checks for email address.
-            if (emailAddress.length() > 0) {
-            }
 
             Pattern regex = Pattern.compile("^[A-Za-z0-9+_.-]+@([A-Za-z]+[A-Za-z0-9-]*)(\\.[A-Za-z]+[A-Za-z0-9-]*)*$");
             if(!regex.matcher(emailAddress).find()){
-                throwIllegalArgument(emailAddress, "The email adress is not correctly formatted");
+                throwIllegalArgument(emailAddress, "The email address is not correctly formatted");
             }
         }
 
@@ -269,26 +271,21 @@ public class Customer {
             if (address == null) {
                 return;
             }
-            // TODO: Add more validation checks for address.
-            if (address.length() > 0) {
-            }
-            Pattern regex = Pattern.compile("[$&+,:;=\\\\?@#|/'<>.^*()%!-]");
-            if (regex.matcher(address).find()) {
+            if (REGEX_SPECIAL_CHARACTERS.matcher(address).find()) {
                 throwIllegalArgument(address, "Cannot contain special characters.");
             }
 
-            Pattern regexNumbers = Pattern.compile("[0-9]");
-            if(!regexNumbers.matcher(address).find()){
-                throwIllegalArgument(address, "Must cointain street number");
+
+            if(!REGEX_NUMBERS.matcher(address).find()){
+                throwIllegalArgument(address, "Must contain street number");
             }
-            Pattern regexCharacters = Pattern.compile("[a-zA-Z]");
-            if (!regexCharacters.matcher(address).find()) {
-                throwIllegalArgument(address, "Address must cointain a street name");
+            if (!REGEX_CHARACTERS.matcher(address).find()) {
+                throwIllegalArgument(address, "Address must contain a street name");
             }
 
             String firstCharacter = String.valueOf(address.charAt(0));
             String lastCharacter = String.valueOf(address.charAt(address.length()-1));
-            if(!(regexCharacters.matcher(firstCharacter).find() || regexNumbers.matcher(lastCharacter).find())){
+            if(!(REGEX_CHARACTERS.matcher(firstCharacter).find() || REGEX_NUMBERS.matcher(lastCharacter).find())){
                 throwIllegalArgument(address, "Address must start with a street name and end with a street number");
             }
 

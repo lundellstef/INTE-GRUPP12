@@ -15,9 +15,7 @@ public class TestMoney {
 
     @Test
     public void throwsExceptionWhenAmountIsLessThanZero(){
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Money(INVALID_AMOUNT);
-        });
+        assertThrows(IllegalArgumentException.class, () -> new Money(INVALID_AMOUNT));
     }
 
     @Test
@@ -45,17 +43,13 @@ public class TestMoney {
     @Test
     public void throwsExceptionWhenAmountToSubtractIsBiggerThanTotalAmount(){
         Money money = new Money(VALID_AMOUNT);
-        assertThrows(IllegalArgumentException.class, () -> {
-            money.subtract(VALID_AMOUNT + 1);
-        });
+        assertThrows(IllegalArgumentException.class, () -> money.subtract(VALID_AMOUNT + 1));
     }
 
     @Test
     public void throwExceptionWhenAmountToBeSubtractedIsNegative(){
         Money money = new Money(VALID_AMOUNT);
-        assertThrows(IllegalArgumentException.class, () -> {
-            money.subtract(INVALID_AMOUNT);
-        });
+        assertThrows(IllegalArgumentException.class, () -> money.subtract(INVALID_AMOUNT));
     }
 
     @Test
@@ -69,9 +63,7 @@ public class TestMoney {
     @Test
     public void throwExceptionWhenAmountToBeAddedIsNegative(){
         Money money = new Money(VALID_AMOUNT);
-        assertThrows(IllegalArgumentException.class, () -> {
-            money.add(INVALID_AMOUNT);
-        });
+        assertThrows(IllegalArgumentException.class, () -> money.add(INVALID_AMOUNT));
     }
 
     @Test

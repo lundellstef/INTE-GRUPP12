@@ -1,11 +1,10 @@
 import java.io.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CashRegister {
 
     Money amountOfMoneyInStore;
-    int[] denominations = new int[]{1000_00, 500_00, 200_00, 100_00, 50_00, 20_00, 10_00, 5_00, 2_00, 1_00, 1};
+    final int[] denominations = new int[]{1000_00, 500_00, 200_00, 100_00, 50_00, 20_00, 10_00, 5_00, 2_00, 1_00, 1};
 
     public CashRegister(){
         readFromDatabaseFile("src/main/resources/cashRegisterMoney.txt");
@@ -130,40 +129,4 @@ public class CashRegister {
             throw new IllegalArgumentException();
         }
     }
-
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
