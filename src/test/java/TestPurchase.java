@@ -147,9 +147,7 @@ public class TestPurchase {
         Purchase purchase = new Purchase();
         ArrayList<Product> products = setUpProducts();
         purchase.scanItem(products.get(5));
-        assertThrows(IllegalArgumentException.class, () ->{
-            purchase.scanItem(products.get(5));
-        });
+        assertThrows(IllegalArgumentException.class, () -> purchase.scanItem(products.get(5)));
     }
 
     @Test
@@ -250,9 +248,7 @@ public class TestPurchase {
         purchase.scanItem(products.get(0));
         purchase.scanItem(products.get(2));
         purchase.scanItem((products.get(4)));
-        assertThrows(NoSuchElementException.class, () ->{
-            purchase.removeScannedItem(products.get(3));
-        });
+        assertThrows(NoSuchElementException.class, () -> purchase.removeScannedItem(products.get(3)));
     }
 
     private ArrayList<Product> setUpProducts(){

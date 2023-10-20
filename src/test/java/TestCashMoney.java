@@ -8,9 +8,7 @@ public class TestCashMoney {
 
     @Test
     public void throwsExceptionWhenCreatingMoneyWithInvalidDenomination(){
-        assertThrows(IllegalArgumentException.class, () -> {
-            new CashMoney(INVALID_DENOMINATION);
-        });
+        assertThrows(IllegalArgumentException.class, () -> new CashMoney(INVALID_DENOMINATION));
     }
 
     @Test

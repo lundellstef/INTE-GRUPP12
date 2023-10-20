@@ -45,9 +45,7 @@ public class TestCashRegister {
 
     @Test
     public void throwsExceptionIfDatabaseFileHasNegativeAmountOfMoney() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            new CashRegister(INVALID_DATABASE_FILE_NEGATIVE_AMOUNT);
-        });
+        assertThrows(IllegalArgumentException.class, () -> new CashRegister(INVALID_DATABASE_FILE_NEGATIVE_AMOUNT));
     }
 
     @Test
@@ -59,16 +57,12 @@ public class TestCashRegister {
 
     @Test
     public void throwsExceptionIfNoFileIsFound() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            new CashRegister(INVALID_NON_EXISTING_DATABASE_FILE);
-        });
+        assertThrows(IllegalArgumentException.class, () -> new CashRegister(INVALID_NON_EXISTING_DATABASE_FILE));
     }
 
     @Test
     public void throwsExceptionIfDatabaseFileDoesNotContainNumbers() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            new CashRegister(INVALID_NON_NUMERIC_DATABASE_FILE);
-        });
+        assertThrows(IllegalArgumentException.class, () -> new CashRegister(INVALID_NON_NUMERIC_DATABASE_FILE));
     }
 
     @Test
@@ -113,9 +107,7 @@ public class TestCashRegister {
     @Test
     public void payByCardShouldThrowExceptionIfTryingToPayWithNegativeAmount(){
         CashRegister cashRegister = new CashRegister(VALID_DATABASE_FILE);
-        assertThrows(IllegalArgumentException.class, () -> {
-            cashRegister.payByCard(INVALID_PAYMENT_AMOUNT,VALID_DATABASE_FILE);
-        });
+        assertThrows(IllegalArgumentException.class, () -> cashRegister.payByCard(INVALID_PAYMENT_AMOUNT,VALID_DATABASE_FILE));
     }
 
     @Test
@@ -154,9 +146,7 @@ public class TestCashRegister {
         CashRegister cashRegister = new CashRegister(VALID_DATABASE_FILE);
         HashMap<CashMoney, Integer> cashMoneyPayment = new HashMap<>();
         addLessThanPaymentAmountToWallet(cashMoneyPayment);
-        assertThrows(IllegalArgumentException.class, () ->{
-            cashRegister.payByCash(cashMoneyPayment, VALID_PAYMENT_AMOUNT, VALID_DATABASE_FILE);
-        });
+        assertThrows(IllegalArgumentException.class, () -> cashRegister.payByCash(cashMoneyPayment, VALID_PAYMENT_AMOUNT, VALID_DATABASE_FILE));
     }
 
     @Test
