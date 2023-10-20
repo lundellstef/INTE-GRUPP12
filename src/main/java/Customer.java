@@ -58,6 +58,13 @@ public class Customer {
         membership = new Membership(this, LocalDate.now(), initialPoints, isAnEmployee);
     }
 
+    public void joinMembership(long initialPoints, boolean isAnEmployee, LocalDate joinDate) {
+        if (isAMember()) {
+            throw new IllegalArgumentException("Already a member.");
+        }
+        membership = new Membership(this, joinDate, initialPoints, isAnEmployee);
+    }
+
     public void leaveMembership() {
         if (!(isAMember())) {
             throw new IllegalArgumentException("Not a member.");

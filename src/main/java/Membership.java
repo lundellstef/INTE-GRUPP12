@@ -45,6 +45,15 @@ public class Membership {
     }
 
     /**
+     * Checks if customer has been member for more than 10 years.
+     * @return true if customer has been and false if not.
+     */
+    public boolean isALegacyMember(){
+        int yearDifference = LocalDate.now().getYear() - startDate.getYear();
+        return yearDifference >= 10;
+    }
+
+    /**
      * Sets the members' employment status.
      *
      * @param isEmployed holds the value of whether the customer is employed or not.

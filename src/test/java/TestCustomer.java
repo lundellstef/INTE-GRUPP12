@@ -1,4 +1,6 @@
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 
 import java.time.LocalDate;
 
@@ -193,11 +195,15 @@ public class TestCustomer {
 
     @Test
     public void joinMemberShipWhenNotAlreadyMemberCorrectlyJoinsMembership(){
-        Customer customer = setUpTestCustomerWithAllValuesEntered();
-        customer.joinMembership(0, false);
-        LocalDate now = LocalDate.now();
-        String memberShipDescription = "Peter has been a member since " + now + ". Member status: Bronze.";
-        assertEquals(memberShipDescription, customer.getMembership().toString());
+        LocalDate mockedDate = LocalDate.of(2023, 1, 1);
+        try (MockedStatic<LocalDate> localDateMock = Mockito.mockStatic(LocalDate.class)) {
+            localDateMock.when(LocalDate::now).thenReturn(mockedDate);
+            Customer customer = setUpTestCustomerWithAllValuesEntered();
+            customer.joinMembership(0, false);
+            System.out.println(customer.getMembership());
+            String memberShipDescription = "Peter has been a member since " + mockedDate + ". Member status: Bronze.";
+            assertEquals(memberShipDescription, customer.getMembership().toString());
+        }
     }
 
     @Test
@@ -320,6 +326,7 @@ public class TestCustomer {
         Customer customer = setUpTestCustomerWithAllValuesEntered();
         assertFalse(customer.isAMember());
     }
+
 
     private Customer setUpTestCustomerWithAllValuesEntered() {
         return new Customer.CustomerBuilder(VALID_NAME, VALID_SS_NUMBER)
