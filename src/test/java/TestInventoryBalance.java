@@ -7,8 +7,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestInventoryBalance {
 
-    static final String TEST_DATA_FILE_PATH = "src/test/resources/product_test_data.csv";
     static final String DEFAULT_PRODUCT_NAME = "Product Name";
+    static final String TEST_DATA_FILE_PATH = "src/test/resources/product_test_data.csv";
+    static final String FIRST_PRODUCT_LOW_IN_STOCK = "Polarbröd Vetekaka";
+    static final String SECOND_PRODUCT_LOW_IN_STOCK = "Kavli Mjukost";
 
     @Test
     void removesProduct_when_removingProductInInventory() {
@@ -65,11 +67,14 @@ public class TestInventoryBalance {
     }
 
     @Test
-    void showsListOfProductsLowInStock_when_inventoryIsSearched() {
+    void findsEveryProductLowInStock_when_displayingProductsLowInStock() {
         InventoryBalance inventoryBalance = InventoryLoader.createInventoryBalanceFromTextFile(TEST_DATA_FILE_PATH);
         ArrayList<String> lowInStock = (ArrayList<String>) inventoryBalance.getProductsLowInStock();
 
-        assertTrue(lowInStock.contains("Polarbröd Vetekaka") && lowInStock.contains("Kavli Mjukost"));
+        boolean containsFirstItem = lowInStock.contains(FIRST_PRODUCT_LOW_IN_STOCK);
+        boolean containsSecondItem = lowInStock.contains(SECOND_PRODUCT_LOW_IN_STOCK);
+
+        assertTrue(containsFirstItem && containsSecondItem);
     }
 
     /**

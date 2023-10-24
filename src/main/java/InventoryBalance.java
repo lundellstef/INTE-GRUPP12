@@ -65,6 +65,7 @@ public class InventoryBalance {
      */
     public List<String> getProductsLowInStock() {
         ArrayList<String> listOfProductsLowInStock = new ArrayList<>();
+
         for (Product product : inventory.values()) {
             if (product.getAmount() < PRODUCT_LOW_IN_STOCK) {
                 listOfProductsLowInStock.add(product.getBrandName() + " " + product.getProductName());
