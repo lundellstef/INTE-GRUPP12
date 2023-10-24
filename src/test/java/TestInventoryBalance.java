@@ -19,7 +19,7 @@ public class TestInventoryBalance {
         // Additional assert added to ensure that the product has been properly added before it is removed.
         assertTrue(inventoryBalance.contains(product));
 
-        inventoryBalance.removeProduct(product);
+        inventoryBalance.deleteProduct(product);
         assertFalse(inventoryBalance.contains(product));
     }
 
@@ -28,7 +28,7 @@ public class TestInventoryBalance {
         InventoryBalance inventoryBalance = new InventoryBalance();
         Product product = createDefaultProduct(DEFAULT_PRODUCT_NAME);
 
-        assertThrows(NoSuchElementException.class, () -> inventoryBalance.removeProduct(product));
+        assertThrows(NoSuchElementException.class, () -> inventoryBalance.deleteProduct(product));
     }
 
     @Test

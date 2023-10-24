@@ -17,7 +17,8 @@ public class TestReceipt {
                 Pris ex moms: 121kr
                 Moms: 22kr
                 Rabatt: 8kr
-                Totalpris: 135kr""";
+                Totalpris: 135kr
+                Datum: 2023-10-24""";
         assertEquals(expectedString, receipt.toString());
     }
 

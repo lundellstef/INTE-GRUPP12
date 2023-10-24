@@ -23,7 +23,7 @@ public class Purchase {
      */
     public void scanItem(Product item){
         if(item.getAmount() == 0){
-            throw new IllegalArgumentException("Det finns inga fler av den här varan i butiken");
+            throw new IllegalArgumentException("There are no more of this product in store");
         }
         if(items.containsKey(item)){
             int currentAmount = items.get(item);
