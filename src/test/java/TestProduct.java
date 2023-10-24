@@ -97,6 +97,26 @@ public class TestProduct {
         assertFalse(product.hasDiscount());
     }
 
+    @Test
+    void removesProductFromInventory_when_removingByName() {
+        InventoryBalance inventoryBalance = new InventoryBalance();
+        Product product = new Product.ProductBuilder("Explicit Brand", "Explicit Name")
+                .setPrice(DEFAULT_PRICE)
+                .setAmount(DEFAULT_AMOUNT)
+                .setVatRate(VAT.FOOD)
+                .build();
+
+        inventoryBalance.addProduct(product);
+        /*
+         * Another assert is used here to ensure that the inventory actually contained the product that is about
+         * to be removed.
+         */
+        assertTrue(inventoryBalance.contains(product));
+
+        inventoryBalance.deleteProduct("Explicit Brand", "Explicit Name");
+        assertFalse(inventoryBalance.contains(product));
+    }
+
     /**
      * Support method used to create a product with default values.
      *

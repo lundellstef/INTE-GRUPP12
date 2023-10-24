@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.Objects;
 
 /**
@@ -11,6 +12,7 @@ public class Product {
     private final String productName;
     private final int priceInMinorUnits;
     private final VAT vatRate;
+    private LocalDate expirationDate;
 
     private int amountInInventory;
     private int discount;
@@ -118,6 +120,18 @@ public class Product {
 
     public String getBrandName() {
         return brandName;
+    }
+
+    public boolean hasAnExpirationDate() {
+        return expirationDate != null;
+    }
+
+    public void setExpirationDate(LocalDate expirationDate) {
+        this.expirationDate = expirationDate;
+    }
+
+    public LocalDate getExpirationDate() {
+        return expirationDate;
     }
 
     @Override

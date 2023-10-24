@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -50,13 +51,17 @@ public class InventoryBalance {
 
     /**
      * Overloaded remove method.
+     * A temporary product is created with the same name and brand, but with junk values.
+     * That product is then sent to deleteProduct(product).
      */
     public void deleteProduct(String brandName, String productName) {
-        Product tempProduct = new Product.ProductBuilder(brandName, productName).build();
+        Product tempProduct = new Product.ProductBuilder(brandName, productName)
+                .setPrice(1)
+                .setAmount(1)
+                .setVatRate(VAT.STANDARD)
+                .build();
         deleteProduct(tempProduct);
     }
-
-
 
     /**
      * Checks the inventory for products that are low in stock.
@@ -72,6 +77,22 @@ public class InventoryBalance {
             }
         }
         return listOfProductsLowInStock;
+    }
+
+    public ArrayList<Product> getProductsAboutToExpire() {
+        ArrayList<Product> productsAboutToExpire = new ArrayList<>();
+        LocalDate expirationDate;
+        int daysDifference;
+        for (Product product : inventory.values()) {
+            if (product.hasAnExpirationDate()) {
+                expirationDate = product.getExpirationDate();
+                daysDifference = expirationDate.getDayOfYear() - LocalDate.now().getDayOfYear();
+                if (daysDifference <= 5) {
+                    productsAboutToExpire.add(product);
+                }
+            }
+        }
+        return productsAboutToExpire;
     }
 
     public boolean contains(Product product) {

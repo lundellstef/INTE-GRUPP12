@@ -1,5 +1,8 @@
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
@@ -75,6 +78,37 @@ public class TestInventoryBalance {
         boolean containsSecondItem = lowInStock.contains(SECOND_PRODUCT_LOW_IN_STOCK);
 
         assertTrue(containsFirstItem && containsSecondItem);
+    }
+
+    @Test
+    void showsEveryProductAboutToExpire_when_findingEveryProductWithShortExpirationDate() {
+        InventoryBalance inventoryBalance = InventoryLoader.createInventoryBalanceFromTextFile(TEST_DATA_FILE_PATH);
+
+        Product firstProduct = new Product.ProductBuilder("Arla", "Västerbottenost")
+                .setAmount(5)
+                .setPrice(80_00)
+                .setVatRate(VAT.FOOD)
+                .build();
+        Product secondProduct = new Product.ProductBuilder("Heinz", "Ketchup")
+                .setAmount(3)
+                .setPrice(30_00)
+                .setVatRate(VAT.FOOD)
+                .build();
+
+        LocalDate expirationDate = LocalDate.of(2023, 12, 24);
+        firstProduct.setExpirationDate(expirationDate);
+        secondProduct.setExpirationDate(expirationDate);
+
+        inventoryBalance.addProduct(firstProduct);
+        inventoryBalance.addProduct(secondProduct);
+
+        LocalDate mockedCurrentDate = LocalDate.of(2023, 12, 20);
+        try (MockedStatic<LocalDate> localDateMock = Mockito.mockStatic(LocalDate.class)) {
+            localDateMock.when(LocalDate::now).thenReturn(mockedCurrentDate);
+
+            ArrayList<Product> productsAboutToExpire = inventoryBalance.getProductsAboutToExpire();
+            assertTrue(productsAboutToExpire.contains(firstProduct) && productsAboutToExpire.contains(secondProduct));
+        }
     }
 
     /**
