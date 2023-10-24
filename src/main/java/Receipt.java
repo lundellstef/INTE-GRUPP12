@@ -1,11 +1,11 @@
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Map;
 
 public class Receipt {
 
     final Map<Product, Integer> items;
     final int totalPriceExVat;
-    final Date date;
+    final LocalDate date;
     final int totalVat;
     final int totalDiscount;
     final int totalPrice;
@@ -16,7 +16,7 @@ public class Receipt {
         totalVat = purchase.getTotalVAT();
         totalDiscount = purchase.getTotalDiscount();
         totalPrice = purchase.getTotalPrice();
-        date = new Date();
+        date = LocalDate.now();
     }
 
 
@@ -36,6 +36,7 @@ public class Receipt {
         stringBuilder.append(System.getProperty("line.separator")).append("Moms: ").append(totalVat/100).append("kr");
         stringBuilder.append(System.getProperty("line.separator")).append("Rabatt: ").append(totalDiscount/100).append("kr");
         stringBuilder.append(System.getProperty("line.separator")).append("Totalpris: ").append(totalPrice/100).append("kr");
+        stringBuilder.append(System.getProperty("line.separator")).append("Datum: ").append(date);
 
         return stringBuilder.toString();
     }

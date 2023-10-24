@@ -7,7 +7,7 @@ public class Money {
     final String currency = "SEK";
     Money(long amountInMinorUnit){
         if(amountInMinorUnit < 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Amount cannot be less than 0");
         }
         this.amountInMinorUnit = amountInMinorUnit;
     }
@@ -26,7 +26,7 @@ public class Money {
      */
     public void subtract(long amountInMinorUnit){
         if((amountInMinorUnit > this.amountInMinorUnit)|| (amountInMinorUnit < 0)){
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("You cannot subtract an amount larger than existing amount");
         }
         this.amountInMinorUnit -= amountInMinorUnit;
     }
@@ -37,7 +37,7 @@ public class Money {
      */
     public void add(long amountInMinorUnit){
         if(amountInMinorUnit < 0){
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("You cannot add a negative amount");
         }
         this.amountInMinorUnit += amountInMinorUnit;
     }

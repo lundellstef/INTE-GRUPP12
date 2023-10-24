@@ -13,6 +13,7 @@ import java.util.*;
 public class InventoryBalance {
 
     private final Map<Integer, Product> inventory;
+    private static final int PRODUCT_LOW_IN_STOCK = 5;
 
     public InventoryBalance() {
         inventory = new HashMap<>();
@@ -40,7 +41,7 @@ public class InventoryBalance {
      * @param product is the Product to be removed.
      * @throws NoSuchElementException if trying to remove a Product not present in the inventory.
      */
-    public void removeProduct(Product product) throws NoSuchElementException {
+    public void deleteProduct(Product product) throws NoSuchElementException {
         Product removedProduct = inventory.remove(product.hashCode());
         if (removedProduct == null) {
             throw new NoSuchElementException("Product not in inventory.");
@@ -50,15 +51,12 @@ public class InventoryBalance {
     /**
      * Overloaded remove method.
      */
-    public Product removeProduct(String brandName, String productName) {
+    public void deleteProduct(String brandName, String productName) {
         Product tempProduct = new Product.ProductBuilder(brandName, productName).build();
-        Product removedProduct = inventory.remove(tempProduct.hashCode());
-        if (removedProduct == null) {
-            throw new NoSuchElementException("Product not in inventory.");
-        } else {
-            return removedProduct;
-        }
+        deleteProduct(tempProduct);
     }
+
+
 
     /**
      * Checks the inventory for products that are low in stock.
@@ -68,7 +66,7 @@ public class InventoryBalance {
     public List<String> getProductsLowInStock() {
         ArrayList<String> listOfProductsLowInStock = new ArrayList<>();
         for (Product product : inventory.values()) {
-            if (product.getAmount() < 5) {
+            if (product.getAmount() < PRODUCT_LOW_IN_STOCK) {
                 listOfProductsLowInStock.add(product.getBrandName() + " " + product.getProductName());
             }
         }
