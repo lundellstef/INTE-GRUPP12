@@ -183,9 +183,9 @@ public class TestPurchase {
         purchase.scanItem(products.get(0));
         purchase.scanItem(products.get(2));
         purchase.scanItem((products.get(4)));
-        int expectedTotalPriceExVat = products.get(0).getPrice();
-        expectedTotalPriceExVat += products.get(2).getPrice();
-        expectedTotalPriceExVat += products.get(4).getPrice();
+        int expectedTotalPriceExVat = products.get(0).getPriceInMinorUnits();
+        expectedTotalPriceExVat += products.get(2).getPriceInMinorUnits();
+        expectedTotalPriceExVat += products.get(4).getPriceInMinorUnits();
         assertEquals(expectedTotalPriceExVat, purchase.getTotalPriceExVat());
     }
 
@@ -197,8 +197,8 @@ public class TestPurchase {
         purchase.scanItem(products.get(2));
         purchase.scanItem((products.get(4)));
         purchase.removeScannedItem(products.get(4));
-        int expectedTotalPriceExVat = products.get(0).getPrice();
-        expectedTotalPriceExVat += products.get(2).getPrice();
+        int expectedTotalPriceExVat = products.get(0).getPriceInMinorUnits();
+        expectedTotalPriceExVat += products.get(2).getPriceInMinorUnits();
         assertEquals(expectedTotalPriceExVat, purchase.getTotalPriceExVat());
     }
 

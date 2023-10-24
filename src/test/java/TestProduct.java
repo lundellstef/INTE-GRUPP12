@@ -1,5 +1,7 @@
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestProduct {
@@ -115,6 +117,14 @@ public class TestProduct {
 
         inventoryBalance.deleteProduct("Explicit Brand", "Explicit Name");
         assertFalse(inventoryBalance.contains(product));
+    }
+
+    @Test
+    void throwsException_when_tryingToSetAnExpirationDate_onAProduct_thatAlreadyHasOne() {
+        Product product = createProductWithDefaultValues(VAT.FOOD);
+        LocalDate expirationDate = LocalDate.of(2023, 1, 2);
+        product.setExpirationDate(expirationDate);
+        assertThrows(IllegalArgumentException.class, () -> product.setExpirationDate(expirationDate));
     }
 
     /**

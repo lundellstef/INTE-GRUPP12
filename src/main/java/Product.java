@@ -4,6 +4,7 @@ import java.util.Objects;
 /**
  * Product is treated as immutable as possible.
  * After a product has been created, you should only be able to change the amount and the discount.
+ * Expiration date is added, if appropriate, after product has been created.
  * Creation of Product objects is managed with builder pattern - see bottom of class.
  */
 public class Product {
@@ -33,7 +34,7 @@ public class Product {
      * If a banana costs 2000 without VAT (20 SEK), this would return 2240.
      **/
     public int getPriceWithVat() {
-        return (getPrice() * (getVat().value + 100) / 100);
+        return (getPriceInMinorUnits() * (getVat().value + 100) / 100);
     }
 
     /**
@@ -41,14 +42,14 @@ public class Product {
      * If a banana costs 2240 with VAT, this would return 240.
      */
     public int getVatAmountOfPrice() {
-        return getPriceWithVat() - getPrice();
+        return getPriceWithVat() - getPriceInMinorUnits();
     }
 
     /**
      * Price is entered in minor units, WITHOUT VAT.
      * If a banana costs 20 SEK, the price entered would be 2000. (2000 öre.)
      **/
-    public int getPrice() {
+    public int getPriceInMinorUnits() {
         return priceInMinorUnits;
     }
 
@@ -126,12 +127,15 @@ public class Product {
         return expirationDate != null;
     }
 
-    public void setExpirationDate(LocalDate expirationDate) {
-        this.expirationDate = expirationDate;
-    }
-
     public LocalDate getExpirationDate() {
         return expirationDate;
+    }
+
+    public void setExpirationDate(LocalDate expirationDate) {
+        if (this.expirationDate != null) {
+            throw new IllegalArgumentException("An expiration date has already been set!");
+        }
+        this.expirationDate = expirationDate;
     }
 
     @Override

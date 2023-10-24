@@ -12,8 +12,6 @@ public class TestInventoryBalance {
 
     static final String DEFAULT_PRODUCT_NAME = "Product Name";
     static final String TEST_DATA_FILE_PATH = "src/test/resources/product_test_data.csv";
-    static final String FIRST_PRODUCT_LOW_IN_STOCK = "Polarbröd Vetekaka";
-    static final String SECOND_PRODUCT_LOW_IN_STOCK = "Kavli Mjukost";
 
     @Test
     void removesProduct_when_removingProductInInventory() {
@@ -72,10 +70,25 @@ public class TestInventoryBalance {
     @Test
     void findsEveryProductLowInStock_when_displayingProductsLowInStock() {
         InventoryBalance inventoryBalance = InventoryLoader.createInventoryBalanceFromTextFile(TEST_DATA_FILE_PATH);
-        ArrayList<String> lowInStock = (ArrayList<String>) inventoryBalance.getProductsLowInStock();
+        ArrayList<Product> lowInStock = (ArrayList<Product>) inventoryBalance.getProductsLowInStock();
 
-        boolean containsFirstItem = lowInStock.contains(FIRST_PRODUCT_LOW_IN_STOCK);
-        boolean containsSecondItem = lowInStock.contains(SECOND_PRODUCT_LOW_IN_STOCK);
+        /* Products are compared only according to their brandName and productName.
+         * Therefore, two products are created with junk values BUT with correct brand names and product names.
+         * Meaning: The two products that are expected to be low in stock are Polarbröd Vetekaka and Kavli Mjukost.
+         */
+        Product firstExpectedProduct = new Product.ProductBuilder("Polarbröd", "Vetekaka")
+                .setAmount(1)
+                .setPrice(1)
+                .setVatRate(VAT.FOOD)
+                .build();
+        Product secondExpectedProduct = new Product.ProductBuilder("Kavli", "Mjukost")
+                .setAmount(1)
+                .setPrice(1)
+                .setVatRate(VAT.FOOD)
+                .build();
+
+        boolean containsFirstItem = lowInStock.contains(firstExpectedProduct);
+        boolean containsSecondItem = lowInStock.contains(secondExpectedProduct);
 
         assertTrue(containsFirstItem && containsSecondItem);
     }
@@ -106,7 +119,7 @@ public class TestInventoryBalance {
         try (MockedStatic<LocalDate> localDateMock = Mockito.mockStatic(LocalDate.class)) {
             localDateMock.when(LocalDate::now).thenReturn(mockedCurrentDate);
 
-            ArrayList<Product> productsAboutToExpire = inventoryBalance.getProductsAboutToExpire();
+            ArrayList<Product> productsAboutToExpire = (ArrayList<Product>) inventoryBalance.getProductsAboutToExpire();
             assertTrue(productsAboutToExpire.contains(firstProduct) && productsAboutToExpire.contains(secondProduct));
         }
     }
