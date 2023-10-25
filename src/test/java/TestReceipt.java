@@ -1,5 +1,8 @@
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -8,8 +11,11 @@ public class TestReceipt {
 
     @Test
     public void testToString(){
-        Receipt receipt = new Receipt(setUpPurchase());
-        String expectedString = """
+        LocalDate mockedDate = LocalDate.of(2023, 1, 1);
+        try (MockedStatic<LocalDate> localDateMock = Mockito.mockStatic(LocalDate.class)) {
+            localDateMock.when(LocalDate::now).thenReturn(mockedDate);
+            Receipt receipt = new Receipt(setUpPurchase());
+            String expectedString = """
                 Du har köpt varorna:
                 Arla Mellanmjölk, antal: 1
                 Axa Fruktmusli, antal: 1
@@ -18,8 +24,10 @@ public class TestReceipt {
                 Moms: 22kr
                 Rabatt: 8kr
                 Totalpris: 135kr
-                Datum: 2023-10-24""";
-        assertEquals(expectedString, receipt.toString());
+                Datum:""" + " " + receipt.date;
+            assertEquals(expectedString, receipt.toString());
+        }
+
     }
 
     private ArrayList<Product> setUpProducts(){
