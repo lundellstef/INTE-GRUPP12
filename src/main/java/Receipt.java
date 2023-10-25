@@ -3,12 +3,12 @@ import java.util.Map;
 
 public class Receipt {
 
-    final Map<Product, Integer> items;
-    final int totalPriceExVat;
-    final LocalDate date;
-    final int totalVat;
-    final int totalDiscount;
-    final int totalPrice;
+    private final Map<Product, Integer> items;
+    private final int totalPriceExVat;
+    public final LocalDate date;
+    private final int totalVat;
+    private final int totalDiscount;
+    private final int totalPrice;
 
     Receipt(Purchase purchase){
         items = purchase.getPurchasedItems();
