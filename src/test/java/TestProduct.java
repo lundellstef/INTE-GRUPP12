@@ -37,6 +37,17 @@ public class TestProduct {
     }
 
     @Test
+    void throwsException_when_creatingProduct_withInvalidDiscount() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new Product.ProductBuilder(DEFAULT_BRAND_NAME, DEFAULT_PRODUCT_NAME)
+                        .setPrice(DEFAULT_PRICE)
+                        .setAmount(DEFAULT_AMOUNT)
+                        .setVatRate(VAT.FOOD)
+                        .setDiscount(-10)
+                        .build());
+    }
+
+    @Test
     void throwsException_when_settingDiscountOfCreatedProduct_toInvalidAmount() {
         Product product = createProductWithDefaultValues(VAT.STANDARD);
         assertThrows(IllegalArgumentException.class, () -> product.setDiscount(-10));
@@ -125,6 +136,44 @@ public class TestProduct {
         LocalDate expirationDate = LocalDate.of(2023, 1, 2);
         product.setExpirationDate(expirationDate);
         assertThrows(IllegalArgumentException.class, () -> product.setExpirationDate(expirationDate));
+    }
+
+    @Test
+    void setsDiscountToNewValue_when_changingDiscountAfterCreation() {
+        Product product = createProductWithDefaultValues(VAT.FOOD);
+        int expectedDiscount = 15;
+        product.setDiscount(expectedDiscount);
+
+        int actualDiscount = product.getDiscount();
+        assertEquals(expectedDiscount, actualDiscount);
+    }
+
+    @Test
+    void hasNoDiscount_when_updatingDiscountAfterCreation() {
+        Product product = new Product.ProductBuilder(DEFAULT_BRAND_NAME, DEFAULT_PRODUCT_NAME)
+                .setPrice(DEFAULT_PRICE)
+                .setAmount(DEFAULT_AMOUNT)
+                .setVatRate(VAT.STANDARD)
+                .setDiscount(10)
+                .build();
+        // Additional assert to ensure that the product actually has a discount before updating discount value.
+        assertTrue(product.hasDiscount());
+
+        product.setDiscount(0);
+        assertFalse(product.hasDiscount());
+    }
+
+    @Test
+    void setsNameAndBrand_when_creatingProduct() {
+        Product product = new Product.ProductBuilder(DEFAULT_BRAND_NAME, DEFAULT_PRODUCT_NAME)
+                .setPrice(DEFAULT_PRICE)
+                .setAmount(DEFAULT_AMOUNT)
+                .setVatRate(VAT.STANDARD)
+                .setDiscount(DEFAULT_DISCOUNT)
+                .build();
+        boolean correctBrand = product.getBrandName().equals(DEFAULT_BRAND_NAME);
+        boolean correctName = product.getProductName().equals(DEFAULT_PRODUCT_NAME);
+        assertTrue(correctBrand && correctName);
     }
 
     /**

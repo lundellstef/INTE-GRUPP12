@@ -89,6 +89,60 @@ public class TestMembership {
         }
     }
 
+    @Test
+    public void isNotALegacyMember_when_beenAMemberForLessThanTenYears() {
+        LocalDate currentDate = LocalDate.of(2023, 1, 1);
+        LocalDate joinDate = LocalDate.of(2022, 1, 1);
+        try (MockedStatic<LocalDate> localDateMock = Mockito.mockStatic(LocalDate.class)) {
+            localDateMock.when(LocalDate::now).thenReturn(currentDate);
+            Customer customer = createCustomerOver18();
+            customer.joinMembership(0, false, joinDate);
+            assertFalse(customer.getMembership().isALegacyMember());
+        }
+    }
+
+    @Test
+    public void throwsException_when_tryingToAdjustMemberPoints_withNegativeValue() {
+        Customer customer = createCustomerOver18();
+        customer.joinMembership(0, false);
+        assertThrows(IllegalArgumentException.class, () -> customer.getMembership().adjustMemberPoints(-5));
+    }
+
+    @Test
+    public void printsMembershipInfoCorrectly_when_toStringCalled() {
+        Customer customer = createCustomerOver18();
+        LocalDate joinDate = LocalDate.of(2023, 7, 30);
+        customer.joinMembership(0, false, joinDate);
+        String expectedString = "CustomerName has been a member since 2023-07-30. Member status: Bronze.";
+        String actualString = customer.getMembership().toString();
+        assertEquals(expectedString, actualString);
+    }
+
+    @Test
+    public void displaysTheUpdatedMemberPoints_when_memberPointsAreUpdatedAndFetched() {
+        long initialPoints = 100;
+        long pointsToAdjustBy = 200;
+
+        Customer customer = createCustomerOver18();
+        customer.joinMembership(initialPoints, false);
+        customer.getMembership().adjustMemberPoints(pointsToAdjustBy);
+
+        long expectedPoints = 300;
+        long actualPoints = customer.getMembership().getMemberPoints();
+
+        assertEquals(expectedPoints, actualPoints);
+    }
+
+    @Test
+    public void setsStartDateCorrectly_when_joiningMembership() {
+        Customer customer = createCustomerOver18();
+        LocalDate joinDate = LocalDate.of(2023, 7, 30);
+        customer.joinMembership(0, false, joinDate);
+
+        LocalDate actualDate = customer.getMembership().getStartDate();
+        assertEquals(joinDate, actualDate);
+    }
+
     private Customer createCustomerOver18() {
         return new Customer.CustomerBuilder("CustomerName", SOCIAL_SECURITY_NUMBER_OVER_18).build();
     }

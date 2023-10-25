@@ -124,6 +124,25 @@ public class TestInventoryBalance {
         }
     }
 
+    @Test
+    void findsProductInInventory_when_searchingByName() {
+        InventoryBalance inventoryBalance = new InventoryBalance();
+        Product addedProduct = InventoryLoader.createSingleProductFromTextFile(TEST_DATA_FILE_PATH);
+        inventoryBalance.addProduct(addedProduct);
+        Product foundProduct = inventoryBalance.get("Arla", "Mellanmjölk");
+        assertEquals(addedProduct, foundProduct);
+    }
+
+    @Test
+    void throwsException_when_tryingToFindAProductNotInInventory() {
+        InventoryBalance inventoryBalance = new InventoryBalance();
+        Product addedProduct = InventoryLoader.createSingleProductFromTextFile(TEST_DATA_FILE_PATH);
+        Product productNotAdded = createDefaultProduct(DEFAULT_PRODUCT_NAME);
+
+        inventoryBalance.addProduct(addedProduct);
+        assertThrows(NoSuchElementException.class, () -> inventoryBalance.get(productNotAdded));
+    }
+
     /**
      * Support method used to create a Product with typical values.
      *

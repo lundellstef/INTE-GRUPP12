@@ -122,14 +122,15 @@ public class InventoryBalance {
 
     /**
      * Overloaded get method.
+     * Creates a product with junk values in order to pass to other get method.
      */
     public Product get(String brandName, String productName) {
-        Product product = new Product.ProductBuilder(brandName, productName).build();
-        if (inventory.containsKey(product.hashCode())) {
-            return inventory.get(product.hashCode());
-        } else {
-            throw new NoSuchElementException("Product not in inventory.");
-        }
+        Product product = new Product.ProductBuilder(brandName, productName)
+                .setAmount(1)
+                .setPrice(1)
+                .setVatRate(VAT.STANDARD)
+                .build();
+        return get(product);
     }
 
     @Override
