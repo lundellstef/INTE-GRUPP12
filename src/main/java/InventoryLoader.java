@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 
 /**
  * Support class used to create InventoryBalance and Product objects from text files.
@@ -25,8 +26,8 @@ public class InventoryLoader {
                 Product product = createProductFromString(values);
                 inventoryBalance.addProduct(product);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException exception) {
+            exception.printStackTrace();
         }
         return inventoryBalance;
     }

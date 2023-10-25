@@ -30,13 +30,13 @@ public class Receipt {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Du har köpt varorna:");
         for(Product item : items.keySet()){
-            stringBuilder.append(System.getProperty("line.separator")).append(item.toString()).append(", antal: ").append(items.get(item));
+            stringBuilder.append("\n").append(item.toString()).append(", antal: ").append(items.get(item));
         }
-        stringBuilder.append(System.getProperty("line.separator")).append("Pris ex moms: ").append(totalPriceExVat/100).append("kr");
-        stringBuilder.append(System.getProperty("line.separator")).append("Moms: ").append(totalVat/100).append("kr");
-        stringBuilder.append(System.getProperty("line.separator")).append("Rabatt: ").append(totalDiscount/100).append("kr");
-        stringBuilder.append(System.getProperty("line.separator")).append("Totalpris: ").append(totalPrice/100).append("kr");
-        stringBuilder.append(System.getProperty("line.separator")).append("Datum: ").append(date);
+        stringBuilder.append("\n").append("Pris ex moms: ").append(totalPriceExVat/100).append("kr");
+        stringBuilder.append("\n").append("Moms: ").append(totalVat/100).append("kr");
+        stringBuilder.append("\n").append("Rabatt: ").append(totalDiscount/100).append("kr");
+        stringBuilder.append("\n").append("Totalpris: ").append(totalPrice/100).append("kr");
+        stringBuilder.append("\n").append("Datum: ").append(date);
 
         return stringBuilder.toString();
     }

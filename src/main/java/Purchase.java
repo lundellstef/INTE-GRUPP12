@@ -63,11 +63,11 @@ public class Purchase {
      * @param item the item to decide price for.
      */
     private void incrementTotalPriceExVat(Product item){
-        totalPriceExVAT += item.getPrice();
+        totalPriceExVAT += item.getPriceInMinorUnits();
     }
 
     /**
-     * Removes an item from the list. Only one item can be removed at a time and it the item to be removed is not
+     * Removes an item from the list. Only one item can be removed at a time and if the item to be removed is not
      * in the list of items, an exception is thrown.
      * @param item the item to be removed
      */
@@ -112,7 +112,7 @@ public class Purchase {
      * @param item the item to decide price for.
      */
     private void decrementPriceExVat(Product item){
-        totalPriceExVAT -= item.getPrice();
+        totalPriceExVAT -= item.getPriceInMinorUnits();
     }
 
     public int getTotalPriceExVat(){

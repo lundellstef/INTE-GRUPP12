@@ -1,5 +1,7 @@
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestProduct {
@@ -9,11 +11,9 @@ public class TestProduct {
     static final int DEFAULT_PRICE = 2000_00;
     static final int EXPECTED_PRICE_WITH_VAT12 = 2240_00;
     static final int EXPECTED_PRICE_WITH_VAT25 = 2500_00;
-    static final int EXPECTED_PRICE_WITH_VAT12_AND_DEFAULT_DISCOUNT = 2016_00;
     static final int DEFAULT_DISCOUNT = 10;
+    static final int EXPECTED_PRICE_WITH_VAT12_AND_DEFAULT_DISCOUNT = 2016_00;
     static final int DEFAULT_AMOUNT = 10;
-
-    static final String EXCEPTION_TEST_MESSAGE = "[TEST] Success: ";
 
     @Test
     void throwsException_when_creatingProduct_withOutPrice() {
@@ -39,13 +39,13 @@ public class TestProduct {
     @Test
     void throwsException_when_settingDiscountOfCreatedProduct_toInvalidAmount() {
         Product product = createProductWithDefaultValues(VAT.STANDARD);
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> product.setDiscount(-10));
+        assertThrows(IllegalArgumentException.class, () -> product.setDiscount(-10));
     }
 
     @Test
     void throwsException_when_settingAmountOfCreatedProduct_toInvalidAmount() {
         Product product = createProductWithDefaultValues(VAT.STANDARD);
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> product.setAmount(-100));
+        assertThrows(IllegalArgumentException.class, () -> product.setAmount(-100));
     }
 
     @Test
@@ -83,7 +83,9 @@ public class TestProduct {
     @Test
     void returnsCorrectDiscountedPrice_withVat12_when_productIsCreated() {
         Product product = createProductWithDefaultValues(VAT.FOOD);
-        assertEquals(product.getPriceWithVatAndDiscount(), EXPECTED_PRICE_WITH_VAT12_AND_DEFAULT_DISCOUNT);
+        int actualPriceWithVatAndDiscount = product.getPriceWithVatAndDiscount();
+
+        assertEquals(actualPriceWithVatAndDiscount, EXPECTED_PRICE_WITH_VAT12_AND_DEFAULT_DISCOUNT);
     }
 
     @Test
@@ -97,13 +99,32 @@ public class TestProduct {
         assertFalse(product.hasDiscount());
     }
 
-    /**
-     * Support method used to print messages retrieved from exceptions.
-     *
-     * @param message is the exception message to be printed.
-     */
-    private void printExceptionMessage(String message) {
-        System.out.println(EXCEPTION_TEST_MESSAGE + message);
+    @Test
+    void removesProductFromInventory_when_removingByName() {
+        InventoryBalance inventoryBalance = new InventoryBalance();
+        Product product = new Product.ProductBuilder("Explicit Brand", "Explicit Name")
+                .setPrice(DEFAULT_PRICE)
+                .setAmount(DEFAULT_AMOUNT)
+                .setVatRate(VAT.FOOD)
+                .build();
+
+        inventoryBalance.addProduct(product);
+        /*
+         * Another assert is used here to ensure that the inventory actually contained the product that is about
+         * to be removed.
+         */
+        assertTrue(inventoryBalance.contains(product));
+
+        inventoryBalance.deleteProduct("Explicit Brand", "Explicit Name");
+        assertFalse(inventoryBalance.contains(product));
+    }
+
+    @Test
+    void throwsException_when_tryingToSetAnExpirationDate_onAProduct_thatAlreadyHasOne() {
+        Product product = createProductWithDefaultValues(VAT.FOOD);
+        LocalDate expirationDate = LocalDate.of(2023, 1, 2);
+        product.setExpirationDate(expirationDate);
+        assertThrows(IllegalArgumentException.class, () -> product.setExpirationDate(expirationDate));
     }
 
     /**
@@ -113,7 +134,7 @@ public class TestProduct {
      * @return a Product with default values and the chosen VAT rate.
      */
     private Product createProductWithDefaultValues(VAT vatRate) {
-        return new Product.ProductBuilder(DEFAULT_BRAND_NAME, DEFAULT_BRAND_NAME)
+        return new Product.ProductBuilder(DEFAULT_BRAND_NAME, DEFAULT_PRODUCT_NAME)
                 .setPrice(DEFAULT_PRICE)
                 .setAmount(DEFAULT_AMOUNT)
                 .setVatRate(vatRate)

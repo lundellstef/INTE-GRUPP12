@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -14,6 +15,7 @@ public class InventoryBalance {
 
     private final Map<Integer, Product> inventory;
     private static final int PRODUCT_LOW_IN_STOCK = 5;
+    private static final int DAYS_BEFORE_SHORT_DATE_WARNING = 5;
 
     public InventoryBalance() {
         inventory = new HashMap<>();
@@ -50,27 +52,54 @@ public class InventoryBalance {
 
     /**
      * Overloaded remove method.
+     * A temporary product is created with the same name and brand, but with junk values.
+     * That product is then sent to deleteProduct(product).
      */
     public void deleteProduct(String brandName, String productName) {
-        Product tempProduct = new Product.ProductBuilder(brandName, productName).build();
+        Product tempProduct = new Product.ProductBuilder(brandName, productName)
+                .setPrice(1)
+                .setAmount(1)
+                .setVatRate(VAT.STANDARD)
+                .build();
         deleteProduct(tempProduct);
     }
-
-
 
     /**
      * Checks the inventory for products that are low in stock.
      *
      * @return a list of products that are currently low in stock.
      */
-    public List<String> getProductsLowInStock() {
-        ArrayList<String> listOfProductsLowInStock = new ArrayList<>();
+    public List<Product> getProductsLowInStock() {
+        ArrayList<Product> listOfProductsLowInStock = new ArrayList<>();
+
         for (Product product : inventory.values()) {
             if (product.getAmount() < PRODUCT_LOW_IN_STOCK) {
-                listOfProductsLowInStock.add(product.getBrandName() + " " + product.getProductName());
+                listOfProductsLowInStock.add(product);
             }
         }
         return listOfProductsLowInStock;
+    }
+
+    /**
+     * Checks the inventory for products that are about to reach their expiration date.
+     * Performs check based on constant DAYS_BEFORE_SHORT_DATE_WARNING.
+     *
+     * @return the list of products that are about to expire.
+     */
+    public List<Product> getProductsAboutToExpire() {
+        ArrayList<Product> productsAboutToExpire = new ArrayList<>();
+        LocalDate expirationDate;
+        int daysDifference;
+        for (Product product : inventory.values()) {
+            if (product.hasAnExpirationDate()) {
+                expirationDate = product.getExpirationDate();
+                daysDifference = expirationDate.getDayOfYear() - LocalDate.now().getDayOfYear();
+                if (daysDifference <= DAYS_BEFORE_SHORT_DATE_WARNING) {
+                    productsAboutToExpire.add(product);
+                }
+            }
+        }
+        return productsAboutToExpire;
     }
 
     public boolean contains(Product product) {
